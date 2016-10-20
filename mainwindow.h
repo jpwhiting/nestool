@@ -24,7 +24,7 @@ private Q_SLOTS:
     void paletteClicked();
 
     void on_action_Open_Palettes_triggered();
-    void on_action_Save_palettes_triggered();
+    void on_action_Save_Palettes_triggered();
 
     void updatePalettes();
 

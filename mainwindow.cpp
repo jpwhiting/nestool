@@ -102,10 +102,22 @@ void MainWindow::on_action_Open_Palettes_triggered()
     }
 }
 
-void MainWindow::on_action_Save_palettes_triggered()
+void MainWindow::on_action_Save_Palettes_triggered()
 {
-    QString filename = QFileDialog::getSaveFileName(this, "Save palettes file", QDir::home().absolutePath(), "*.pal");
+    QString filename = QFileDialog::getSaveFileName(this, "Save palettes file", QDir::home().absolutePath(), "NES Palettes (*.pal)");
     if (!filename.isEmpty()) {
+        QFile file(filename);
+        if (file.open(QIODevice::WriteOnly)) {
+            char pal[16];
+            for (int i = 0; i < 4; ++i) {
+                pal[i]=mBgPal[0][i];
+                pal[i+4]=mBgPal[1][i];
+                pal[i+8]=mBgPal[2][i];
+                pal[i+12]=mBgPal[3][i];
+            }
+            file.write(pal, 16);
+            file.close();
+        }
     }
 }
 
