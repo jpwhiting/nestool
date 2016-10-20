@@ -14,10 +14,14 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    swatch.cpp
+        swatch.cpp \
+        tile.cpp \
+        tileset.cpp
 
 HEADERS  += mainwindow.h \
-    palette.h \
-    swatch.h
+        palette.h \
+        swatch.h \
+        tile.h \
+        tileset.h
 
 FORMS    += mainwindow.ui

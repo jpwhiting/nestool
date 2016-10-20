@@ -16,26 +16,29 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout_3">
     <item row="0" column="1">
-     <widget class="QGroupBox" name="groupBox">
+     <widget class="QGroupBox" name="tileSetGroupBox">
       <property name="title">
        <string>Tileset</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0">
-        <widget class="QScrollArea" name="scrollArea_2">
-         <property name="widgetResizable">
+       <item row="0" column="0" colspan="2">
+        <widget class="TileSet" name="tileSet" native="true"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QRadioButton" name="bankAButton">
+         <property name="text">
+          <string>Ban&amp;k A</string>
+         </property>
+         <property name="checked">
           <bool>true</bool>
          </property>
-         <widget class="QWidget" name="scrollAreaWidgetContents_2">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>384</width>
-            <height>237</height>
-           </rect>
-          </property>
-         </widget>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QRadioButton" name="bankBButton">
+         <property name="text">
+          <string>Bank B</string>
+         </property>
         </widget>
        </item>
       </layout>
@@ -1811,12 +1814,24 @@
     </item>
     <item row="0" column="0" rowspan="2">
      <widget class="QGroupBox" name="groupBox_3">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>1</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="title">
        <string>Nametables</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_4">
        <item row="0" column="0">
         <widget class="QScrollArea" name="scrollArea">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>1</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="widgetResizable">
           <bool>true</bool>
          </property>
@@ -1825,7 +1840,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>384</width>
+            <width>437</width>
             <height>485</height>
            </rect>
           </property>
@@ -1923,6 +1938,12 @@
    <class>Swatch</class>
    <extends>QWidget</extends>
    <header>swatch.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TileSet</class>
+   <extends>QWidget</extends>
+   <header>tileset.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

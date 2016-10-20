@@ -26,12 +26,20 @@ private Q_SLOTS:
     void on_action_Open_Palettes_triggered();
     void on_action_Save_Palettes_triggered();
 
+    void on_action_Open_CHR_triggered();
+    void on_action_Save_CHR_triggered();
+
+    void on_bankAButton_toggled(bool set);
+    void on_bankBButton_toggled(bool set);
+
     void updatePalettes();
+    void updateTileset();
 
 private:
   Ui::MainWindow *ui;
   QColor mBasePalette[64];
   unsigned char mBgPal[4][4]; // Palettes
+  char mChr[8192]; // Tileset
   int mCurrentPalette; // Which palette to use
   unsigned char *mCurrentPal; // Which color is selected
   Swatch *mCurrentPalSwatch;

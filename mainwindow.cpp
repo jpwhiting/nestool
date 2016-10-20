@@ -59,6 +59,12 @@ void MainWindow::bgClicked()
                 mCurrentPal = &mBgPal[i][j];
                 mCurrentPalette = i;
                 mCurrentPalSwatch = swatch;
+                QList<QColor> pal;
+                pal.append(mBasePalette[mBgPal[i][0]]);
+                pal.append(mBasePalette[mBgPal[i][1]]);
+                pal.append(mBasePalette[mBgPal[i][2]]);
+                pal.append(mBasePalette[mBgPal[i][3]]);
+                ui->tileSet->setPalette(pal);
             } else {
                 swatch->setSelected(false);
             }
@@ -121,6 +127,43 @@ void MainWindow::on_action_Save_Palettes_triggered()
     }
 }
 
+void MainWindow::on_action_Open_CHR_triggered()
+{
+    QString filename = QFileDialog::getOpenFileName(this, "Open tileset file", QDir::home().absolutePath(), "NES Tileset (*.chr)");
+    if (!filename.isEmpty()) {
+        QFile file(filename);
+        QFileInfo info(file);
+        if (file.exists() && file.open(QIODevice::ReadOnly)) {
+            if (info.size() == 8192) {
+                file.read(mChr, 8192);
+                file.close();
+                updateTileset();
+            } else if (info.size() == 4096) {
+
+            } else {
+                // Check size and import accordingly
+            }
+        }
+    }
+}
+
+void MainWindow::on_action_Save_CHR_triggered()
+{
+
+}
+
+void MainWindow::on_bankAButton_toggled(bool set)
+{
+    if (set)
+        updateTileset();
+}
+
+void MainWindow::on_bankBButton_toggled(bool set)
+{
+    if (set)
+        updateTileset();
+}
+
 void MainWindow::updatePalettes()
 {
     // Populate default palettes
@@ -133,4 +176,12 @@ void MainWindow::updatePalettes()
             }
         }
     }
+}
+
+void MainWindow::updateTileset()
+{
+    if (ui->bankAButton->isChecked())
+        ui->tileSet->setData(mChr);
+    else
+        ui->tileSet->setData(mChr + 4096);
 }
