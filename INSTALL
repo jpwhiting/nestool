@@ -1,0 +1,7 @@
+To build NESTool you only need a compiler and Qt 5.x.
+To build:
+qmake
+make
+
+To run:
+src/nestool
