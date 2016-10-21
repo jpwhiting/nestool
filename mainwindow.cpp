@@ -1,3 +1,21 @@
+/***************************************************************************
+ *   Copyright (C) 2016 by Jeremy Whiting <jpwhiting@kde.org>              *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 3 of the License.        *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.          *
+ ***************************************************************************/
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -17,6 +35,11 @@ MainWindow::MainWindow(QWidget *parent) :
   mCurrentPalSwatch(0)
 {
   ui->setupUi(this);
+
+  // Clear out mChr
+  for (int i = 0; i < 8192; ++i) {
+      mChr[i] = 0;
+  }
 
   // Populate mBasePalette
   int pp = 0;
@@ -41,6 +64,8 @@ MainWindow::MainWindow(QWidget *parent) :
           connect(swatch, SIGNAL(clicked()), this, SLOT(bgClicked()));
       }
   }
+
+  updateTileset();
 }
 
 MainWindow::~MainWindow()
@@ -149,7 +174,14 @@ void MainWindow::on_action_Open_CHR_triggered()
 
 void MainWindow::on_action_Save_CHR_triggered()
 {
-
+    QString filename = QFileDialog::getSaveFileName(this, "Save tileset file", QDir::home().absolutePath(), "NES Tileset (*.chr)");
+    if (!filename.isEmpty()) {
+        QFile file(filename);
+        if (file.open(QIODevice::WriteOnly)) {
+            file.write(mChr, 8192);
+            file.close();
+        }
+    }
 }
 
 void MainWindow::on_bankAButton_toggled(bool set)
