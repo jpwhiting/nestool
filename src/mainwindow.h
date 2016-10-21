@@ -23,6 +23,7 @@
 #include <QMap>
 
 class Swatch;
+class NameTable;
 class QSettings;
 
 namespace Ui {
@@ -48,6 +49,9 @@ private Q_SLOTS:
     void on_action_Open_CHR_triggered();
     void on_action_Save_CHR_triggered();
 
+    void on_action_Open_NameTable_triggered();
+    void on_action_Save_NameTable_triggered();
+
     void on_bankAButton_toggled(bool set);
     void on_bankBButton_toggled(bool set);
 
@@ -55,10 +59,12 @@ private Q_SLOTS:
     void openRecentPalettes();
     void updateTileset();
     void openRecentCHR();
+    void openRecentNameTable();
 
 private:
     void loadPalettes(QString filename);
     void loadCHR(QString filename);
+    void loadNameTable(QString filename);
 
     // Delete and create recent file actions based on QStringLists
     void updateRecentActions();
@@ -74,6 +80,8 @@ private:
     QSettings *mSettings;
     QStringList mLastPaletteFiles;
     QStringList mLastCHRFiles;
+    QStringList mLastNameTableFiles;
+    QList<NameTable*> mNameTables;
 };
 
 #endif // MAINWINDOW_H

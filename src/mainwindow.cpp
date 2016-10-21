@@ -23,6 +23,7 @@
 #include <QMessageBox>
 #include <QSettings>
 
+#include "nametable.h"
 #include "palette.h"
 #include "swatch.h"
 
@@ -34,6 +35,7 @@
 #define kLastOpenPathKey "lastOpenPath"
 #define kPreviousPalKey "previousPalFiles"
 #define kPreviousCHRKey "previousCHRFiles"
+#define kPreviousNameTablesKey "previousNameTableFiles"
 #define kPreviousPathKey "path"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -61,7 +63,18 @@ MainWindow::MainWindow(QWidget *parent) :
   }
   mSettings->endArray();
 
+  size = mSettings->beginReadArray(kPreviousNameTablesKey);
+  for (int i = 0; i < size; ++i) {
+      mSettings->setArrayIndex(i);
+      mLastNameTableFiles.append(mSettings->value(kPreviousPathKey).toString());
+  }
+  mSettings->endArray();
+
   updateRecentActions();
+
+  // Create one nametable
+  mNameTables.append(ui->nameTable);
+  ui->nameTable->setTileSet(ui->tileSet);
 
   // Clear out mChr
   for (int i = 0; i < 8192; ++i) {
@@ -118,6 +131,7 @@ void MainWindow::bgClicked()
                 pal.append(mBasePalette[mBgPal[i][2]]);
                 pal.append(mBasePalette[mBgPal[i][3]]);
                 ui->tileSet->setPalette(pal);
+                ui->nameTable->setPalette(pal);
             } else {
                 swatch->setSelected(false);
             }
@@ -189,6 +203,22 @@ void MainWindow::on_action_Save_CHR_triggered()
     }
 }
 
+void MainWindow::on_action_Open_NameTable_triggered()
+{
+    QString filename = QFileDialog::getOpenFileName(this,
+                                                    "Open nametable file",
+                                                    mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
+                                                    "NES NameTable (*.nam)");
+    if (!filename.isEmpty()) {
+        loadNameTable(filename);
+    }
+}
+
+void MainWindow::on_action_Save_NameTable_triggered()
+{
+// Ask for each nametable filename
+}
+
 void MainWindow::on_bankAButton_toggled(bool set)
 {
     if (set)
@@ -235,6 +265,12 @@ void MainWindow::openRecentCHR()
     loadCHR(action->text().remove('&'));
 }
 
+void MainWindow::openRecentNameTable()
+{
+    QAction *action = qobject_cast<QAction*>(sender());
+    loadNameTable(action->text().remove('&'));
+}
+
 void MainWindow::loadCHR(QString filename)
 {
     QFile file(filename);
@@ -259,11 +295,36 @@ void MainWindow::loadCHR(QString filename)
     }
 }
 
+void MainWindow::loadNameTable(QString filename)
+{
+    QFile file(filename);
+    QFileInfo info(file);
+    if (file.exists() && file.open(QIODevice::ReadOnly)) {
+        if (!mLastNameTableFiles.contains(filename)) {
+            mLastNameTableFiles.append(filename);
+            if (mLastNameTableFiles.count() > kLastFileCount)
+                mLastNameTableFiles.removeFirst();
+            updateRecentActions();
+        }
+        mSettings->setValue(kLastOpenPathKey, info.absolutePath());
+        if (info.size() == 1024) {
+            char nametableData[1024];
+            file.read(nametableData, 1024);
+            ui->nameTable->setData(nametableData);
+            file.close();
+        } else if (info.size() == 960) {
+
+        } else {
+            // Check size and import accordingly
+        }
+    }
+}
+
 void MainWindow::updateRecentActions()
 {
     ui->menu_Recent_CHR->clear();
     ui->menu_Recent_Palettes->clear();
-    ui->menu_Recent_Nametable->clear();
+    ui->menu_Recent_NameTable->clear();
 
     Q_FOREACH(const QString &filename, mLastPaletteFiles) {
         ui->menu_Recent_Palettes->addAction(filename, this, SLOT(openRecentPalettes()));
@@ -271,6 +332,10 @@ void MainWindow::updateRecentActions()
 
     Q_FOREACH(const QString &filename, mLastCHRFiles) {
         ui->menu_Recent_CHR->addAction(filename, this, SLOT(openRecentCHR()));
+    }
+
+    Q_FOREACH(const QString &filename, mLastNameTableFiles) {
+        ui->menu_Recent_NameTable->addAction(filename, this, SLOT(openRecentNameTable()));
     }
 
     mSettings->beginWriteArray(kPreviousPalKey, mLastPaletteFiles.count());
@@ -286,6 +351,14 @@ void MainWindow::updateRecentActions()
         mSettings->setValue(kPreviousPathKey, mLastCHRFiles.at(i));
     }
     mSettings->endArray();
+
+    mSettings->beginWriteArray(kPreviousNameTablesKey, mLastNameTableFiles.count());
+    for (int i = 0; i < mLastNameTableFiles.count(); ++i) {
+        mSettings->setArrayIndex(i);
+        mSettings->setValue(kPreviousPathKey, mLastNameTableFiles.at(i));
+    }
+    mSettings->endArray();
+
 }
 
 void MainWindow::loadPalettes(QString filename)

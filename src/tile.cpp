@@ -33,6 +33,11 @@ void Tile::setData(char *data)
     update();
 }
 
+char *Tile::chrData()
+{
+    return mData;
+}
+
 void Tile::setPalette(QList<QColor> colors)
 {
     for (int i = 0; i < 4; ++i) {

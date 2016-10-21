@@ -16,29 +16,51 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.          *
  ***************************************************************************/
 
-#ifndef TILESET_H
-#define TILESET_H
+#include "nametable.h"
 
-#include "tile.h"
+#include <QGridLayout>
 
-#include <QList>
-#include <QWidget>
-
-class TileSet : public QWidget
+NameTable::NameTable(QWidget *parent) : QWidget(parent), mTileSet(0)
 {
-    Q_OBJECT
-public:
-    explicit TileSet(QWidget *parent = 0);
+    QGridLayout *layout = new QGridLayout(this);
+    layout->setVerticalSpacing(0);
+    layout->setHorizontalSpacing(0);
+    layout->setContentsMargins(0, 0, 0, 0);
 
-    void setData(char *data);
+    for (int i = 0; i < 30; ++i) {
+        for (int j = 0; j < 32; ++j) {
+            Tile *tile = new Tile(this);
+            tile->setFixedSize(QSize(18, 18));
+            mTiles.append(tile);
+            layout->addWidget(tile, i, j);
+        }
+    }
+}
 
-    char *tileData(int tile); // Get the CHR data for a given tile
+void NameTable::setTileSet(TileSet *tileset)
+{
+    mTileSet = tileset;
+}
 
-    void setPalette(QList<QColor> colors);
+void NameTable::setData(char *data)
+{
+    for (int i = 0; i < 1024; ++i) {
+        mData[i] = (unsigned char)data[i];
+    }
 
-public slots:
-private:
-    QList<Tile*> mTiles;
-};
+    if (mTileSet) { // Update tiles if we have a tileset
+        for (int i = 0; i < 960; ++i) {
+            char *tileData = mTileSet->tileData(mData[i]);
+            if (tileData)
+                mTiles.at(i)->setData(tileData);
+        }
+    }
+}
 
-#endif // TILESET_H
+void NameTable::setPalette(QList<QColor> colors)
+{
+    Q_FOREACH(Tile *tile, mTiles) {
+        tile->setPalette(colors);
+    }
+}
+

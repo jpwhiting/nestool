@@ -16,29 +16,33 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.          *
  ***************************************************************************/
 
-#ifndef TILESET_H
-#define TILESET_H
+#ifndef NAMETABLE_H
+#define NAMETABLE_H
 
 #include "tile.h"
+#include "tileset.h"
 
 #include <QList>
 #include <QWidget>
 
-class TileSet : public QWidget
+class NameTable : public QWidget
 {
     Q_OBJECT
 public:
-    explicit TileSet(QWidget *parent = 0);
+    explicit NameTable(QWidget *parent = 0);
 
+    void setTileSet(TileSet *tileset); // Tell us the tileset so we can draw
     void setData(char *data);
 
-    char *tileData(int tile); // Get the CHR data for a given tile
-
+    // Set all 4 palettes in order so we can apply the right one per tile.
     void setPalette(QList<QColor> colors);
 
 public slots:
 private:
+    TileSet *mTileSet;
     QList<Tile*> mTiles;
+    unsigned char mData[1024]; // Nametable
+    QList<QColor> colors; // All 4 palettes in order
 };
 
-#endif // TILESET_H
+#endif // NAMETABLE_H

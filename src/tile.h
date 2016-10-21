@@ -30,6 +30,7 @@ public:
     explicit Tile(QWidget *parent = 0);
 
     void setData(char *data);
+    char *chrData(); // Get this tile's chr data
 
     void setPalette(QList<QColor> colors);
 

@@ -1825,7 +1825,7 @@
       </property>
       <layout class="QGridLayout" name="gridLayout_4">
        <item row="0" column="0">
-        <widget class="QScrollArea" name="scrollArea">
+        <widget class="QScrollArea" name="nametableArea">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>1</horstretch>
@@ -1835,7 +1835,7 @@
          <property name="widgetResizable">
           <bool>true</bool>
          </property>
-         <widget class="QWidget" name="scrollAreaWidgetContents">
+         <widget class="QWidget" name="nametableContents">
           <property name="geometry">
            <rect>
             <x>0</x>
@@ -1844,6 +1844,11 @@
             <height>499</height>
            </rect>
           </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_9">
+           <item>
+            <widget class="NameTable" name="nameTable" native="true"/>
+           </item>
+          </layout>
          </widget>
         </widget>
        </item>
@@ -1885,15 +1890,15 @@
     <property name="title">
      <string>&amp;Nametable</string>
     </property>
-    <widget class="QMenu" name="menu_Recent_Nametable">
+    <widget class="QMenu" name="menu_Recent_NameTable">
      <property name="title">
       <string>&amp;Recent</string>
      </property>
     </widget>
-    <addaction name="action_Open_Nametable"/>
-    <addaction name="action_Save_Nametable"/>
+    <addaction name="action_Open_NameTable"/>
+    <addaction name="action_Save_NameTable"/>
     <addaction name="separator"/>
-    <addaction name="menu_Recent_Nametable"/>
+    <addaction name="menu_Recent_NameTable"/>
    </widget>
    <widget class="QMenu" name="menu_Palettes">
     <property name="title">
@@ -1935,14 +1940,20 @@
     <string>&amp;Save CHR</string>
    </property>
   </action>
-  <action name="action_Open_Nametable">
+  <action name="action_Open_NameTable">
    <property name="text">
-    <string>&amp;Open Nametable</string>
+    <string>&amp;Open NameTable</string>
+   </property>
+   <property name="toolTip">
+    <string>Open NameTable</string>
    </property>
   </action>
-  <action name="action_Save_Nametable">
+  <action name="action_Save_NameTable">
    <property name="text">
-    <string>&amp;Save Nametable</string>
+    <string>&amp;Save NameTable</string>
+   </property>
+   <property name="toolTip">
+    <string>Save NameTable</string>
    </property>
   </action>
   <action name="action_Quit">
@@ -1963,6 +1974,12 @@
    <class>TileSet</class>
    <extends>QWidget</extends>
    <header>tileset.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>NameTable</class>
+   <extends>QWidget</extends>
+   <header>nametable.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

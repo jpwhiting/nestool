@@ -1,5 +1,5 @@
 TODO:
-  Read nam files
+  Use nametable attributes for palettes
   Edit nametable in gui
   Write nam files
   Write nametable .h files
@@ -18,3 +18,4 @@ DONE:
   Read .chr files
   Save chr
   Remember recent paths for saving and loading.
+  Read nam files

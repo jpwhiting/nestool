@@ -47,6 +47,13 @@ void TileSet::setData(char *data)
     }
 }
 
+char *TileSet::tileData(int tile)
+{
+    if (tile < 0 || tile > 16*16)
+        return NULL;
+    return mTiles.at(tile)->chrData();
+}
+
 void TileSet::setPalette(QList<QColor> colors)
 {
     Q_FOREACH(Tile *tile, mTiles) {

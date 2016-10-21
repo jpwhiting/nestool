@@ -14,11 +14,13 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
+        nametable.cpp \
         swatch.cpp \
         tile.cpp \
         tileset.cpp
 
 HEADERS  += mainwindow.h \
+        nametable.h \
         palette.h \
         swatch.h \
         tile.h \
