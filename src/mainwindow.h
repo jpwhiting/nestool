@@ -52,11 +52,16 @@ private Q_SLOTS:
     void on_bankBButton_toggled(bool set);
 
     void updatePalettes();
+    void openRecentPalettes();
     void updateTileset();
+    void openRecentCHR();
 
 private:
     void loadPalettes(QString filename);
     void loadCHR(QString filename);
+
+    // Delete and create recent file actions based on QStringLists
+    void updateRecentActions();
 
     Ui::MainWindow *ui;
     QColor mBasePalette[64];
@@ -67,6 +72,8 @@ private:
     Swatch *mCurrentPalSwatch;
     QMap<QString, int> mColorIndexes; // Which color is which index in nes palette
     QSettings *mSettings;
+    QStringList mLastPaletteFiles;
+    QStringList mLastCHRFiles;
 };
 
 #endif // MAINWINDOW_H

@@ -28,6 +28,14 @@
 
 #include <QDebug>
 
+// Keep track of last 5 filenames of each type
+#define kLastFileCount 5
+
+#define kLastOpenPathKey "lastOpenPath"
+#define kPreviousPalKey "previousPalFiles"
+#define kPreviousCHRKey "previousCHRFiles"
+#define kPreviousPathKey "path"
+
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::MainWindow),
@@ -37,6 +45,23 @@ MainWindow::MainWindow(QWidget *parent) :
   mSettings(new QSettings())
 {
   ui->setupUi(this);
+
+  // Read in list of last files
+  int size = mSettings->beginReadArray(kPreviousPalKey);
+  for (int i = 0; i < size; ++i) {
+      mSettings->setArrayIndex(i);
+      mLastPaletteFiles.append(mSettings->value(kPreviousPathKey).toString());
+  }
+  mSettings->endArray();
+
+  size = mSettings->beginReadArray(kPreviousCHRKey);
+  for (int i = 0; i < size; ++i) {
+      mSettings->setArrayIndex(i);
+      mLastCHRFiles.append(mSettings->value(kPreviousPathKey).toString());
+  }
+  mSettings->endArray();
+
+  updateRecentActions();
 
   // Clear out mChr
   for (int i = 0; i < 8192; ++i) {
@@ -113,7 +138,10 @@ void MainWindow::paletteClicked()
 
 void MainWindow::on_action_Open_Palettes_triggered()
 {
-    QString filename = QFileDialog::getOpenFileName(this, "Open palettes file", QDir::home().absolutePath(), "NES Palettes (*.pal)");
+    QString filename = QFileDialog::getOpenFileName(this,
+                                                    "Open palettes file",
+                                                    mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
+                                                    "NES Palettes (*.pal)");
     if (!filename.isEmpty()) {
         loadPalettes(filename);
     }
@@ -140,7 +168,10 @@ void MainWindow::on_action_Save_Palettes_triggered()
 
 void MainWindow::on_action_Open_CHR_triggered()
 {
-    QString filename = QFileDialog::getOpenFileName(this, "Open tileset file", QDir::home().absolutePath(), "NES Tileset (*.chr)");
+    QString filename = QFileDialog::getOpenFileName(this,
+                                                    "Open tileset file",
+                                                    mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
+                                                    "NES Tileset (*.chr)");
     if (!filename.isEmpty()) {
         loadCHR(filename);
     }
@@ -184,6 +215,12 @@ void MainWindow::updatePalettes()
     }
 }
 
+void MainWindow::openRecentPalettes()
+{
+    QAction *action = qobject_cast<QAction*>(sender());
+    loadPalettes(action->text().remove('&'));
+}
+
 void MainWindow::updateTileset()
 {
     if (ui->bankAButton->isChecked())
@@ -192,11 +229,24 @@ void MainWindow::updateTileset()
         ui->tileSet->setData(mChr + 4096);
 }
 
+void MainWindow::openRecentCHR()
+{
+    QAction *action = qobject_cast<QAction*>(sender());
+    loadCHR(action->text().remove('&'));
+}
+
 void MainWindow::loadCHR(QString filename)
 {
     QFile file(filename);
     QFileInfo info(file);
     if (file.exists() && file.open(QIODevice::ReadOnly)) {
+        if (!mLastCHRFiles.contains(filename)) {
+            mLastCHRFiles.append(filename);
+            if (mLastCHRFiles.count() > kLastFileCount)
+                mLastCHRFiles.removeFirst();
+            updateRecentActions();
+        }
+        mSettings->setValue(kLastOpenPathKey, info.absolutePath());
         if (info.size() == 8192) {
             file.read(mChr, 8192);
             file.close();
@@ -209,11 +259,47 @@ void MainWindow::loadCHR(QString filename)
     }
 }
 
+void MainWindow::updateRecentActions()
+{
+    ui->menu_Recent_CHR->clear();
+    ui->menu_Recent_Palettes->clear();
+    ui->menu_Recent_Nametable->clear();
+
+    Q_FOREACH(const QString &filename, mLastPaletteFiles) {
+        QAction *action = ui->menu_Recent_Palettes->addAction(filename, this, SLOT(openRecentPalettes()));
+    }
+
+    Q_FOREACH(const QString &filename, mLastCHRFiles) {
+        QAction *action = ui->menu_Recent_CHR->addAction(filename, this, SLOT(openRecentCHR()));
+    }
+
+    mSettings->beginWriteArray(kPreviousPalKey, mLastPaletteFiles.count());
+    for (int i = 0; i < mLastPaletteFiles.count(); ++i) {
+        mSettings->setArrayIndex(i);
+        mSettings->setValue(kPreviousPathKey, mLastPaletteFiles.at(i));
+    }
+    mSettings->endArray();
+
+    mSettings->beginWriteArray(kPreviousCHRKey, mLastCHRFiles.count());
+    for (int i = 0; i < mLastCHRFiles.count(); ++i) {
+        mSettings->setArrayIndex(i);
+        mSettings->setValue(kPreviousPathKey, mLastCHRFiles.at(i));
+    }
+    mSettings->endArray();
+}
+
 void MainWindow::loadPalettes(QString filename)
 {
     QFile file(filename);
     if (file.exists()) {
+        if (!mLastPaletteFiles.contains(filename)) {
+            mLastPaletteFiles.append(filename);
+            if (mLastPaletteFiles.count() > kLastFileCount)
+                mLastPaletteFiles.removeFirst();
+            updateRecentActions();
+        }
         QFileInfo info(file);
+        mSettings->setValue(kLastOpenPathKey, info.absolutePath());
         if (info.size() == 16 && file.open(QIODevice::ReadOnly)) {
             char pal[16];
             file.read(pal, 16);
