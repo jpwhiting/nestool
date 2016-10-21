@@ -1,5 +1,4 @@
 TODO:
-  Save chr
   Read nam files
   Edit nametable in gui
   Write nam files
@@ -10,9 +9,12 @@ TODO:
   Metasprite editor
   Save metasprites
   Copy buttons (for palette, tileset, nametable, etc. to copy selection to clipboard)
-  Remember recent paths for saving and loading.
+  Tileset editor
+  Show grid(s)
 
 DONE:
   Read .pal files
   Write .pal files
   Read .chr files
+  Save chr
+  Remember recent paths for saving and loading.
