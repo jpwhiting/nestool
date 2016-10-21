@@ -21,9 +21,13 @@
 
 int main(int argc, char *argv[])
 {
-  QApplication a(argc, argv);
-  MainWindow w;
-  w.show();
+    QApplication::setApplicationName("NESTool");
+    QApplication::setApplicationVersion("0.1");
+    QApplication::setOrganizationDomain("jpwhiting.org");
+    QApplication::setApplicationDisplayName("NESTool");
+    QApplication a(argc, argv);
+    MainWindow w;
+    w.show();
 
-  return a.exec();
+    return a.exec();
 }

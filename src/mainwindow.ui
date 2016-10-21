@@ -1841,7 +1841,7 @@
             <x>0</x>
             <y>0</y>
             <width>437</width>
-            <height>485</height>
+            <height>499</height>
            </rect>
           </property>
          </widget>
@@ -1865,6 +1865,7 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
+    <addaction name="action_Quit"/>
    </widget>
    <widget class="QMenu" name="menu_Tileset">
     <property name="title">
@@ -1872,6 +1873,8 @@
     </property>
     <addaction name="action_Open_CHR"/>
     <addaction name="action_Save_CHR"/>
+    <addaction name="separator"/>
+    <addaction name="action_Recent_CHR"/>
    </widget>
    <widget class="QMenu" name="menu_Nametable">
     <property name="title">
@@ -1879,6 +1882,8 @@
     </property>
     <addaction name="action_Open_Nametable"/>
     <addaction name="action_Save_Nametable"/>
+    <addaction name="separator"/>
+    <addaction name="action_Recent_Nametable"/>
    </widget>
    <widget class="QMenu" name="menu_Palettes">
     <property name="title">
@@ -1886,19 +1891,13 @@
     </property>
     <addaction name="action_Open_Palettes"/>
     <addaction name="action_Save_Palettes"/>
+    <addaction name="separator"/>
+    <addaction name="action_Recent_Palettes"/>
    </widget>
    <addaction name="menu_File"/>
-   <addaction name="menu_Tileset"/>
    <addaction name="menu_Nametable"/>
+   <addaction name="menu_Tileset"/>
    <addaction name="menu_Palettes"/>
-  </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="action_Open_Palettes">
@@ -1931,6 +1930,26 @@
     <string>&amp;Save Nametable</string>
    </property>
   </action>
+  <action name="action_Recent_Nametable">
+   <property name="text">
+    <string>&amp;Recent</string>
+   </property>
+  </action>
+  <action name="action_Recent_Palettes">
+   <property name="text">
+    <string>&amp;Recent</string>
+   </property>
+  </action>
+  <action name="action_Recent_CHR">
+   <property name="text">
+    <string>&amp;Recent</string>
+   </property>
+  </action>
+  <action name="action_Quit">
+   <property name="text">
+    <string>&amp;Quit</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -1948,5 +1967,22 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>action_Quit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>412</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

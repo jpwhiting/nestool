@@ -21,6 +21,7 @@
 
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QSettings>
 
 #include "palette.h"
 #include "swatch.h"
@@ -32,7 +33,8 @@ MainWindow::MainWindow(QWidget *parent) :
   ui(new Ui::MainWindow),
   mBgPal{{15, 0, 16, 48}, {15, 1, 33, 49}, {15, 6, 22, 38}, {15, 9, 25, 41}},
   mCurrentPal(0),
-  mCurrentPalSwatch(0)
+  mCurrentPalSwatch(0),
+  mSettings(new QSettings())
 {
   ui->setupUi(this);
 
@@ -71,6 +73,7 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete mSettings;
 }
 
 void MainWindow::bgClicked()
@@ -112,24 +115,7 @@ void MainWindow::on_action_Open_Palettes_triggered()
 {
     QString filename = QFileDialog::getOpenFileName(this, "Open palettes file", QDir::home().absolutePath(), "NES Palettes (*.pal)");
     if (!filename.isEmpty()) {
-        QFile file(filename);
-        if (file.exists()) {
-            QFileInfo info(file);
-            if (info.size() == 16 && file.open(QIODevice::ReadOnly)) {
-                char pal[16];
-                file.read(pal, 16);
-                file.close();
-                for (int i = 0; i < 4; ++i) {
-                    mBgPal[0][i]=pal[i];
-                    mBgPal[1][i]=pal[i+4];
-                    mBgPal[2][i]=pal[i+8];
-                    mBgPal[3][i]=pal[i+12];
-                }
-                updatePalettes();
-            } else {
-                QMessageBox::information(this, "Unable to read palettes file", "Palette file should be 16 bytes long");
-            }
-        }
+        loadPalettes(filename);
     }
 }
 
@@ -156,19 +142,7 @@ void MainWindow::on_action_Open_CHR_triggered()
 {
     QString filename = QFileDialog::getOpenFileName(this, "Open tileset file", QDir::home().absolutePath(), "NES Tileset (*.chr)");
     if (!filename.isEmpty()) {
-        QFile file(filename);
-        QFileInfo info(file);
-        if (file.exists() && file.open(QIODevice::ReadOnly)) {
-            if (info.size() == 8192) {
-                file.read(mChr, 8192);
-                file.close();
-                updateTileset();
-            } else if (info.size() == 4096) {
-
-            } else {
-                // Check size and import accordingly
-            }
-        }
+        loadCHR(filename);
     }
 }
 
@@ -216,4 +190,43 @@ void MainWindow::updateTileset()
         ui->tileSet->setData(mChr);
     else
         ui->tileSet->setData(mChr + 4096);
+}
+
+void MainWindow::loadCHR(QString filename)
+{
+    QFile file(filename);
+    QFileInfo info(file);
+    if (file.exists() && file.open(QIODevice::ReadOnly)) {
+        if (info.size() == 8192) {
+            file.read(mChr, 8192);
+            file.close();
+            updateTileset();
+        } else if (info.size() == 4096) {
+
+        } else {
+            // Check size and import accordingly
+        }
+    }
+}
+
+void MainWindow::loadPalettes(QString filename)
+{
+    QFile file(filename);
+    if (file.exists()) {
+        QFileInfo info(file);
+        if (info.size() == 16 && file.open(QIODevice::ReadOnly)) {
+            char pal[16];
+            file.read(pal, 16);
+            file.close();
+            for (int i = 0; i < 4; ++i) {
+                mBgPal[0][i]=pal[i];
+                mBgPal[1][i]=pal[i+4];
+                mBgPal[2][i]=pal[i+8];
+                mBgPal[3][i]=pal[i+12];
+            }
+            updatePalettes();
+        } else {
+            QMessageBox::information(this, "Unable to read palettes file", "Palette file should be 16 bytes long");
+        }
+    }
 }

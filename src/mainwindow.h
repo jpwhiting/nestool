@@ -23,6 +23,7 @@
 #include <QMap>
 
 class Swatch;
+class QSettings;
 
 namespace Ui {
 class MainWindow;
@@ -30,11 +31,11 @@ class MainWindow;
 
 class MainWindow : public QMainWindow
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  explicit MainWindow(QWidget *parent = 0);
-  ~MainWindow();
+    explicit MainWindow(QWidget *parent = 0);
+    ~MainWindow();
 
 private Q_SLOTS:
     void bgClicked();
@@ -54,14 +55,18 @@ private Q_SLOTS:
     void updateTileset();
 
 private:
-  Ui::MainWindow *ui;
-  QColor mBasePalette[64];
-  unsigned char mBgPal[4][4]; // Palettes
-  char mChr[8192]; // Tileset
-  int mCurrentPalette; // Which palette to use
-  unsigned char *mCurrentPal; // Which color is selected
-  Swatch *mCurrentPalSwatch;
-  QMap<QString, int> mColorIndexes; // Which color is which index in nes palette
+    void loadPalettes(QString filename);
+    void loadCHR(QString filename);
+
+    Ui::MainWindow *ui;
+    QColor mBasePalette[64];
+    unsigned char mBgPal[4][4]; // Palettes
+    char mChr[8192]; // Tileset
+    int mCurrentPalette; // Which palette to use
+    unsigned char *mCurrentPal; // Which color is selected
+    Swatch *mCurrentPalSwatch;
+    QMap<QString, int> mColorIndexes; // Which color is which index in nes palette
+    QSettings *mSettings;
 };
 
 #endif // MAINWINDOW_H
