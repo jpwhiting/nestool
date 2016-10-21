@@ -266,11 +266,11 @@ void MainWindow::updateRecentActions()
     ui->menu_Recent_Nametable->clear();
 
     Q_FOREACH(const QString &filename, mLastPaletteFiles) {
-        QAction *action = ui->menu_Recent_Palettes->addAction(filename, this, SLOT(openRecentPalettes()));
+        ui->menu_Recent_Palettes->addAction(filename, this, SLOT(openRecentPalettes()));
     }
 
     Q_FOREACH(const QString &filename, mLastCHRFiles) {
-        QAction *action = ui->menu_Recent_CHR->addAction(filename, this, SLOT(openRecentCHR()));
+        ui->menu_Recent_CHR->addAction(filename, this, SLOT(openRecentCHR()));
     }
 
     mSettings->beginWriteArray(kPreviousPalKey, mLastPaletteFiles.count());
