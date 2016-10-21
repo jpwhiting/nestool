@@ -9,19 +9,6 @@ QT       += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = nestool
-TEMPLATE = app
+TEMPLATE = subdirs
 
-
-SOURCES += main.cpp\
-        mainwindow.cpp \
-        swatch.cpp \
-        tile.cpp \
-        tileset.cpp
-
-HEADERS  += mainwindow.h \
-        palette.h \
-        swatch.h \
-        tile.h \
-        tileset.h
-
-FORMS    += mainwindow.ui
+SUBDIRS += src
