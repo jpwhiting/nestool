@@ -35,14 +35,26 @@ public:
     void setData(char *data);
 
     // Set all 4 palettes in order so we can apply the right one per tile.
-    void setPalette(QList<QColor> colors);
+    void setPalettes(QList<QList<QColor> > colors);
 
-public slots:
+    // Set the given x, y, to the given palette
+    void setAttr(int x, int y, int pal);
+
+    char *getData() const;
+Q_SIGNALS:
+    void tileClicked(int x, int y);
+
+private Q_SLOTS:
+    void tileClicked();
+
 private:
+    // Get the palette for a given tile
+    int getAttr(int x, int y);
     TileSet *mTileSet;
     QList<Tile*> mTiles;
     unsigned char mData[1024]; // Nametable
-    QList<QColor> colors; // All 4 palettes in order
+    unsigned char *mAttrs; // Attributes of the name table
+    QList<QList<QColor> > mPalettes; // All 4 palettes in order
 };
 
 #endif // NAMETABLE_H

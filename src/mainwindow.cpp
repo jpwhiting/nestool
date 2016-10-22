@@ -42,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::MainWindow),
   mBgPal{{15, 0, 16, 48}, {15, 1, 33, 49}, {15, 6, 22, 38}, {15, 9, 25, 41}},
+  mCurrentPalette(-1),
   mCurrentPal(0),
   mCurrentPalSwatch(0),
   mSettings(new QSettings())
@@ -75,6 +76,7 @@ MainWindow::MainWindow(QWidget *parent) :
   // Create one nametable
   mNameTables.append(ui->nameTable);
   ui->nameTable->setTileSet(ui->tileSet);
+  connect(ui->nameTable, SIGNAL(tileClicked(int,int)), this, SLOT(nameTableClicked(int,int)));
 
   // Clear out mChr
   for (int i = 0; i < 8192; ++i) {
@@ -131,7 +133,6 @@ void MainWindow::bgClicked()
                 pal.append(mBasePalette[mBgPal[i][2]]);
                 pal.append(mBasePalette[mBgPal[i][3]]);
                 ui->tileSet->setPalette(pal);
-                ui->nameTable->setPalette(pal);
             } else {
                 swatch->setSelected(false);
             }
@@ -147,6 +148,17 @@ void MainWindow::paletteClicked()
     if (mCurrentPal != 0) {
         *mCurrentPal = index;
         mCurrentPalSwatch->setColor(color);
+
+        // Send list of QColor to nametable
+        QList<QList<QColor> > palettes;
+        for (int i = 0; i < 4; ++i) {
+            QList<QColor> pal;
+            for (int j = 0; j < 4; ++j) {
+                pal.append(mBasePalette[mBgPal[i][j]]);
+            }
+            palettes.append(pal);
+        }
+        ui->nameTable->setPalettes(palettes);
     }
 }
 
@@ -217,6 +229,14 @@ void MainWindow::on_action_Open_NameTable_triggered()
 void MainWindow::on_action_Save_NameTable_triggered()
 {
 // Ask for each nametable filename
+    QString filename = QFileDialog::getSaveFileName(this, "Save nametable file", QDir::home().absolutePath(), "NES NameTable (*.nam)");
+    if (!filename.isEmpty()) {
+        QFile file(filename);
+        if (file.open(QIODevice::WriteOnly)) {
+            file.write(ui->nameTable->getData(), 1024);
+            file.close();
+        }
+    }
 }
 
 void MainWindow::on_bankAButton_toggled(bool set)
@@ -243,6 +263,17 @@ void MainWindow::updatePalettes()
             }
         }
     }
+
+    // Send list of QColor to nametable
+    QList<QList<QColor> > palettes;
+    for (int i = 0; i < 4; ++i) {
+        QList<QColor> pal;
+        for (int j = 0; j < 4; ++j) {
+            pal.append(mBasePalette[mBgPal[i][j]]);
+        }
+        palettes.append(pal);
+    }
+    ui->nameTable->setPalettes(palettes);
 }
 
 void MainWindow::openRecentPalettes()
@@ -269,6 +300,13 @@ void MainWindow::openRecentNameTable()
 {
     QAction *action = qobject_cast<QAction*>(sender());
     loadNameTable(action->text().remove('&'));
+}
+
+void MainWindow::nameTableClicked(int x, int y)
+{
+    if (ui->applyPalettesCheckBox->isChecked() && mCurrentPalette != -1) {
+        ui->nameTable->setAttr(x, y, mCurrentPalette);
+    }
 }
 
 void MainWindow::loadCHR(QString filename)

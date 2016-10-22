@@ -1,7 +1,5 @@
 TODO:
-  Use nametable attributes for palettes
   Edit nametable in gui
-  Write nam files
   Write nametable .h files
   Allow multiple nametables in memory
   Remove duplicate tiles
@@ -19,3 +17,5 @@ DONE:
   Save chr
   Remember recent paths for saving and loading.
   Read nam files
+  Use nametable attributes for palettes
+  Write nam files

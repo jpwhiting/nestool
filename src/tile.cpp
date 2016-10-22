@@ -23,6 +23,9 @@
 Tile::Tile(QWidget *parent) : QWidget(parent)
 {
     mSelected = false;
+    for (int i = 0; i < 16; ++i) {
+        mData[i] = 0;
+    }
 }
 
 void Tile::setData(char *data)
@@ -70,7 +73,7 @@ void Tile::paintEvent(QPaintEvent *event)
 
     painter.setPen(Qt::NoPen);
 
-    int cellWidth = (width() - 1) / 8;
+    int cellWidth = width() / 8;
 
     for (int r = 0; r < 8; ++r) {
         for (int c = 0; c < 8; ++c) {

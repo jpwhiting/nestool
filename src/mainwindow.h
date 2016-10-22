@@ -61,6 +61,7 @@ private Q_SLOTS:
     void openRecentCHR();
     void openRecentNameTable();
 
+    void nameTableClicked(int x, int y);
 private:
     void loadPalettes(QString filename);
     void loadCHR(QString filename);
