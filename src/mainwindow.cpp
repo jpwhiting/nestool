@@ -45,6 +45,7 @@ MainWindow::MainWindow(QWidget *parent) :
   mCurrentPalette(-1),
   mCurrentPal(0),
   mCurrentPalSwatch(0),
+  mCurrentNameTable(0),
   mSettings(new QSettings())
 {
   ui->setupUi(this);
@@ -76,6 +77,7 @@ MainWindow::MainWindow(QWidget *parent) :
   // Create one nametable
   mNameTables.append(ui->nameTable);
   ui->nameTable->setTileSet(ui->tileSet);
+  mCurrentNameTable = mNameTables.at(0);
   connect(ui->nameTable, SIGNAL(tileClicked(int,int)), this, SLOT(nameTableClicked(int,int)));
 
   // Clear out mChr
@@ -228,7 +230,7 @@ void MainWindow::on_action_Open_NameTable_triggered()
 
 void MainWindow::on_action_Save_NameTable_triggered()
 {
-// Ask for each nametable filename
+    // Ask for each nametable filename
     QString filename = QFileDialog::getSaveFileName(this, "Save nametable file", QDir::home().absolutePath(), "NES NameTable (*.nam)");
     if (!filename.isEmpty()) {
         QFile file(filename);
@@ -249,6 +251,26 @@ void MainWindow::on_bankBButton_toggled(bool set)
 {
     if (set)
         updateTileset();
+}
+
+void MainWindow::on_addNameTableButton_clicked()
+{
+    NameTable *nameTable = new NameTable(this);
+    mNameTables.append(nameTable);
+    ui->nameTableContents->layout()->addWidget(nameTable);
+    nameTable->setTileSet(ui->tileSet);
+
+    // Send list of QColor to new nametable
+    QList<QList<QColor> > palettes;
+    for (int i = 0; i < 4; ++i) {
+        QList<QColor> pal;
+        for (int j = 0; j < 4; ++j) {
+            pal.append(mBasePalette[mBgPal[i][j]]);
+        }
+        palettes.append(pal);
+    }
+    nameTable->setPalettes(palettes);
+    connect(nameTable, SIGNAL(tileClicked(int,int)), this, SLOT(nameTableClicked(int,int)));
 }
 
 void MainWindow::updatePalettes()
@@ -273,7 +295,9 @@ void MainWindow::updatePalettes()
         }
         palettes.append(pal);
     }
-    ui->nameTable->setPalettes(palettes);
+    Q_FOREACH(NameTable* nameTable, mNameTables) {
+        nameTable->setPalettes(palettes);
+    }
 }
 
 void MainWindow::openRecentPalettes()
@@ -304,8 +328,10 @@ void MainWindow::openRecentNameTable()
 
 void MainWindow::nameTableClicked(int x, int y)
 {
+    NameTable *nameTable = qobject_cast<NameTable*>(sender());
+    mCurrentNameTable = nameTable;
     if (ui->applyPalettesCheckBox->isChecked() && mCurrentPalette != -1) {
-        ui->nameTable->setAttr(x, y, mCurrentPalette);
+        nameTable->setAttr(x, y, mCurrentPalette);
     }
 }
 
@@ -345,13 +371,18 @@ void MainWindow::loadNameTable(QString filename)
             updateRecentActions();
         }
         mSettings->setValue(kLastOpenPathKey, info.absolutePath());
-        if (info.size() == 1024) {
+        if (info.size() == 1024 || info.size() == 960) {
             char nametableData[1024];
-            file.read(nametableData, 1024);
-            ui->nameTable->setData(nametableData);
+            if (info.size() == 1024) {
+                file.read(nametableData, 1024);
+            } else {
+                file.read(nametableData, 960);
+                for (int i = 960; i < 1024; ++i)
+                    nametableData[i] = 0;
+            }
+            mCurrentNameTable->setData(nametableData);
+            mCurrentNameTable->setFileName(filename);
             file.close();
-        } else if (info.size() == 960) {
-
         } else {
             // Check size and import accordingly
         }

@@ -19,15 +19,22 @@
 #include "nametable.h"
 
 #include <QGridLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QPushButton>
 
 #include <QDebug>
 
 NameTable::NameTable(QWidget *parent) : QWidget(parent), mTileSet(0)
 {
-    QGridLayout *layout = new QGridLayout(this);
-    layout->setVerticalSpacing(0);
-    layout->setHorizontalSpacing(0);
-    layout->setContentsMargins(0, 0, 0, 0);
+    QVBoxLayout *vLayout = new QVBoxLayout(this);
+    mFileNameLabel = new QLabel(this);
+
+    QGridLayout *gridLayout = new QGridLayout(this);
+    gridLayout->setVerticalSpacing(0);
+    gridLayout->setHorizontalSpacing(0);
+    gridLayout->setContentsMargins(0, 0, 0, 0);
 
     mAttrs = &mData[960];
 
@@ -37,13 +44,16 @@ NameTable::NameTable(QWidget *parent) : QWidget(parent), mTileSet(0)
             connect(tile, SIGNAL(clicked()), this, SLOT(tileClicked()));
             tile->setFixedSize(QSize(24, 24));
             mTiles.append(tile);
-            layout->addWidget(tile, i, j);
+            gridLayout->addWidget(tile, i, j);
         }
     }
 
     for (int i = 0; i < 1024; ++i) {
         mData[i] = 0;
     }
+    setLayout(vLayout);
+    vLayout->addWidget(mFileNameLabel);
+    vLayout->addLayout(gridLayout);
 }
 
 void NameTable::setTileSet(TileSet *tileset)
@@ -121,6 +131,16 @@ void NameTable::setAttr(int x, int y, int pal)
     mTiles.at(index)->setPalette(mPalettes.at(which));
 
     update();
+}
+
+QString NameTable::getFileName() const
+{
+    return mFileNameLabel->text();
+}
+
+void NameTable::setFileName(QString &filename)
+{
+    mFileNameLabel->setText(filename);
 }
 
 char *NameTable::getData() const

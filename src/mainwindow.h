@@ -55,6 +55,8 @@ private Q_SLOTS:
     void on_bankAButton_toggled(bool set);
     void on_bankBButton_toggled(bool set);
 
+    void on_addNameTableButton_clicked();
+
     void updatePalettes();
     void openRecentPalettes();
     void updateTileset();
@@ -77,6 +79,7 @@ private:
     int mCurrentPalette; // Which palette to use
     unsigned char *mCurrentPal; // Which color is selected
     Swatch *mCurrentPalSwatch;
+    NameTable *mCurrentNameTable; // Current name table
     QMap<QString, int> mColorIndexes; // Which color is which index in nes palette
     QSettings *mSettings;
     QStringList mLastPaletteFiles;

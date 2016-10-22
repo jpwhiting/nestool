@@ -25,9 +25,12 @@
 #include <QList>
 #include <QWidget>
 
+class QLabel;
+
 class NameTable : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(QString filename WRITE setFileName READ getFileName)
 public:
     explicit NameTable(QWidget *parent = 0);
 
@@ -39,6 +42,9 @@ public:
 
     // Set the given x, y, to the given palette
     void setAttr(int x, int y, int pal);
+
+    QString getFileName() const;
+    void setFileName(QString &filename);
 
     char *getData() const;
 Q_SIGNALS:
@@ -55,6 +61,7 @@ private:
     unsigned char mData[1024]; // Nametable
     unsigned char *mAttrs; // Attributes of the name table
     QList<QList<QColor> > mPalettes; // All 4 palettes in order
+    QLabel *mFileNameLabel; // Label to show filename
 };
 
 #endif // NAMETABLE_H
