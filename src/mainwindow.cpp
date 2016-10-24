@@ -195,7 +195,10 @@ void MainWindow::on_action_Open_Palettes_triggered()
 
 void MainWindow::on_action_Save_Palettes_triggered()
 {
-    QString filename = QFileDialog::getSaveFileName(this, "Save palettes file", QDir::home().absolutePath(), "NES Palettes (*.pal)");
+    QString filename = QFileDialog::getSaveFileName(this,
+                                                    "Save palettes file",
+                                                    mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
+                                                    "NES Palettes (*.pal)");
     if (!filename.isEmpty()) {
         QFile file(filename);
         if (file.open(QIODevice::WriteOnly)) {
@@ -225,7 +228,10 @@ void MainWindow::on_action_Open_CHR_triggered()
 
 void MainWindow::on_action_Save_CHR_triggered()
 {
-    QString filename = QFileDialog::getSaveFileName(this, "Save tileset file", QDir::home().absolutePath(), "NES Tileset (*.chr)");
+    QString filename = QFileDialog::getSaveFileName(this,
+                                                    "Save tileset file",
+                                                    mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
+                                                    "NES Tileset (*.chr)");
     if (!filename.isEmpty()) {
         QFile file(filename);
         if (file.open(QIODevice::WriteOnly)) {
@@ -249,12 +255,90 @@ void MainWindow::on_action_Open_NameTable_triggered()
 void MainWindow::on_action_Save_NameTable_triggered()
 {
     // Ask for each nametable filename
-    QString filename = QFileDialog::getSaveFileName(this, "Save nametable file", QDir::home().absolutePath(), "NES NameTable (*.nam)");
+    QString filename = QFileDialog::getSaveFileName(this,
+                                                    "Save nametable file",
+                                                    mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
+                                                    "NES NameTable (*.nam)");
     if (!filename.isEmpty()) {
         QFile file(filename);
+        char *nameTableData = mCurrentNameTable->getData();
         if (file.open(QIODevice::WriteOnly)) {
-            file.write(ui->nameTable->getData(), 1024);
+            file.write(nameTableData, 1024);
             file.close();
+        }
+        // Save .h in rle compressed
+        bool compress = mSettingsDialog->compressNameTables();
+        QFileInfo info(filename);
+        QString name = info.baseName();
+        QString hFilename = info.canonicalPath() + "/" + name + ".h";
+        qDebug() << "writing .h file " << hFilename;
+        QFile headerFile(hFilename);
+
+        unsigned char *dst;
+        int stat[256];
+        int i;
+        int size = 1024;
+
+        if (compress) {
+            int min=256;
+            int tag=255;
+
+            dst = new unsigned char[size*2];
+            for (i = 0; i < 256; ++i)
+                stat[i] = 0;
+            for (i=0; i < size; ++i)
+                stat[nameTableData[i]]++;
+
+            for (i = 0; i < 256; ++i) {
+                if (stat[i]<min) {
+                    min=stat[i];
+                    tag = i;
+                }
+            }
+
+            int pp=0;
+            dst[pp++] = tag;
+            int len=0;
+            int sym=-1;
+
+            for (i=0; i < size - 1; ++i) {
+                if (nameTableData[i]!= sym || len == 255 || i == size - 1) {
+                    if (nameTableData[i]==sym && i == size - 1) len++;
+                    if  (len) dst[pp++]=sym;
+                    if (len > 1) {
+                        if (len == 2) {
+                            dst[pp++] = sym;
+                        } else {
+                            dst[pp++] = tag;
+                            dst[pp++] = len - 1;
+                        }
+                    }
+                    sym = nameTableData[i];
+                    len = 1;
+                } else {
+                    len++;
+                }
+            }
+            dst[pp++] = tag;
+            dst[pp++] = 0;
+            size = pp;
+        } else {
+            dst = (unsigned char*)nameTableData;
+        }
+        if (headerFile.open(QIODevice::WriteOnly|QIODevice::Text)) {
+            QString nameString = QString("const unsigned char %1[%2]={\n").arg(name).arg(size);
+            headerFile.write(nameString.toStdString().c_str(), nameString.length());
+
+            for (i = 0; i < size; ++i) {
+                QString numberString = QString("0x%1").arg(dst[i], 2, 16, QChar('0'));
+                if (i<size-1) numberString += ",";
+                if ((i&15) == 15 || i == (size-1))
+                    numberString += "\n";
+                headerFile.write(numberString.toStdString().c_str(), numberString.length());
+            }
+            QString endString("};\n");
+            headerFile.write(endString.toStdString().c_str(), endString.length());
+            headerFile.close();
         }
     }
 }
@@ -277,6 +361,7 @@ void MainWindow::on_addNameTableButton_clicked()
     mNameTables.append(nameTable);
     ui->nameTableContents->layout()->addWidget(nameTable);
     nameTable->setTileSet(ui->tileSet);
+    nameTable->setScale(mSettingsDialog->nameTableScale());
 
     // Send list of QColor to new nametable
     QList<QList<QColor> > palettes;
