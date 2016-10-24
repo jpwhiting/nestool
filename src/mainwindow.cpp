@@ -25,12 +25,10 @@
 
 #include "nametable.h"
 #include "palette.h"
+#include "settingsdialog.h"
 #include "swatch.h"
 
 #include <QDebug>
-
-// Keep track of last 5 filenames of each type
-#define kLastFileCount 5
 
 #define kLastOpenPathKey "lastOpenPath"
 #define kPreviousPalKey "previousPalFiles"
@@ -41,6 +39,7 @@
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::MainWindow),
+  mSettingsDialog(new SettingsDialog(this)),
   mBgPal{{15, 0, 16, 48}, {15, 1, 33, 49}, {15, 6, 22, 38}, {15, 9, 25, 41}},
   mCurrentPalette(-1),
   mCurrentPal(0),
@@ -115,6 +114,9 @@ MainWindow::MainWindow(QWidget *parent) :
   }
 
   updateTileset();
+
+  connect(mSettingsDialog, SIGNAL(settingsChanged()), this, SLOT(onSettingsChanged()));
+  onSettingsChanged(); // Update scales
 }
 
 MainWindow::~MainWindow()
@@ -173,6 +175,11 @@ void MainWindow::paletteHovered()
 {
     Swatch *swatch = qobject_cast<Swatch*>(sender());
     setStatus(swatch->getHoverText());
+}
+
+void MainWindow::on_action_Preferences_triggered()
+{
+    mSettingsDialog->show();
 }
 
 void MainWindow::on_action_Open_Palettes_triggered()
@@ -351,6 +358,16 @@ void MainWindow::setStatus(QString text)
     ui->statusBar->showMessage(text);
 }
 
+void MainWindow::onSettingsChanged()
+{
+    // Update tileset scale
+    ui->tileSet->setScale(mSettingsDialog->tileSetScale());
+    // Update nametable scales
+    Q_FOREACH(NameTable *nameTable, mNameTables) {
+        nameTable->setScale(mSettingsDialog->nameTableScale());
+    }
+}
+
 void MainWindow::loadCHR(QString filename)
 {
     QFile file(filename);
@@ -358,7 +375,7 @@ void MainWindow::loadCHR(QString filename)
     if (file.exists() && file.open(QIODevice::ReadOnly)) {
         if (!mLastCHRFiles.contains(filename)) {
             mLastCHRFiles.append(filename);
-            if (mLastCHRFiles.count() > kLastFileCount)
+            if (mLastCHRFiles.count() > mSettingsDialog->maxRecentFiles())
                 mLastCHRFiles.removeFirst();
             updateRecentActions();
         }
@@ -382,7 +399,7 @@ void MainWindow::loadNameTable(QString filename)
     if (file.exists() && file.open(QIODevice::ReadOnly)) {
         if (!mLastNameTableFiles.contains(filename)) {
             mLastNameTableFiles.append(filename);
-            if (mLastNameTableFiles.count() > kLastFileCount)
+            if (mLastNameTableFiles.count() > mSettingsDialog->maxRecentFiles())
                 mLastNameTableFiles.removeFirst();
             updateRecentActions();
         }
@@ -452,7 +469,7 @@ void MainWindow::loadPalettes(QString filename)
     if (file.exists()) {
         if (!mLastPaletteFiles.contains(filename)) {
             mLastPaletteFiles.append(filename);
-            if (mLastPaletteFiles.count() > kLastFileCount)
+            if (mLastPaletteFiles.count() > mSettingsDialog->maxRecentFiles())
                 mLastPaletteFiles.removeFirst();
             updateRecentActions();
         }

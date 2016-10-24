@@ -24,6 +24,7 @@
 
 class Swatch;
 class NameTable;
+class SettingsDialog;
 class QSettings;
 
 namespace Ui {
@@ -44,6 +45,8 @@ private Q_SLOTS:
     void paletteClicked();
     void paletteHovered();
 
+    void on_action_Preferences_triggered();
+
     void on_action_Open_Palettes_triggered();
     void on_action_Save_Palettes_triggered();
 
@@ -56,6 +59,7 @@ private Q_SLOTS:
     void on_bankAButton_toggled(bool set);
     void on_bankBButton_toggled(bool set);
 
+
     void on_addNameTableButton_clicked();
 
     void updatePalettes();
@@ -67,6 +71,8 @@ private Q_SLOTS:
     void nameTableClicked(int x, int y);
 
     void setStatus(QString text);
+
+    void onSettingsChanged(); // Called whenever settings are changed
 private:
     void loadPalettes(QString filename);
     void loadCHR(QString filename);
@@ -76,6 +82,7 @@ private:
     void updateRecentActions();
 
     Ui::MainWindow *ui;
+    SettingsDialog *mSettingsDialog;
     QColor mBasePalette[64];
     unsigned char mBgPal[4][4]; // Palettes
     char mChr[8192]; // Tileset

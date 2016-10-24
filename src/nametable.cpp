@@ -143,6 +143,16 @@ void NameTable::setFileName(QString &filename)
     mFileNameLabel->setText(filename);
 }
 
+void NameTable::setScale(int scale)
+{
+    if (scale < 1 || scale > 6)
+        return;
+
+    Q_FOREACH(Tile *tile, mTiles) {
+        tile->setFixedSize(QSize(8*scale, 8*scale));
+    }
+}
+
 char *NameTable::getData() const
 {
     return (char*)mData;

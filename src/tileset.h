@@ -36,6 +36,8 @@ public:
 
     void setPalette(QList<QColor> colors);
 
+    void setScale(int scale); // Set scale for tiles
+
 signals:
     void setStatus(QString text); // Signal to change the status bar message
 private slots:

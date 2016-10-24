@@ -17,13 +17,16 @@ SOURCES += main.cpp\
         nametable.cpp \
         swatch.cpp \
         tile.cpp \
-        tileset.cpp
+        tileset.cpp \
+    settingsdialog.cpp
 
 HEADERS  += mainwindow.h \
         nametable.h \
         palette.h \
         swatch.h \
         tile.h \
-        tileset.h
+        tileset.h \
+    settingsdialog.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    settingsdialog.ui

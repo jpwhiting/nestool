@@ -46,6 +46,8 @@ public:
     QString getFileName() const;
     void setFileName(QString &filename);
 
+    void setScale(int scale); // Set scale for tiles
+
     char *getData() const;
 Q_SIGNALS:
     void tileClicked(int x, int y);

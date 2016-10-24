@@ -63,6 +63,16 @@ void TileSet::setPalette(QList<QColor> colors)
     }
 }
 
+void TileSet::setScale(int scale)
+{
+    // TODO: Add some sanity checking
+    if (scale < 1 || scale > 6)
+        return;
+    Q_FOREACH(Tile *tile, mTiles) {
+        tile->setFixedSize(QSize(8*scale, 8*scale));
+    }
+}
+
 void TileSet::tileHovered()
 {
     Tile *tile = qobject_cast<Tile*>(sender());
