@@ -36,7 +36,10 @@ public:
 
     void setPalette(QList<QColor> colors);
 
-public slots:
+signals:
+    void setStatus(QString text); // Signal to change the status bar message
+private slots:
+    void tileHovered(); // Slot for when a tile is hovered over
 private:
     QList<Tile*> mTiles;
 };

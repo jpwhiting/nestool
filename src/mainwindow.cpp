@@ -74,6 +74,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
   updateRecentActions();
 
+  // Connect to tileset signals
+  connect(ui->tileSet, SIGNAL(setStatus(QString)), this, SLOT(setStatus(QString)));
+
   // Create one nametable
   mNameTables.append(ui->nameTable);
   ui->nameTable->setTileSet(ui->tileSet);
@@ -93,6 +96,8 @@ MainWindow::MainWindow(QWidget *parent) :
       if (swatch) {
           QColor color(ntscPalette[pp], ntscPalette[pp+1], ntscPalette[pp+2]);
           swatch->setColor(color);
+          swatch->setHoverText(QString("Color:$%1").arg(i, 2, 16, QChar('0')));
+          connect(swatch, SIGNAL(hovered()), this, SLOT(paletteHovered()));
           mColorIndexes.insert(color.name(), i);
           connect(swatch, SIGNAL(clicked()), this, SLOT(paletteClicked()));
       }
@@ -162,6 +167,12 @@ void MainWindow::paletteClicked()
         }
         ui->nameTable->setPalettes(palettes);
     }
+}
+
+void MainWindow::paletteHovered()
+{
+    Swatch *swatch = qobject_cast<Swatch*>(sender());
+    setStatus(swatch->getHoverText());
 }
 
 void MainWindow::on_action_Open_Palettes_triggered()
@@ -333,6 +344,11 @@ void MainWindow::nameTableClicked(int x, int y)
     if (ui->applyPalettesCheckBox->isChecked() && mCurrentPalette != -1) {
         nameTable->setAttr(x, y, mCurrentPalette);
     }
+}
+
+void MainWindow::setStatus(QString text)
+{
+    ui->statusBar->showMessage(text);
 }
 
 void MainWindow::loadCHR(QString filename)

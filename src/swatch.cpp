@@ -18,12 +18,14 @@
 
 #include "swatch.h"
 
+#include <QMouseEvent>
 #include <QPainter>
 
 Swatch::Swatch(QWidget *parent) : QWidget(parent)
 {
     mColor = Qt::black;
     mSelected = false;
+    setMouseTracking(true);
 }
 
 QColor Swatch::getColor() const
@@ -48,6 +50,16 @@ void Swatch::setSelected(bool selected)
     update();
 }
 
+QString Swatch::getHoverText() const
+{
+    return mHoverText;
+}
+
+void Swatch::setHoverText(QString text)
+{
+    mHoverText = text;
+}
+
 void Swatch::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
@@ -63,4 +75,11 @@ void Swatch::paintEvent(QPaintEvent *event)
 void Swatch::mousePressEvent(QMouseEvent *event)
 {
     emit clicked();
+}
+
+void Swatch::mouseMoveEvent(QMouseEvent *event)
+{
+    if (event->buttons() & Qt::LeftButton == Qt::LeftButton)
+        emit clicked();
+    emit hovered();
 }

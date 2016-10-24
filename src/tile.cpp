@@ -18,6 +18,7 @@
 
 #include "tile.h"
 
+#include <QMouseEvent>
 #include <QPainter>
 
 Tile::Tile(QWidget *parent) : QWidget(parent)
@@ -26,6 +27,7 @@ Tile::Tile(QWidget *parent) : QWidget(parent)
     for (int i = 0; i < 16; ++i) {
         mData[i] = 0;
     }
+    setMouseTracking(true);
 }
 
 void Tile::setData(char *data)
@@ -60,6 +62,16 @@ void Tile::setSelected(bool selected)
     update();
 }
 
+QString Tile::getHoverText() const
+{
+    return mHoverText;
+}
+
+void Tile::setHoverText(QString text)
+{
+    mHoverText = text;
+}
+
 void Tile::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
@@ -88,4 +100,11 @@ void Tile::paintEvent(QPaintEvent *event)
 void Tile::mousePressEvent(QMouseEvent *event)
 {
     emit clicked();
+}
+
+void Tile::mouseMoveEvent(QMouseEvent *event)
+{
+    if (event->buttons() & Qt::LeftButton == Qt::LeftButton)
+        emit clicked();
+    emit hovered();
 }

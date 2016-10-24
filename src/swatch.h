@@ -27,6 +27,7 @@ class Swatch : public QWidget
     Q_OBJECT
     Q_PROPERTY(QColor color READ getColor WRITE setColor)
     Q_PROPERTY(bool selected READ getSelected WRITE setSelected)
+    Q_PROPERTY(QString hoverText READ getHoverText WRITE setHoverText)
 public:
     explicit Swatch(QWidget *parent = 0);
 
@@ -35,16 +36,23 @@ public:
 
     bool getSelected() const;
     void setSelected(bool selected);
+
+    QString getHoverText() const;
+    void setHoverText(QString text);
+
 signals:
     void clicked();
+    void hovered();
 
 public slots:
 protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 private:
     QColor mColor;
     bool mSelected;
+    QString mHoverText;
 };
 
 #endif // SWATCH_H

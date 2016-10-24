@@ -31,6 +31,8 @@ TileSet::TileSet(QWidget *parent) : QWidget(parent)
         for (int j = 0; j < 16; ++j) {
             Tile *tile = new Tile(this);
             tile->setFixedSize(QSize(18, 18));
+            tile->setHoverText(QString("Tile: $%1").arg(i*16+j, 2, 16, QChar('0')));
+            connect(tile, SIGNAL(hovered()), this, SLOT(tileHovered()));
             mTiles.append(tile);
             layout->addWidget(tile, i, j);
         }
@@ -59,5 +61,11 @@ void TileSet::setPalette(QList<QColor> colors)
     Q_FOREACH(Tile *tile, mTiles) {
         tile->setPalette(colors);
     }
+}
+
+void TileSet::tileHovered()
+{
+    Tile *tile = qobject_cast<Tile*>(sender());
+    emit setStatus(tile->getHoverText());
 }
 

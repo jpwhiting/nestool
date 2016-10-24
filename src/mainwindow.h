@@ -42,6 +42,7 @@ private Q_SLOTS:
     void bgClicked();
 
     void paletteClicked();
+    void paletteHovered();
 
     void on_action_Open_Palettes_triggered();
     void on_action_Save_Palettes_triggered();
@@ -64,6 +65,8 @@ private Q_SLOTS:
     void openRecentNameTable();
 
     void nameTableClicked(int x, int y);
+
+    void setStatus(QString text);
 private:
     void loadPalettes(QString filename);
     void loadCHR(QString filename);
