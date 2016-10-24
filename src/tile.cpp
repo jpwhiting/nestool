@@ -104,7 +104,7 @@ void Tile::mousePressEvent(QMouseEvent *event)
 
 void Tile::mouseMoveEvent(QMouseEvent *event)
 {
-    if (event->buttons() & Qt::LeftButton == Qt::LeftButton)
+    if (event->buttons() & Qt::LeftButton)
         emit clicked();
     emit hovered();
 }

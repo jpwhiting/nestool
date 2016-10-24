@@ -79,7 +79,7 @@ void Swatch::mousePressEvent(QMouseEvent *event)
 
 void Swatch::mouseMoveEvent(QMouseEvent *event)
 {
-    if (event->buttons() & Qt::LeftButton == Qt::LeftButton)
+    if (event->buttons() & Qt::LeftButton)
         emit clicked();
     emit hovered();
 }
