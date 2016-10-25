@@ -43,6 +43,7 @@ public:
     // Set the given x, y, to the given palette
     void setAttr(int x, int y, int pal);
 
+    QString getName() const;
     QString getFileName() const;
     void setFileName(QString &filename);
 

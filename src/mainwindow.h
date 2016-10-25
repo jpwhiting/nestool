@@ -77,6 +77,8 @@ private Q_SLOTS:
     void setStatus(QString text);
 
     void onSettingsChanged(); // Called whenever settings are changed
+
+    void setTitle(QString name);
 private:
     void loadPalettes(QString filename);
     void loadCHR(QString filename);

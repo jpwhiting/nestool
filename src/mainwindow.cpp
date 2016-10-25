@@ -36,6 +36,8 @@
 #define kPreviousNameTablesKey "previousNameTableFiles"
 #define kPreviousPathKey "path"
 
+#define VERSION "0.1"
+
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::MainWindow),
@@ -80,6 +82,7 @@ MainWindow::MainWindow(QWidget *parent) :
   mNameTables.append(ui->nameTable);
   ui->nameTable->setTileSet(ui->tileSet);
   mCurrentNameTable = mNameTables.at(0);
+  setTitle(mCurrentNameTable->getName());
   connect(ui->nameTable, SIGNAL(tileClicked(int,int)), this, SLOT(nameTableClicked(int,int)));
 
   // Clear out mChr
@@ -334,7 +337,6 @@ void MainWindow::on_action_Save_NameTable_triggered()
         QFileInfo info(filename);
         QString name = info.baseName();
         QString hFilename = info.canonicalPath() + "/" + name + ".h";
-        qDebug() << "writing .h file " << hFilename;
         QFile headerFile(hFilename);
 
         unsigned char *dst;
@@ -518,6 +520,7 @@ void MainWindow::nameTableClicked(int x, int y)
 {
     NameTable *nameTable = qobject_cast<NameTable*>(sender());
     mCurrentNameTable = nameTable;
+    setTitle(mCurrentNameTable->getName());
     if (ui->applyPalettesCheckBox->isChecked() && mCurrentPalette != -1) {
         nameTable->setAttr(x, y, mCurrentPalette);
     }
@@ -536,6 +539,11 @@ void MainWindow::onSettingsChanged()
     Q_FOREACH(NameTable *nameTable, mNameTables) {
         nameTable->setScale(mSettingsDialog->nameTableScale());
     }
+}
+
+void MainWindow::setTitle(QString name)
+{
+    setWindowTitle(QString("NES Tool v%1 - %2").arg(VERSION).arg(name));
 }
 
 void MainWindow::loadCHR(QString filename)
@@ -585,6 +593,7 @@ void MainWindow::loadNameTable(QString filename)
             }
             mCurrentNameTable->setData(nametableData);
             mCurrentNameTable->setFileName(filename);
+            setTitle(mCurrentNameTable->getName());
             file.close();
         } else {
             // Check size and import accordingly

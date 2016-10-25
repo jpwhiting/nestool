@@ -18,6 +18,7 @@
 
 #include "nametable.h"
 
+#include <QFileInfo>
 #include <QGridLayout>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -108,7 +109,6 @@ void NameTable::setAttr(int x, int y, int pal)
     }
 
     int pp = y/4*8+x/4;
-    qDebug() << "pp is " << pp;
     int mask = 3;
     pal = pal&3;
 
@@ -127,10 +127,18 @@ void NameTable::setAttr(int x, int y, int pal)
     mAttrs[pp]=(mAttrs[pp] & (mask^255))|pal;
 
     int index = x + (y*32);
-    qDebug() << "which is " << which << " size is " << mPalettes.size();
     mTiles.at(index)->setPalette(mPalettes.at(which));
 
     update();
+}
+
+QString NameTable::getName() const
+{
+    QFileInfo info(mFileNameLabel->text());
+    if (info.exists())
+        return info.baseName();
+    else
+        return QString("New NameTable");
 }
 
 QString NameTable::getFileName() const
