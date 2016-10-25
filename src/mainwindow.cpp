@@ -364,10 +364,11 @@ void MainWindow::on_action_Save_NameTable_triggered()
             int len=0;
             int sym=-1;
 
-            for (i=0; i < size - 1; ++i) {
+            for (i=0; i < size; ++i) {
                 if (nameTableData[i]!= sym || len == 255 || i == size - 1) {
                     if (nameTableData[i]==sym && i == size - 1) len++;
-                    if  (len) dst[pp++]=sym;
+                    if (len)
+                        dst[pp++]=sym;
                     if (len > 1) {
                         if (len == 2) {
                             dst[pp++] = sym;
