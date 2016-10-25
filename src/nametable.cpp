@@ -158,6 +158,24 @@ char *NameTable::getData() const
     return (char*)mData;
 }
 
+QSet<int> NameTable::usedTiles() const
+{
+    QSet<int> tiles;
+    for (int i = 0; i < 960; ++i) {
+        tiles.insert(mData[i]);
+    }
+    return tiles;
+}
+
+void NameTable::remapTiles(QMap<int, int> mapping)
+{
+    for (int i = 0; i < 960; ++i) {
+        if (mapping.contains(mData[i])) {
+            mData[i] = mapping.value(mData[i]);
+        }
+    }
+}
+
 void NameTable::tileClicked()
 {
     Tile *tile = qobject_cast<Tile*>(sender());

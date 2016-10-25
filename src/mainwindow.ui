@@ -1975,7 +1975,11 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
+    <addaction name="action_Remove_Duplicates"/>
+    <addaction name="action_Remove_Unused"/>
+    <addaction name="separator"/>
     <addaction name="action_Preferences"/>
+    <addaction name="separator"/>
     <addaction name="action_Quit"/>
    </widget>
    <widget class="QMenu" name="menu_Tileset">
@@ -2070,6 +2074,16 @@
   <action name="action_Preferences">
    <property name="text">
     <string>&amp;Preferences...</string>
+   </property>
+  </action>
+  <action name="action_Remove_Duplicates">
+   <property name="text">
+    <string>Remove &amp;Duplicates</string>
+   </property>
+  </action>
+  <action name="action_Remove_Unused">
+   <property name="text">
+    <string>Remove &amp;Unused</string>
    </property>
   </action>
  </widget>

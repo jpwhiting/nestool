@@ -49,6 +49,9 @@ public:
     void setScale(int scale); // Set scale for tiles
 
     char *getData() const;
+
+    QSet<int> usedTiles() const;
+    void remapTiles(QMap<int, int> mapping); // Update nametable using the given mapping
 Q_SIGNALS:
     void tileClicked(int x, int y);
 

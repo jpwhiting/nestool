@@ -38,6 +38,8 @@ public:
 
     void setScale(int scale); // Set scale for tiles
 
+    void copyTile(int from, int to); // Copy tile data from tile from to tile to
+    void clearTile(int index); // Clear out the given tile
 signals:
     void setStatus(QString text); // Signal to change the status bar message
 private slots:

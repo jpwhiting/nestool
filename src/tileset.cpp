@@ -20,6 +20,8 @@
 
 #include <QGridLayout>
 
+char zeros[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
 TileSet::TileSet(QWidget *parent) : QWidget(parent)
 {
     QGridLayout *layout = new QGridLayout(this);
@@ -71,6 +73,16 @@ void TileSet::setScale(int scale)
     Q_FOREACH(Tile *tile, mTiles) {
         tile->setFixedSize(QSize(8*scale, 8*scale));
     }
+}
+
+void TileSet::copyTile(int from, int to)
+{
+    mTiles.at(to)->setData(mTiles.at(from)->chrData());
+}
+
+void TileSet::clearTile(int index)
+{
+    mTiles.at(index)->setData(zeros);
 }
 
 void TileSet::tileHovered()

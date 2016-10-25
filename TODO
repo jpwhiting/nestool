@@ -1,7 +1,5 @@
 TODO:
-  Write nametable .h files
   Remove duplicate tiles
-  Remove unused tiles
   Edit nametable in gui
   Fix palette sync issues
   Metasprite editor
@@ -20,3 +18,5 @@ DONE:
   Use nametable attributes for palettes
   Write nam files
   Allow multiple nametables in memory
+  Write nametable .h files
+  Remove unused tiles

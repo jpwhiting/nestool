@@ -190,6 +190,55 @@ void MainWindow::paletteHovered()
     setStatus(swatch->getHoverText());
 }
 
+void MainWindow::on_action_Remove_Duplicates_triggered()
+{
+    // Find duplicates in tileset
+    // Create mapping of duplicates
+    // Remove duplicates and update all nametables
+}
+
+void MainWindow::on_action_Remove_Unused_triggered()
+{
+    QSet<int> usedTiles;
+    // Get used tiles from all nametables
+    // Find union of used tiles from nametables
+    Q_FOREACH(NameTable *nameTable, mNameTables) {
+        usedTiles.unite(nameTable->usedTiles());
+    }
+
+    // Create mapping of tiles we will remove (shifting tiles up)
+    QMap<int, int> mapping;
+    for (int i = 0; i < 256; ++i) {
+        if (!usedTiles.contains(i)) {
+            // Find next used tile > i
+            for (int j = i+1; j < 256; ++j) {
+                if (usedTiles.contains(j)) {
+                    // Move tile data from j to i
+                    ui->tileSet->copyTile(j, i);
+                    usedTiles.remove(j);
+                    usedTiles.insert(i); // Now i is used, j isn't
+                    // Add j to i to mapping
+                    mapping.insert(j, i);
+                    j = 256;
+                }
+            }
+        }
+    }
+
+    // Now clear out all unused tiles
+    for (int i = 0; i < 256; ++i) {
+        if (!usedTiles.contains(i)) {
+            // Clear out the tile
+            ui->tileSet->clearTile(i);
+        }
+    }
+    // update all nametables
+    Q_FOREACH(NameTable *nameTable, mNameTables) {
+        nameTable->remapTiles(mapping);
+    }
+    update();
+}
+
 void MainWindow::on_action_Preferences_triggered()
 {
     mSettingsDialog->show();
@@ -314,12 +363,10 @@ void MainWindow::on_action_Save_NameTable_triggered()
             int len=0;
             int sym=-1;
 
-            for (i=0; i < size; ++i) {
+            for (i=0; i < size - 1; ++i) {
                 if (nameTableData[i]!= sym || len == 255 || i == size - 1) {
-                    if (nameTableData[i] == sym && i == size - 1)
-                        len++;
-                    if (len)
-                        dst[pp++] = sym;
+                    if (nameTableData[i]==sym && i == size - 1) len++;
+                    if  (len) dst[pp++]=sym;
                     if (len > 1) {
                         if (len == 2) {
                             dst[pp++] = sym;

@@ -45,6 +45,9 @@ private Q_SLOTS:
     void paletteClicked();
     void paletteHovered();
 
+    void on_action_Remove_Duplicates_triggered();
+    void on_action_Remove_Unused_triggered();
+
     void on_action_Preferences_triggered();
 
     void on_action_Open_Palettes_triggered();
