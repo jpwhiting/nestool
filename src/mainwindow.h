@@ -68,6 +68,7 @@ private Q_SLOTS:
     void updatePalettes();
     void openRecentPalettes();
     void updateTileset();
+    void updateFromTileset();
     void openRecentCHR();
     void openRecentNameTable();
 

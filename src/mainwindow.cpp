@@ -236,6 +236,7 @@ void MainWindow::on_action_Remove_Unused_triggered()
     Q_FOREACH(NameTable *nameTable, mNameTables) {
         nameTable->remapTiles(mapping);
     }
+    updateFromTileset(); // Make mChr match what the tileset shows
     update();
 }
 
@@ -485,6 +486,19 @@ void MainWindow::updateTileset()
         ui->tileSet->setData(mChr);
     else
         ui->tileSet->setData(mChr + 4096);
+}
+
+void MainWindow::updateFromTileset()
+{
+    char *start = (ui->bankAButton->isChecked() ? mChr : mChr + 4096);
+    for (int i = 0; i < 256; ++i) {
+        char *tileData;
+        tileData = ui->tileSet->tileData(i);
+        for (int j = 0; j < 16; ++j) {
+            start[j] = tileData[j];
+        }
+        start += 16;
+    }
 }
 
 void MainWindow::openRecentCHR()
