@@ -30,7 +30,7 @@ TileSet::TileSet(QWidget *parent) : QWidget(parent)
     for (int i = 0; i < 16; ++i) {
         for (int j = 0; j < 16; ++j) {
             Tile *tile = new Tile(this);
-            tile->setFixedSize(QSize(18, 18));
+            tile->setFixedSize(QSize(16, 16));
             tile->setHoverText(QString("Tile: $%1").arg(i*16+j, 2, 16, QChar('0')));
             connect(tile, SIGNAL(hovered()), this, SLOT(tileHovered()));
             mTiles.append(tile);

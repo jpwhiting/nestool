@@ -113,6 +113,19 @@ MainWindow::MainWindow(QWidget *parent) :
       }
   }
 
+  // Select swatch 0_0
+  Swatch *swatch = ui->paletteGroupBox->findChild<Swatch*>(QString("swatch0_0"));
+  swatch->setSelected(true);
+  mCurrentPal = &mBgPal[0][0];
+  mCurrentPalette = 0;
+  mCurrentPalSwatch = swatch;
+  QList<QColor> pal;
+  pal.append(mBasePalette[mBgPal[0][0]]);
+  pal.append(mBasePalette[mBgPal[0][1]]);
+  pal.append(mBasePalette[mBgPal[0][2]]);
+  pal.append(mBasePalette[mBgPal[0][3]]);
+  ui->tileSet->setPalette(pal);
+
   updateTileset();
 
   connect(mSettingsDialog, SIGNAL(settingsChanged()), this, SLOT(onSettingsChanged()));
@@ -388,6 +401,14 @@ void MainWindow::updatePalettes()
             }
         }
     }
+
+    // Send color palette to tileSet
+    QList<QColor> pal;
+    pal.append(mBasePalette[mBgPal[mCurrentPalette][0]]);
+    pal.append(mBasePalette[mBgPal[mCurrentPalette][1]]);
+    pal.append(mBasePalette[mBgPal[mCurrentPalette][2]]);
+    pal.append(mBasePalette[mBgPal[mCurrentPalette][3]]);
+    ui->tileSet->setPalette(pal);
 
     // Send list of QColor to nametable
     QList<QList<QColor> > palettes;
