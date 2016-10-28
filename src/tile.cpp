@@ -72,6 +72,18 @@ void Tile::setHoverText(QString text)
     mHoverText = text;
 }
 
+bool Tile::identical(Tile *other)
+{
+    bool same = true;
+    for (int i = 0; i < 16; ++i) {
+        if (mData[i] != other->mData[i]) {
+            same = false;
+            i = 16;
+        }
+    }
+    return same;
+}
+
 void Tile::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);

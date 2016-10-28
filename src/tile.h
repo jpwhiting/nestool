@@ -40,6 +40,8 @@ public:
 
     QString getHoverText() const;
     void setHoverText(QString text);
+
+    bool identical(Tile *other); // Tell if this tile is identical to other
 signals:
     void clicked();
     void hovered();

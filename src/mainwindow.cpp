@@ -196,8 +196,51 @@ void MainWindow::paletteHovered()
 void MainWindow::on_action_Remove_Duplicates_triggered()
 {
     // Find duplicates in tileset
+    QList<QPair<int, int> >duplicates = ui->tileSet->duplicateTiles();
+
     // Create mapping of duplicates
+    QMap<int, int> mapping;
+    QSet<int> unused;
+    for (int i = 0; i < duplicates.size(); ++i) {
+        QPair<int, int> pair = duplicates.at(i);
+        mapping.insert(pair.second, pair.first);
+        unused.insert(pair.second);
+        ui->tileSet->clearTile(pair.second);
+    }
     // Remove duplicates and update all nametables
+    Q_FOREACH(NameTable *nameTable, mNameTables) {
+        nameTable->remapTiles(mapping);
+    }
+
+    mapping.clear();
+    // Now shift all used tiles to make space at the end
+    for (int i = 0; i < 256; ++i) {
+        if (unused.contains(i)) {
+            for (int j = i+1; j < 256; ++j) {
+                if (!unused.contains(j)) {
+                    ui->tileSet->copyTile(j, i);
+                    unused.remove(i);
+                    unused.insert(j);
+                    mapping.insert(j, i);
+                    j = 256; // Skip to the next unused
+                }
+            }
+        }
+    }
+
+    // Now clear out all unused tiles
+    for (int i = 0; i < 256; ++i) {
+        if (unused.contains(i)) {
+            // Clear out the tile
+            ui->tileSet->clearTile(i);
+        }
+    }
+    // update all nametables
+    Q_FOREACH(NameTable *nameTable, mNameTables) {
+        nameTable->remapTiles(mapping);
+    }
+    updateFromTileset(); // Make mChr match what the tileset shows
+    update();
 }
 
 void MainWindow::on_action_Remove_Unused_triggered()

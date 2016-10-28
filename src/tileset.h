@@ -40,6 +40,8 @@ public:
 
     void copyTile(int from, int to); // Copy tile data from tile from to tile to
     void clearTile(int index); // Clear out the given tile
+
+    QList<QPair<int, int> > duplicateTiles(); // Find all duplicate tiles
 signals:
     void setStatus(QString text); // Signal to change the status bar message
 private slots:

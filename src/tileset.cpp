@@ -85,6 +85,20 @@ void TileSet::clearTile(int index)
     mTiles.at(index)->setData(zeros);
 }
 
+QList<QPair<int, int> > TileSet::duplicateTiles()
+{
+    QList<QPair<int, int> >duplicates;
+    for (int i = 0; i < mTiles.size() - 1; ++i) {
+        for (int j = i + 1; j < mTiles.size(); ++j) {
+            if (mTiles.at(i)->identical(mTiles.at(j))) {
+                QPair<int, int> pair(i, j);
+                duplicates.append(pair);
+            }
+        }
+    }
+    return duplicates;
+}
+
 void TileSet::tileHovered()
 {
     Tile *tile = qobject_cast<Tile*>(sender());
