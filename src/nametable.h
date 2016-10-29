@@ -30,11 +30,15 @@ class QLabel;
 class NameTable : public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY(QString filename WRITE setFileName READ getFileName)
+    Q_PROPERTY(QString filename READ getFileName)
 public:
     explicit NameTable(QWidget *parent = 0);
 
     void setTileSet(TileSet *tileset); // Tell us the tileset so we can draw
+    bool load(QString filename);
+    void save(bool compress); // Need filename loaded or call saveAs first
+    void saveAs(QString filename, bool compress);
+
     void setData(char *data);
 
     // Set all 4 palettes in order so we can apply the right one per tile.
@@ -45,7 +49,6 @@ public:
 
     QString getName() const;
     QString getFileName() const;
-    void setFileName(QString &filename);
 
     void setScale(int scale); // Set scale for tiles
 
@@ -68,6 +71,7 @@ private:
     unsigned char *mAttrs; // Attributes of the name table
     QList<QList<QColor> > mPalettes; // All 4 palettes in order
     QLabel *mFileNameLabel; // Label to show filename
+    QString mFileName; // Last Filename used to load or save this NameTable
 };
 
 #endif // NAMETABLE_H

@@ -369,86 +369,14 @@ void MainWindow::on_action_Save_NameTable_triggered()
                                                     mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
                                                     "NES NameTable (*.nam)");
     if (!filename.isEmpty()) {
-        QFile file(filename);
-        char *nameTableData = mCurrentNameTable->getData();
-        if (file.open(QIODevice::WriteOnly)) {
-            file.write(nameTableData, 1024);
-            file.close();
-        }
-        // Save .h in rle compressed
-        bool compress = mSettingsDialog->compressNameTables();
-        QFileInfo info(filename);
-        QString name = info.baseName();
-        QString hFilename = info.canonicalPath() + "/" + name + ".h";
-        QFile headerFile(hFilename);
+        mCurrentNameTable->saveAs(filename, mSettingsDialog->compressNameTables());
+    }
+}
 
-        unsigned char *dst;
-        int stat[256];
-        int i;
-        int size = 1024;
-
-        if (compress) {
-            int min=256;
-            int tag=255;
-
-            dst = new unsigned char[size*2];
-            for (i = 0; i < 256; ++i)
-                stat[i] = 0;
-            for (i=0; i < size; ++i)
-                stat[nameTableData[i]]++;
-
-            for (i = 0; i < 256; ++i) {
-                if (stat[i]<min) {
-                    min=stat[i];
-                    tag = i;
-                }
-            }
-
-            int pp=0;
-            dst[pp++] = tag;
-            int len=0;
-            int sym=-1;
-
-            for (i=0; i < size; ++i) {
-                if (nameTableData[i]!= sym || len == 255 || i == size - 1) {
-                    if (nameTableData[i]==sym && i == size - 1) len++;
-                    if (len)
-                        dst[pp++]=sym;
-                    if (len > 1) {
-                        if (len == 2) {
-                            dst[pp++] = sym;
-                        } else {
-                            dst[pp++] = tag;
-                            dst[pp++] = len - 1;
-                        }
-                    }
-                    sym = nameTableData[i];
-                    len = 1;
-                } else {
-                    len++;
-                }
-            }
-            dst[pp++] = tag;
-            dst[pp++] = 0;
-            size = pp;
-        } else {
-            dst = (unsigned char*)nameTableData;
-        }
-        if (headerFile.open(QIODevice::WriteOnly|QIODevice::Text)) {
-            QString nameString = QString("const unsigned char %1[%2]={\n").arg(name).arg(size);
-            headerFile.write(nameString.toStdString().c_str(), nameString.length());
-
-            for (i = 0; i < size; ++i) {
-                QString numberString = QString("0x%1").arg(dst[i], 2, 16, QChar('0'));
-                if (i<size-1) numberString += ",";
-                if ((i&15) == 15 || i == (size-1))
-                    numberString += "\n";
-                headerFile.write(numberString.toStdString().c_str(), numberString.length());
-            }
-            QString endString("};\n");
-            headerFile.write(endString.toStdString().c_str(), endString.length());
-            headerFile.close();
-        }
+void MainWindow::on_action_Save_All_NameTables_triggered()
+{
+    Q_FOREACH(NameTable *nameTable, mNameTables) {
+        nameTable->save(mSettingsDialog->compressNameTables());
     }
 }
 
@@ -615,9 +543,8 @@ void MainWindow::loadCHR(QString filename)
 
 void MainWindow::loadNameTable(QString filename)
 {
-    QFile file(filename);
-    QFileInfo info(file);
-    if (file.exists() && file.open(QIODevice::ReadOnly)) {
+    if (mCurrentNameTable->load(filename)) {
+        QFileInfo info(filename);
         if (!mLastNameTableFiles.contains(filename)) {
             mLastNameTableFiles.append(filename);
             if (mLastNameTableFiles.count() > mSettingsDialog->maxRecentFiles())
@@ -625,22 +552,10 @@ void MainWindow::loadNameTable(QString filename)
             updateRecentActions();
         }
         mSettings->setValue(kLastOpenPathKey, info.absolutePath());
-        if (info.size() == 1024 || info.size() == 960) {
-            char nametableData[1024];
-            if (info.size() == 1024) {
-                file.read(nametableData, 1024);
-            } else {
-                file.read(nametableData, 960);
-                for (int i = 960; i < 1024; ++i)
-                    nametableData[i] = 0;
-            }
-            mCurrentNameTable->setData(nametableData);
-            mCurrentNameTable->setFileName(filename);
-            setTitle(mCurrentNameTable->getName());
-            file.close();
-        } else {
-            // Check size and import accordingly
-        }
+        setTitle(mCurrentNameTable->getName());
+    } else {
+        QMessageBox::warning(this, "Unable to load NameTable",
+                             QString("Unable to load NameTable from file %1").arg(filename));
     }
 }
 

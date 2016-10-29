@@ -62,6 +62,123 @@ void NameTable::setTileSet(TileSet *tileset)
     mTileSet = tileset;
 }
 
+bool NameTable::load(QString filename)
+{
+    QFile file(filename);
+    QFileInfo info(file);
+    if (file.exists() && file.open(QIODevice::ReadOnly)) {
+        if (info.size() == 1024 || info.size() == 960) {
+            char nametableData[1024];
+            if (info.size() == 1024) {
+                file.read(nametableData, 1024);
+            } else {
+                file.read(nametableData, 960);
+                for (int i = 960; i < 1024; ++i)
+                    nametableData[i] = 0;
+            }
+            setData(nametableData);
+            mFileName = filename;
+            mFileNameLabel->setText(getName());
+            file.close();
+            return true;
+        } else {
+            // Check size and import accordingly
+        }
+    }
+
+    return false;
+}
+
+void NameTable::save(bool compress)
+{
+    // Save .nam file
+    QFile file(mFileName);
+    if (file.open(QIODevice::WriteOnly)) {
+        file.write((const char*)mData, 1024);
+        file.close();
+    }
+    // Save .h in rle compressed
+    QFileInfo info(mFileName);
+    QString name = info.baseName();
+    QString hFilename = info.canonicalPath() + "/" + name + ".h";
+    QFile headerFile(hFilename);
+
+    unsigned char *dst;
+    int stat[256];
+    int i;
+    int size = 1024;
+
+    if (compress) {
+        int min=256;
+        int tag=255;
+
+        dst = new unsigned char[size*2];
+        for (i = 0; i < 256; ++i)
+            stat[i] = 0;
+        for (i=0; i < size; ++i)
+            stat[mData[i]]++;
+
+        for (i = 0; i < 256; ++i) {
+            if (stat[i]<min) {
+                min=stat[i];
+                tag = i;
+            }
+        }
+
+        int pp=0;
+        dst[pp++] = tag;
+        int len=0;
+        int sym=-1;
+
+        for (i=0; i < size; ++i) {
+            if (mData[i]!= sym || len == 255 || i == size - 1) {
+                if (mData[i]==sym && i == size - 1) len++;
+                if (len)
+                    dst[pp++]=sym;
+                if (len > 1) {
+                    if (len == 2) {
+                        dst[pp++] = sym;
+                    } else {
+                        dst[pp++] = tag;
+                        dst[pp++] = len - 1;
+                    }
+                }
+                sym = mData[i];
+                len = 1;
+            } else {
+                len++;
+            }
+        }
+        dst[pp++] = tag;
+        dst[pp++] = 0;
+        size = pp;
+    } else {
+        dst = (unsigned char*)mData;
+    }
+    if (headerFile.open(QIODevice::WriteOnly|QIODevice::Text)) {
+        QString nameString = QString("const unsigned char %1[%2]={\n").arg(name).arg(size);
+        headerFile.write(nameString.toStdString().c_str(), nameString.length());
+
+        for (i = 0; i < size; ++i) {
+            QString numberString = QString("0x%1").arg(dst[i], 2, 16, QChar('0'));
+            if (i<size-1) numberString += ",";
+            if ((i&15) == 15 || i == (size-1))
+                numberString += "\n";
+            headerFile.write(numberString.toStdString().c_str(), numberString.length());
+        }
+        QString endString("};\n");
+        headerFile.write(endString.toStdString().c_str(), endString.length());
+        headerFile.close();
+    }
+}
+
+void NameTable::saveAs(QString filename, bool compress)
+{
+    mFileName = filename;
+    mFileNameLabel->setText(getName());
+    save(compress);
+}
+
 void NameTable::setData(char *data)
 {
     for (int i = 0; i < 1024; ++i) {
@@ -134,7 +251,7 @@ void NameTable::setAttr(int x, int y, int pal)
 
 QString NameTable::getName() const
 {
-    QFileInfo info(mFileNameLabel->text());
+    QFileInfo info(mFileName);
     if (info.exists())
         return info.baseName();
     else
@@ -143,12 +260,7 @@ QString NameTable::getName() const
 
 QString NameTable::getFileName() const
 {
-    return mFileNameLabel->text();
-}
-
-void NameTable::setFileName(QString &filename)
-{
-    mFileNameLabel->setText(filename);
+    return mFileName;
 }
 
 void NameTable::setScale(int scale)

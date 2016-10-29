@@ -58,6 +58,7 @@ private Q_SLOTS:
 
     void on_action_Open_NameTable_triggered();
     void on_action_Save_NameTable_triggered();
+    void on_action_Save_All_NameTables_triggered();
 
     void on_bankAButton_toggled(bool set);
     void on_bankBButton_toggled(bool set);
