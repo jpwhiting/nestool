@@ -229,7 +229,7 @@ void NameTable::setAttr(int x, int y, int pal)
     int mask = 3;
     pal = pal&3;
 
-    int which = pal;
+    QList<QColor> palette = mPalettes.at(pal);
 
     if (x&2) {
         pal  <<=2;
@@ -244,7 +244,17 @@ void NameTable::setAttr(int x, int y, int pal)
     mAttrs[pp]=(mAttrs[pp] & (mask^255))|pal;
 
     int index = x + (y*32);
-    mTiles.at(index)->setPalette(mPalettes.at(which));
+    int otherindex = (x%2 == 0) ? index + 1 : index - 1;
+
+    mTiles.at(index)->setPalette(palette);
+    mTiles.at(otherindex)->setPalette(palette);
+    if (y%2 == 0) { // Y is even, so also set the palettes below
+        mTiles.at(index + 32)->setPalette(palette);
+        mTiles.at(otherindex + 32)->setPalette(palette);
+    } else { // Y is odd, so also set palettes above
+        mTiles.at(index - 32)->setPalette(palette);
+        mTiles.at(otherindex - 32)->setPalette(palette);
+    }
 
     update();
 }
