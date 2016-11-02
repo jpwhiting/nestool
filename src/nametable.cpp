@@ -23,6 +23,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QMouseEvent>
 #include <QPushButton>
 
 #include <QDebug>
@@ -42,7 +43,6 @@ NameTable::NameTable(QWidget *parent) : QWidget(parent), mTileSet(0)
     for (int i = 0; i < 30; ++i) {
         for (int j = 0; j < 32; ++j) {
             Tile *tile = new Tile(this);
-            connect(tile, SIGNAL(clicked()), this, SLOT(tileClicked()));
             tile->setFixedSize(QSize(24, 24));
             mTiles.append(tile);
             gridLayout->addWidget(tile, i, j);
@@ -55,6 +55,7 @@ NameTable::NameTable(QWidget *parent) : QWidget(parent), mTileSet(0)
     setLayout(vLayout);
     vLayout->addWidget(mFileNameLabel);
     vLayout->addLayout(gridLayout);
+    setMouseTracking(true);
 }
 
 void NameTable::setTileSet(TileSet *tileset)
@@ -327,5 +328,28 @@ int NameTable::getAttr(int x, int y)
         pal>>=4;
 
     return pal&3;
+}
+
+void NameTable::mousePressEvent(QMouseEvent *event)
+{
+    // Find the tile
+    Tile *tile = qobject_cast<Tile*>(childAt(event->x(), event->y()));
+    if (tile) {
+        int index = mTiles.indexOf(tile);
+        emit tileClicked(index %32, index / 32);
+    }
+}
+
+void NameTable::mouseMoveEvent(QMouseEvent *event)
+{
+    qDebug() << "mouse move event on nametable at " << event->x() << event->y();
+    // Find the tile
+    if (event->buttons() & Qt::LeftButton) {
+        Tile *tile = qobject_cast<Tile*>(childAt(event->x(), event->y()));
+        if (tile) {
+            int index = mTiles.indexOf(tile);
+            emit tileClicked(index %32, index / 32);
+        }
+    }
 }
 

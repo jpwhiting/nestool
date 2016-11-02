@@ -112,6 +112,7 @@ void Tile::paintEvent(QPaintEvent *event)
 void Tile::mousePressEvent(QMouseEvent *event)
 {
     emit clicked();
+    event->ignore();
 }
 
 void Tile::mouseMoveEvent(QMouseEvent *event)
@@ -119,4 +120,5 @@ void Tile::mouseMoveEvent(QMouseEvent *event)
     if (event->buttons() & Qt::LeftButton)
         emit clicked();
     emit hovered();
+    event->ignore();
 }
