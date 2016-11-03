@@ -30,3 +30,6 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui \
     settingsdialog.ui
+
+RESOURCES += \
+    nestool.qrc

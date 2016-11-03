@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>NES Tool v 0.1</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="nestool.qrc">
+    <normaloff>:/icons/icon.png</normaloff>:/icons/icon.png</iconset>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout_3">
     <item row="0" column="1">
@@ -2117,7 +2121,9 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="nestool.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>action_Quit</sender>
