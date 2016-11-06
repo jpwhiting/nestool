@@ -38,23 +38,6 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="QRadioButton" name="bankAButton">
-         <property name="text">
-          <string>Ban&amp;k A</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QRadioButton" name="bankBButton">
-         <property name="text">
-          <string>Bank B</string>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="2">
         <spacer name="horizontalSpacer_3">
          <property name="orientation">
@@ -1996,6 +1979,7 @@
      </property>
     </widget>
     <addaction name="action_Open_CHR"/>
+    <addaction name="action_Save_CHR_As"/>
     <addaction name="action_Save_CHR"/>
     <addaction name="separator"/>
     <addaction name="menu_Recent_CHR"/>
@@ -2047,12 +2031,12 @@
   </action>
   <action name="action_Open_CHR">
    <property name="text">
-    <string>&amp;Open CHR</string>
+    <string>&amp;Open CHR...</string>
    </property>
   </action>
-  <action name="action_Save_CHR">
+  <action name="action_Save_CHR_As">
    <property name="text">
-    <string>&amp;Save CHR</string>
+    <string>&amp;Save CHR As...</string>
    </property>
   </action>
   <action name="action_Open_NameTable">
@@ -2097,6 +2081,11 @@
   <action name="action_Save_All_NameTables">
    <property name="text">
     <string>Save &amp;All NameTables</string>
+   </property>
+  </action>
+  <action name="action_Save_CHR">
+   <property name="text">
+    <string>Save CHR</string>
    </property>
   </action>
  </widget>

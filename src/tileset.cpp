@@ -18,7 +18,11 @@
 
 #include "tileset.h"
 
+#include <QFile>
+#include <QFileInfo>
 #include <QGridLayout>
+#include <QLabel>
+#include <QRadioButton>
 
 char zeros[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
@@ -36,17 +40,67 @@ TileSet::TileSet(QWidget *parent) : QWidget(parent)
             tile->setHoverText(QString("Tile: $%1").arg(i*16+j, 2, 16, QChar('0')));
             connect(tile, SIGNAL(hovered()), this, SLOT(tileHovered()));
             mTiles.append(tile);
-            layout->addWidget(tile, i, j);
+            layout->addWidget(tile, i+1, j);
         }
+    }
+
+    mBankAButton = new QRadioButton("Bank A", this);
+    mBankAButton->setChecked(true);
+    mBankBButton = new QRadioButton("Bank B", this);
+    layout->addWidget(mBankAButton, 17, 0, 1, 16);
+    layout->addWidget(mBankBButton, 18, 0, 1, 16);
+    connect (mBankAButton, SIGNAL(toggled(bool)), this, SLOT(updateTiles()));
+    connect (mBankBButton, SIGNAL(toggled(bool)), this, SLOT(updateTiles()));
+
+    mFileNameLabel = new QLabel(this);
+    layout->addWidget(mFileNameLabel, 0, 0, 1, 16);
+}
+
+bool TileSet::load(QString &filename)
+{
+    QFile file(filename);
+    QFileInfo info(file);
+    if (file.exists() && file.open(QIODevice::ReadOnly)) {
+        mFileName = filename;
+        mFileNameLabel->setText(info.baseName());
+        if (info.size() == 8192) {
+            file.read(mData, 8192);
+            file.close();
+            updateTiles();
+            return true;
+        } else if (info.size() == 4096) {
+
+        } else {
+            // Check size and import accordingly
+        }
+    }
+    return false;
+}
+
+void TileSet::save()
+{
+    QFile file(mFileName);
+    if (file.open(QIODevice::WriteOnly)) {
+        file.write(mData, 8192);
+        file.close();
     }
 }
 
-void TileSet::setData(char *data)
+void TileSet::saveAs(QString filename)
 {
+    QFileInfo info(filename);
+    mFileName = filename;
+    mFileNameLabel->setText(info.baseName());
+    save();
+}
+
+void TileSet::updateTiles()
+{
+    char *start = (mBankAButton->isChecked() ? mData : mData + 4096);
     for (int i = 0; i < 16; ++i) {
         for (int j = 0; j < 16; ++j) {
             int which = i*16+j;
-            mTiles.at(which)->setData(data + (which * 16));
+            mTiles.at(which)->setData(start + (which * 16));
         }
     }
 }

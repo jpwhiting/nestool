@@ -24,13 +24,20 @@
 #include <QList>
 #include <QWidget>
 
+class QLabel;
+class QRadioButton;
+
 class TileSet : public QWidget
 {
     Q_OBJECT
 public:
     explicit TileSet(QWidget *parent = 0);
 
-    void setData(char *data);
+    // Load tile data from the given file in chr format
+    // Return true if it loaded
+    bool load(QString &filename);
+    void save(); // Need filename loaded or call saveAs first
+    void saveAs(QString filename);
 
     char *tileData(int tile); // Get the CHR data for a given tile
 
@@ -46,8 +53,15 @@ signals:
     void setStatus(QString text); // Signal to change the status bar message
 private slots:
     void tileHovered(); // Slot for when a tile is hovered over
+    void updateTiles();
+
 private:
     QList<Tile*> mTiles;
+    char mData[8192]; // chr data
+    QRadioButton *mBankAButton;
+    QRadioButton *mBankBButton;
+    QLabel *mFileNameLabel; // Label to show filename
+    QString mFileName; // Last Filename used to load or save this NameTable
 };
 
 #endif // TILESET_H

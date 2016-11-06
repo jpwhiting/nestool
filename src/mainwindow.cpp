@@ -91,11 +91,6 @@ MainWindow::MainWindow(QWidget *parent) :
   setTitle(mCurrentNameTable->getName());
   connect(ui->nameTable, SIGNAL(tileClicked(int,int)), this, SLOT(nameTableClicked(int,int)));
 
-  // Clear out mChr
-  for (int i = 0; i < 8192; ++i) {
-      mChr[i] = 0;
-  }
-
   // Populate mBasePalette
   int pp = 0;
   for (int i = 0; i < 64; ++i) {
@@ -134,8 +129,6 @@ MainWindow::MainWindow(QWidget *parent) :
   pal.append(mBasePalette[mBgPal[0][2]]);
   pal.append(mBasePalette[mBgPal[0][3]]);
   ui->tileSet->setPalette(pal);
-
-  updateTileset();
 
   connect(mSettingsDialog, SIGNAL(settingsChanged()), this, SLOT(onSettingsChanged()));
   onSettingsChanged(); // Update scales
@@ -245,7 +238,6 @@ void MainWindow::on_action_Remove_Duplicates_triggered()
     Q_FOREACH(NameTable *nameTable, mNameTables) {
         nameTable->remapTiles(mapping);
     }
-    updateFromTileset(); // Make mChr match what the tileset shows
     update();
 }
 
@@ -288,7 +280,6 @@ void MainWindow::on_action_Remove_Unused_triggered()
     Q_FOREACH(NameTable *nameTable, mNameTables) {
         nameTable->remapTiles(mapping);
     }
-    updateFromTileset(); // Make mChr match what the tileset shows
     update();
 }
 
@@ -341,19 +332,20 @@ void MainWindow::on_action_Open_CHR_triggered()
     }
 }
 
-void MainWindow::on_action_Save_CHR_triggered()
+void MainWindow::on_action_Save_CHR_As_triggered()
 {
     QString filename = QFileDialog::getSaveFileName(this,
                                                     "Save tileset file",
                                                     mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
                                                     "NES Tileset (*.chr)");
     if (!filename.isEmpty()) {
-        QFile file(filename);
-        if (file.open(QIODevice::WriteOnly)) {
-            file.write(mChr, 8192);
-            file.close();
-        }
+        ui->tileSet->saveAs(filename);
     }
+}
+
+void MainWindow::on_action_Save_CHR_triggered()
+{
+    ui->tileSet->save();
 }
 
 void MainWindow::on_action_Open_NameTable_triggered()
@@ -384,18 +376,6 @@ void MainWindow::on_action_Save_All_NameTables_triggered()
     Q_FOREACH(NameTable *nameTable, mNameTables) {
         nameTable->save(mSettingsDialog->compressNameTables());
     }
-}
-
-void MainWindow::on_bankAButton_toggled(bool set)
-{
-    if (set)
-        updateTileset();
-}
-
-void MainWindow::on_bankBButton_toggled(bool set)
-{
-    if (set)
-        updateTileset();
 }
 
 void MainWindow::on_addNameTableButton_clicked()
@@ -460,27 +440,6 @@ void MainWindow::openRecentPalettes()
     loadPalettes(action->text().remove('&'));
 }
 
-void MainWindow::updateTileset()
-{
-    if (ui->bankAButton->isChecked())
-        ui->tileSet->setData(mChr);
-    else
-        ui->tileSet->setData(mChr + 4096);
-}
-
-void MainWindow::updateFromTileset()
-{
-    char *start = (ui->bankAButton->isChecked() ? mChr : mChr + 4096);
-    for (int i = 0; i < 256; ++i) {
-        char *tileData;
-        tileData = ui->tileSet->tileData(i);
-        for (int j = 0; j < 16; ++j) {
-            start[j] = tileData[j];
-        }
-        start += 16;
-    }
-}
-
 void MainWindow::openRecentCHR()
 {
     QAction *action = qobject_cast<QAction*>(sender());
@@ -531,25 +490,16 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::loadCHR(QString filename)
 {
-    QFile file(filename);
-    QFileInfo info(file);
-    if (file.exists() && file.open(QIODevice::ReadOnly)) {
+    if (ui->tileSet->load(filename)) {
         if (!mLastCHRFiles.contains(filename)) {
             mLastCHRFiles.append(filename);
             if (mLastCHRFiles.count() > mSettingsDialog->maxRecentFiles())
                 mLastCHRFiles.removeFirst();
             updateRecentActions();
         }
+        QFile file(filename);
+        QFileInfo info(file);
         mSettings->setValue(kLastOpenPathKey, info.absolutePath());
-        if (info.size() == 8192) {
-            file.read(mChr, 8192);
-            file.close();
-            updateTileset();
-        } else if (info.size() == 4096) {
-
-        } else {
-            // Check size and import accordingly
-        }
     }
 }
 
