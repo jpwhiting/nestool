@@ -35,6 +35,8 @@
 #define kPreviousCHRKey "previousCHRFiles"
 #define kPreviousNameTablesKey "previousNameTableFiles"
 #define kPreviousPathKey "path"
+#define kWindowGeometryKey "windowGeometry"
+#define kWindowStateKey "windowState"
 
 #define VERSION "0.1"
 
@@ -50,6 +52,10 @@ MainWindow::MainWindow(QWidget *parent) :
   mSettings(new QSettings())
 {
   ui->setupUi(this);
+
+  restoreGeometry(mSettings->value(kWindowGeometryKey).toByteArray());
+  // create docks, toolbars, etc…
+  restoreState(mSettings->value(kWindowStateKey).toByteArray());
 
   // Read in list of last files
   int size = mSettings->beginReadArray(kPreviousPalKey);
@@ -515,6 +521,12 @@ void MainWindow::onSettingsChanged()
 void MainWindow::setTitle(QString name)
 {
     setWindowTitle(QString("NES Tool v%1 - %2").arg(VERSION).arg(name));
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    mSettings->setValue(kWindowGeometryKey, saveGeometry());
+    mSettings->setValue(kWindowStateKey, saveState());
 }
 
 void MainWindow::loadCHR(QString filename)

@@ -80,6 +80,8 @@ private Q_SLOTS:
     void onSettingsChanged(); // Called whenever settings are changed
 
     void setTitle(QString name);
+
+     void closeEvent(QCloseEvent *event);
 private:
     void loadPalettes(QString filename);
     void loadCHR(QString filename);
