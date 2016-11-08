@@ -33,7 +33,7 @@ QColor Swatch::getColor() const
     return mColor;
 }
 
-void Swatch::setColor(QColor &color)
+void Swatch::setColor(const QColor &color)
 {
     mColor = color;
     update();

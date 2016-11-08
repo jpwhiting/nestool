@@ -21,6 +21,8 @@
 #include <QMouseEvent>
 #include <QPainter>
 
+#include <QDebug>
+
 Tile::Tile(QWidget *parent) : QWidget(parent)
 {
     mSelected = false;
@@ -51,6 +53,11 @@ void Tile::setPalette(QList<QColor> colors)
         mPalette[i] = colors[i];
     }
     update();
+}
+
+void Tile::setCurrentColor(int color)
+{
+    mCurrentColor = color;
 }
 
 bool Tile::getSelected() const
@@ -145,6 +152,15 @@ void Tile::paintEvent(QPaintEvent *event)
 
 void Tile::mousePressEvent(QMouseEvent *event)
 {
+    if (mEditable) {
+        // Find which pixel was clicked and change it to current color
+        int cellWidth = width() / 8;
+        int x = event->x() / cellWidth;
+        int y = event->y() / cellWidth;
+        setPixel(x, y, mCurrentColor);
+        update();
+        qDebug() << "pixel at " << x << ", " << y << " clicked";
+    }
     emit clicked();
     event->ignore();
 }
@@ -155,4 +171,24 @@ void Tile::mouseMoveEvent(QMouseEvent *event)
         emit clicked();
     emit hovered();
     event->ignore();
+}
+
+void Tile::setPixel(int x, int y, int color)
+{
+    // Check for valid values
+    if (x < 0 || x > 7 || y < 0 || y > 7 || color < 0 || color > 3)
+        return;
+
+    int pp = y;
+    int mask = 1;
+    int palLow = color&1;
+    int palHigh = color&2;
+    palHigh >>=1;
+
+    palLow <<= (7-x);
+    palHigh <<= (7-x);
+    mask <<=(7-x);
+
+    mData[pp]=(mData[pp] & (mask^255))|palLow;
+    mData[pp+8]=(mData[pp+8] & (mask^255))|palHigh;
 }

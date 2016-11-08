@@ -26,6 +26,7 @@
 
 class QLabel;
 class QRadioButton;
+class EditTileDialog;
 
 class TileSet : public QWidget
 {
@@ -62,6 +63,7 @@ private slots:
     void updateTiles();
 
 private:
+    void editTile(int index);
     QList<Tile*> mTiles;
     char mData[8192]; // chr data
     QRadioButton *mBankAButton;
@@ -69,6 +71,7 @@ private:
     QLabel *mFileNameLabel; // Label to show filename
     QString mFileName; // Last Filename used to load or save this NameTable
     int mSelectedTile; // Which tile is currently selected
+    EditTileDialog *mEditDialog; // Dialog to edit tiles
 };
 
 #endif // TILESET_H

@@ -16,43 +16,34 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.          *
  ***************************************************************************/
 
-#ifndef SWATCH_H
-#define SWATCH_H
+#ifndef EDITTILEDIALOG_H
+#define EDITTILEDIALOG_H
 
-#include <QColor>
-#include <QWidget>
+#include <QDialog>
 
-class Swatch : public QWidget
+namespace Ui {
+class EditTileDialog;
+}
+
+class EditTileDialog : public QDialog
 {
     Q_OBJECT
-    Q_PROPERTY(QColor color READ getColor WRITE setColor)
-    Q_PROPERTY(bool selected READ getSelected WRITE setSelected)
-    Q_PROPERTY(QString hoverText READ getHoverText WRITE setHoverText)
+
 public:
-    explicit Swatch(QWidget *parent = 0);
+    explicit EditTileDialog(QWidget *parent = 0);
+    ~EditTileDialog();
 
-    QColor getColor() const;
-    void setColor(const QColor &color);
+    void setData(char *data);
+    char *chrData(); // Get this tile's chr data
 
-    bool getSelected() const;
-    void setSelected(bool selected);
+    void setPalette(QList<QColor> colors);
 
-    QString getHoverText() const;
-    void setHoverText(QString text);
+private Q_SLOTS:
+    void paletteClicked();
 
-signals:
-    void clicked();
-    void hovered();
-
-public slots:
-protected:
-    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
-    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
-    void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 private:
-    QColor mColor;
-    bool mSelected;
-    QString mHoverText;
+    Ui::EditTileDialog *ui;
+    int mCurrentColor;
 };
 
-#endif // SWATCH_H
+#endif // EDITTILEDIALOG_H

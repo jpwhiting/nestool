@@ -36,6 +36,7 @@ public:
     char *chrData(); // Get this tile's chr data
 
     void setPalette(QList<QColor> colors);
+    void setCurrentColor(int color);
 
     bool getSelected() const;
     void setSelected(bool selected);
@@ -60,12 +61,16 @@ protected:
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 private:
+    // set the given pixel at x and y to color
+    void setPixel(int x, int y, int color);
+
     bool mSelected;
     char mData[16];
     QColor mPalette[4];
     QString mHoverText;
     bool mEditable;
     bool mShowGrid;
+    int mCurrentColor;
 };
 
 #endif // TILE_H

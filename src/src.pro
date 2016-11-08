@@ -18,7 +18,8 @@ SOURCES += main.cpp\
         swatch.cpp \
         tile.cpp \
         tileset.cpp \
-    settingsdialog.cpp
+    settingsdialog.cpp \
+    edittiledialog.cpp
 
 HEADERS  += mainwindow.h \
         nametable.h \
@@ -26,10 +27,12 @@ HEADERS  += mainwindow.h \
         swatch.h \
         tile.h \
         tileset.h \
-    settingsdialog.h
+    settingsdialog.h \
+    edittiledialog.h
 
 FORMS    += mainwindow.ui \
-    settingsdialog.ui
+    settingsdialog.ui \
+    edittiledialog.ui
 
 RESOURCES += \
     nestool.qrc

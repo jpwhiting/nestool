@@ -25,6 +25,8 @@
 #include <QMouseEvent>
 #include <QRadioButton>
 
+#include "edittiledialog.h"
+
 char zeros[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 TileSet::TileSet(QWidget *parent) : QWidget(parent)
@@ -58,6 +60,8 @@ TileSet::TileSet(QWidget *parent) : QWidget(parent)
 
     mFileNameLabel = new QLabel(this);
     layout->addWidget(mFileNameLabel, 0, 0, 1, 16);
+
+    mEditDialog = new EditTileDialog(this);
 }
 
 bool TileSet::load(QString &filename)
@@ -65,15 +69,20 @@ bool TileSet::load(QString &filename)
     QFile file(filename);
     QFileInfo info(file);
     if (file.exists() && file.open(QIODevice::ReadOnly)) {
-        mFileName = filename;
-        mFileNameLabel->setText(info.baseName());
         if (info.size() == 8192) {
+            mFileName = filename; // Only update mFileName if importing an 8k chr
+            mFileNameLabel->setText(info.baseName());
             file.read(mData, 8192);
             file.close();
             updateTiles();
             return true;
         } else if (info.size() == 4096) {
-
+            // Load file into the currently selected bank and don't remember filename
+            char *start = (mBankAButton->isChecked() ? mData : mData + 4096);
+            file.read(start, 4096);
+            file.close();
+            updateTiles();
+            return true;
         } else {
             // Check size and import accordingly
         }
@@ -114,6 +123,14 @@ void TileSet::updateTiles()
     }
 }
 
+void TileSet::editTile(int index)
+{
+    mEditDialog->setData(mTiles.at(index)->chrData());
+    if (mEditDialog->exec() == QDialog::Accepted) {
+        mTiles.at(index)->setData(mEditDialog->chrData());
+    }
+}
+
 char *TileSet::tileData(int tile)
 {
     if (tile < 0 || tile > 16*16)
@@ -126,6 +143,7 @@ void TileSet::setPalette(QList<QColor> colors)
     Q_FOREACH(Tile *tile, mTiles) {
         tile->setPalette(colors);
     }
+    mEditDialog->setPalette(colors);
 }
 
 void TileSet::setScale(int scale)
@@ -167,13 +185,19 @@ void TileSet::mousePressEvent(QMouseEvent *event)
     // Find the tile
     Tile *tile = qobject_cast<Tile*>(childAt(event->x(), event->y()));
     if (tile) {
-        Q_FOREACH(Tile *t, mTiles) {
-            t->setSelected(false);
-        }
+        if (!tile->getSelected()) {
+            Q_FOREACH(Tile *t, mTiles) {
+                t->setSelected(false);
+            }
 
-        tile->setSelected(true);
-        int index = mTiles.indexOf(tile);
-        mSelectedTile = index;
+            tile->setSelected(true);
+            int index = mTiles.indexOf(tile);
+            mSelectedTile = index;
+        } else {
+            // Tile is already selected, so open edit mode
+            int index = mTiles.indexOf(tile);
+            editTile(index);
+        }
     }
 }
 
