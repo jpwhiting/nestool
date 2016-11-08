@@ -219,6 +219,16 @@ void NameTable::setPalettes(QList<QList<QColor> > colors)
     }
 }
 
+void NameTable::setTile(int x, int y, int tile)
+{
+    int i = x + y*32;
+    mData[i] = tile;
+    char *tileData = mTileSet->tileData(mData[i]);
+    if (tileData) {
+        mTiles.at(i)->setData(tileData);
+    }
+}
+
 void NameTable::setAttr(int x, int y, int pal)
 {
     if (x < 0 || x > 31 || y < 0 || y > 29) {

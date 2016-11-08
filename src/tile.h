@@ -27,6 +27,8 @@ class Tile : public QWidget
     Q_OBJECT
     Q_PROPERTY(bool selected READ getSelected WRITE setSelected)
     Q_PROPERTY(QString hoverText READ getHoverText WRITE setHoverText)
+    Q_PROPERTY(bool editable READ getEditable WRITE setEditable)
+    Q_PROPERTY(bool showGrid READ getShowGrid WRITE setShowGrid)
 public:
     explicit Tile(QWidget *parent = 0);
 
@@ -40,6 +42,12 @@ public:
 
     QString getHoverText() const;
     void setHoverText(QString text);
+
+    bool getEditable() const;
+    void setEditable(bool editable);
+
+    bool getShowGrid() const;
+    void setShowGrid(bool show);
 
     bool identical(Tile *other); // Tell if this tile is identical to other
 signals:
@@ -56,6 +64,8 @@ private:
     char mData[16];
     QColor mPalette[4];
     QString mHoverText;
+    bool mEditable;
+    bool mShowGrid;
 };
 
 #endif // TILE_H

@@ -39,6 +39,8 @@ public:
     void save(); // Need filename loaded or call saveAs first
     void saveAs(QString filename);
 
+    int selectedTile() const;
+
     char *tileData(int tile); // Get the CHR data for a given tile
 
     void setPalette(QList<QColor> colors);
@@ -51,6 +53,10 @@ public:
     QList<QPair<int, int> > duplicateTiles(); // Find all duplicate tiles
 signals:
     void setStatus(QString text); // Signal to change the status bar message
+protected:
+    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+
 private slots:
     void tileHovered(); // Slot for when a tile is hovered over
     void updateTiles();
@@ -62,6 +68,7 @@ private:
     QRadioButton *mBankBButton;
     QLabel *mFileNameLabel; // Label to show filename
     QString mFileName; // Last Filename used to load or save this NameTable
+    int mSelectedTile; // Which tile is currently selected
 };
 
 #endif // TILESET_H

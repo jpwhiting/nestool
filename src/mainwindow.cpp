@@ -460,6 +460,9 @@ void MainWindow::nameTableClicked(int x, int y)
     if (ui->applyPalettesCheckBox->isChecked() && mCurrentPalette != -1) {
         nameTable->setAttr(x, y, mCurrentPalette);
     }
+    if (ui->applyTilesCheckBox->isChecked()) {
+        nameTable->setTile(x, y, ui->tileSet->selectedTile());
+    }
 }
 
 void MainWindow::setStatus(QString text)

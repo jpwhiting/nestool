@@ -24,6 +24,8 @@
 Tile::Tile(QWidget *parent) : QWidget(parent)
 {
     mSelected = false;
+    mEditable = false;
+    mShowGrid = false;
     for (int i = 0; i < 16; ++i) {
         mData[i] = 0;
     }
@@ -72,6 +74,28 @@ void Tile::setHoverText(QString text)
     mHoverText = text;
 }
 
+bool Tile::getEditable() const
+{
+    return mEditable;
+}
+
+void Tile::setEditable(bool editable)
+{
+    mEditable = editable;
+    update();
+}
+
+bool Tile::getShowGrid() const
+{
+    return mShowGrid;
+}
+
+void Tile::setShowGrid(bool show)
+{
+    mShowGrid = show;
+    update();
+}
+
 bool Tile::identical(Tile *other)
 {
     bool same = true;
@@ -105,7 +129,17 @@ void Tile::paintEvent(QPaintEvent *event)
             painter.setBrush(mPalette[col]);
             painter.drawRect(c*cellWidth, r*cellWidth, cellWidth, cellWidth);
         }
+        if (mShowGrid) {
+            painter.setPen(Qt::white);
+            painter.drawLine(0, r*cellWidth, width(), r*cellWidth);
+        }
     }
+    if (mSelected) {
+        painter.setPen(Qt::white);
+        painter.setBrush(Qt::NoBrush);
+        painter.drawRect(0, 0, width() - 1, height() - 1);
+    }
+
     painter.restore();
 }
 

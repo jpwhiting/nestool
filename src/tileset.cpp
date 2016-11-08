@@ -22,6 +22,7 @@
 #include <QFileInfo>
 #include <QGridLayout>
 #include <QLabel>
+#include <QMouseEvent>
 #include <QRadioButton>
 
 char zeros[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -43,6 +44,9 @@ TileSet::TileSet(QWidget *parent) : QWidget(parent)
             layout->addWidget(tile, i+1, j);
         }
     }
+
+    mSelectedTile = 0;
+    mTiles.at(mSelectedTile)->setSelected(true);
 
     mBankAButton = new QRadioButton("Bank A", this);
     mBankAButton->setChecked(true);
@@ -92,6 +96,11 @@ void TileSet::saveAs(QString filename)
     mFileName = filename;
     mFileNameLabel->setText(info.baseName());
     save();
+}
+
+int TileSet::selectedTile() const
+{
+    return mSelectedTile;
 }
 
 void TileSet::updateTiles()
@@ -151,6 +160,26 @@ QList<QPair<int, int> > TileSet::duplicateTiles()
         }
     }
     return duplicates;
+}
+
+void TileSet::mousePressEvent(QMouseEvent *event)
+{
+    // Find the tile
+    Tile *tile = qobject_cast<Tile*>(childAt(event->x(), event->y()));
+    if (tile) {
+        Q_FOREACH(Tile *t, mTiles) {
+            t->setSelected(false);
+        }
+
+        tile->setSelected(true);
+        int index = mTiles.indexOf(tile);
+        mSelectedTile = index;
+    }
+}
+
+void TileSet::mouseMoveEvent(QMouseEvent *event)
+{
+
 }
 
 void TileSet::tileHovered()

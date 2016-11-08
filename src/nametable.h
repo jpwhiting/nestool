@@ -43,6 +43,8 @@ public:
 
     // Set all 4 palettes in order so we can apply the right one per tile.
     void setPalettes(QList<QList<QColor> > colors);
+    // Set the given coordinate to the given tile
+    void setTile(int x, int y, int tile);
 
     // Set the given x, y, to the given palette
     void setAttr(int x, int y, int pal);
