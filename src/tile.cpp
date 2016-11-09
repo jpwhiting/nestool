@@ -132,12 +132,34 @@ void Tile::vFlip()
 
 void Tile::rotateCounterClockwise()
 {
-
+    char result[16] = {0, 0, 0, 0, 0, 0, 0, 0,
+                      0, 0, 0, 0, 0, 0, 0, 0};
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            result[i] = ((mData[j] & (1 << i)) >> i) << (7-j) | result[i];
+            result[i+8] = ((mData[j+8] & (1 << i)) >> i) << (7-j) | result[i+8];
+        }
+    }
+    for (int i = 0; i < 16; ++i) {
+        mData[i] = result[i];
+    }
+    update();
 }
 
 void Tile::rotateClockwise()
 {
-
+    char result[16] = {0, 0, 0, 0, 0, 0, 0, 0,
+                      0, 0, 0, 0, 0, 0, 0, 0};
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            result[i] = (((mData[j] & (1 << (7-i))) >> (7-i)) << j) | result[i];
+            result[i+8] = (((mData[j+8] & (1 << (7-i))) >> (7-i)) << j) | result[i+8];
+        }
+    }
+    for (int i = 0; i < 16; ++i) {
+        mData[i] = result[i];
+    }
+    update();
 }
 
 bool Tile::identical(Tile *other)
