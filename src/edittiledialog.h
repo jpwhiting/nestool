@@ -39,6 +39,10 @@ public:
     void setPalette(QList<QColor> colors);
 
 private Q_SLOTS:
+    void on_hFlipToolButton_clicked();
+    void on_vFlipToolButton_clicked();
+    void on_cCWToolButton_clicked();
+    void on_cWToolButton_clicked();
     void paletteClicked();
 
 private:

@@ -50,6 +50,11 @@ public:
     bool getShowGrid() const;
     void setShowGrid(bool show);
 
+    void hFlip();
+    void vFlip();
+    void rotateCounterClockwise();
+    void rotateClockwise();
+
     bool identical(Tile *other); // Tell if this tile is identical to other
 signals:
     void clicked();

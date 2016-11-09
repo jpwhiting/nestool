@@ -145,30 +145,30 @@
    <item row="2" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QToolButton" name="toolButton">
+      <widget class="QToolButton" name="hFlipToolButton">
        <property name="text">
-        <string>...</string>
+        <string>HFlip</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="toolButton_2">
+      <widget class="QToolButton" name="vFlipToolButton">
        <property name="text">
-        <string>...</string>
+        <string>VFlip</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="toolButton_3">
+      <widget class="QToolButton" name="cCWToolButton">
        <property name="text">
-        <string>...</string>
+        <string>CCW</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="toolButton_4">
+      <widget class="QToolButton" name="cWToolButton">
        <property name="text">
-        <string>...</string>
+        <string>CW</string>
        </property>
       </widget>
      </item>

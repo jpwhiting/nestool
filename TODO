@@ -1,10 +1,8 @@
 TODO:
-  Edit nametable in gui
   Fix palette sync issues
   Metasprite editor
   Save metasprites
   Copy buttons (for palette, tileset, nametable, etc. to copy selection to clipboard)
-  Tileset editor
   Show grid(s)
 
 DONE:
@@ -20,3 +18,5 @@ DONE:
   Write nametable .h files
   Remove unused tiles
   Remove duplicate tiles
+  Edit nametable in gui
+  Tileset editor

@@ -103,6 +103,43 @@ void Tile::setShowGrid(bool show)
     update();
 }
 
+void Tile::hFlip()
+{
+    for (int i = 0; i < 16; ++i) {
+        char d = mData[i];
+        d = (d & 0xF0) >> 4 | (d & 0x0F) << 4;
+        d = (d & 0xCC) >> 2 | (d & 0x33) << 2;
+        d = (d & 0xAA) >> 1 | (d & 0x55) << 1;
+        mData[i] = d;
+    }
+    update();
+}
+
+void Tile::vFlip()
+{
+    for (int i = 0; i < 4; ++i) {
+        qDebug() << "swapping bytes " << i << " and " << 7-i;
+        qDebug() << "swapping bytes " << i+8 << " and " << (7-i) + 8;
+        char t = mData[i];
+        mData[i] = mData[7-i];
+        mData[7-i] = t;
+        t = mData[i+8];
+        mData[i+8] = mData[(7-i)+8];
+        mData[(7-i)+8] = t;
+    }
+    update();
+}
+
+void Tile::rotateCounterClockwise()
+{
+
+}
+
+void Tile::rotateClockwise()
+{
+
+}
+
 bool Tile::identical(Tile *other)
 {
     bool same = true;

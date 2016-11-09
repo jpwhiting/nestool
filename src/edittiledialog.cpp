@@ -41,6 +41,26 @@ void EditTileDialog::setPalette(QList<QColor> colors)
     ui->swatch3->setColor(colors.at(3));
 }
 
+void EditTileDialog::on_hFlipToolButton_clicked()
+{
+    ui->tileWidget->hFlip();
+}
+
+void EditTileDialog::on_vFlipToolButton_clicked()
+{
+    ui->tileWidget->vFlip();
+}
+
+void EditTileDialog::on_cCWToolButton_clicked()
+{
+    ui->tileWidget->rotateCounterClockwise();
+}
+
+void EditTileDialog::on_cWToolButton_clicked()
+{
+    ui->tileWidget->rotateClockwise();
+}
+
 void EditTileDialog::paletteClicked()
 {
     Swatch *from = qobject_cast<Swatch*>(sender());
