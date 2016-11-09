@@ -322,7 +322,6 @@ void NameTable::tileClicked()
     Tile *tile = qobject_cast<Tile*>(sender());
     int index = mTiles.indexOf(tile);
     if (index >= 0 && index < mTiles.size()) {
-        qDebug() << "tile clicked " << index % 32 << " " << index / 32;
         emit tileClicked(index % 32, index / 32);
     }
 }
@@ -352,7 +351,6 @@ void NameTable::mousePressEvent(QMouseEvent *event)
 
 void NameTable::mouseMoveEvent(QMouseEvent *event)
 {
-    qDebug() << "mouse move event on nametable at " << event->x() << event->y();
     // Find the tile
     if (event->buttons() & Qt::LeftButton) {
         Tile *tile = qobject_cast<Tile*>(childAt(event->x(), event->y()));
