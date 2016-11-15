@@ -123,12 +123,23 @@ void TileSet::updateTiles()
     }
 }
 
+void TileSet::updateFromTiles(int index)
+{
+    char *start = (mBankAButton->isChecked() ? mData : mData + 4096);
+    char *data = mTiles.at(index)->chrData();
+    start = start + (index * 16);
+    for (int x = 0; x < 16; ++x) {
+        *start++ = data[x];
+    }
+}
+
 void TileSet::editTile(int index)
 {
     mEditDialog->setData(mTiles.at(index)->chrData());
     if (mEditDialog->exec() == QDialog::Accepted) {
         mTiles.at(index)->setData(mEditDialog->chrData());
     }
+    updateFromTiles(index);
 }
 
 char *TileSet::tileData(int tile)
@@ -159,11 +170,13 @@ void TileSet::setScale(int scale)
 void TileSet::copyTile(int from, int to)
 {
     mTiles.at(to)->setData(mTiles.at(from)->chrData());
+    updateFromTiles(to);
 }
 
 void TileSet::clearTile(int index)
 {
     mTiles.at(index)->setData(zeros);
+    updateFromTiles(index);
 }
 
 QList<QPair<int, int> > TileSet::duplicateTiles()

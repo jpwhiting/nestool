@@ -61,6 +61,7 @@ protected:
 private slots:
     void tileHovered(); // Slot for when a tile is hovered over
     void updateTiles();
+    void updateFromTiles(int index); // Update mData based on tile contents
 
 private:
     void editTile(int index);
