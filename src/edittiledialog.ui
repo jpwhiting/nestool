@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>336</width>
-    <height>247</height>
+    <width>492</width>
+    <height>263</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -169,6 +169,13 @@
       <widget class="QToolButton" name="cWToolButton">
        <property name="text">
         <string>CW</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="fillToolButton">
+       <property name="text">
+        <string>Fill</string>
        </property>
       </widget>
      </item>

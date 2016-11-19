@@ -61,10 +61,14 @@ void EditTileDialog::on_cWToolButton_clicked()
     ui->tileWidget->rotateClockwise();
 }
 
+void EditTileDialog::on_fillToolButton_clicked()
+{
+    ui->tileWidget->fill();
+}
+
 void EditTileDialog::paletteClicked()
 {
     Swatch *from = qobject_cast<Swatch*>(sender());
-    QColor color = from->getColor();
     for (int i = 0; i < 4; ++i) {
         Swatch *swatch = this->findChild<Swatch *>(QString("swatch%1").arg(i));
         if (swatch) {

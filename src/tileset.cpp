@@ -24,6 +24,7 @@
 #include <QLabel>
 #include <QMouseEvent>
 #include <QRadioButton>
+#include <QToolButton>
 
 #include "edittiledialog.h"
 
@@ -53,10 +54,19 @@ TileSet::TileSet(QWidget *parent) : QWidget(parent)
     mBankAButton = new QRadioButton("Bank A", this);
     mBankAButton->setChecked(true);
     mBankBButton = new QRadioButton("Bank B", this);
-    layout->addWidget(mBankAButton, 17, 0, 1, 16);
-    layout->addWidget(mBankBButton, 18, 0, 1, 16);
+    layout->addWidget(mBankAButton, 17, 0, 1, 8);
+    layout->addWidget(mBankBButton, 17, 8, 1, 8);
     connect (mBankAButton, SIGNAL(toggled(bool)), this, SLOT(updateTiles()));
     connect (mBankBButton, SIGNAL(toggled(bool)), this, SLOT(updateTiles()));
+
+    mCopyButton = new QToolButton(this);
+    mCopyButton->setText("Copy");
+    mPasteButton = new QToolButton(this);
+    mPasteButton->setText("Paste");
+    layout->addWidget(mCopyButton, 18, 0, 1, 8);
+    layout->addWidget(mPasteButton, 18, 8, 1, 8);
+    connect(mCopyButton, SIGNAL(clicked()), this, SLOT(copySelected()));
+    connect(mPasteButton, SIGNAL(clicked()), this, SLOT(pasteSelected()));
 
     mFileNameLabel = new QLabel(this);
     layout->addWidget(mFileNameLabel, 0, 0, 1, 16);
@@ -131,6 +141,18 @@ void TileSet::updateFromTiles(int index)
     for (int x = 0; x < 16; ++x) {
         *start++ = data[x];
     }
+}
+
+void TileSet::copySelected()
+{
+    // Save selected tile chr data for pasting
+    mCopiedTile = mSelectedTile;
+}
+
+void TileSet::pasteSelected()
+{
+    // Overwrite currently selected tile with copied chr data
+    copyTile(mCopiedTile, mSelectedTile);
 }
 
 void TileSet::editTile(int index)

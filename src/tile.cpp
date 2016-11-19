@@ -162,6 +162,16 @@ void Tile::rotateClockwise()
     update();
 }
 
+void Tile::fill()
+{
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            setPixel(i, j, mCurrentColor);
+        }
+    }
+    update();
+}
+
 bool Tile::identical(Tile *other)
 {
     bool same = true;
@@ -218,7 +228,6 @@ void Tile::mousePressEvent(QMouseEvent *event)
         int y = event->y() / cellWidth;
         setPixel(x, y, mCurrentColor);
         update();
-        qDebug() << "pixel at " << x << ", " << y << " clicked";
     }
     emit clicked();
     event->ignore();

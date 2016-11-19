@@ -54,6 +54,7 @@ public:
     void vFlip();
     void rotateCounterClockwise();
     void rotateClockwise();
+    void fill();
 
     bool identical(Tile *other); // Tell if this tile is identical to other
 signals:
