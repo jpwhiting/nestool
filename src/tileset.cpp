@@ -28,48 +28,35 @@
 
 #include "edittiledialog.h"
 
+#include "ui_tileset.h"
+
 char zeros[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-TileSet::TileSet(QWidget *parent) : QWidget(parent)
+TileSet::TileSet(QWidget *parent)
+    : QWidget(parent),
+      ui(new Ui::Tileset)
 {
-    QGridLayout *layout = new QGridLayout(this);
-    layout->setVerticalSpacing(0);
-    layout->setHorizontalSpacing(0);
-    layout->setContentsMargins(0, 0, 0, 0);
+    ui->setupUi(this);
 
     for (int i = 0; i < 16; ++i) {
         for (int j = 0; j < 16; ++j) {
-            Tile *tile = new Tile(this);
+            Tile *tile = QWidget::findChild<Tile *>(QString("tile_%1").arg(i*16+j));
             tile->setFixedSize(QSize(16, 16));
             tile->setHoverText(QString("Tile: $%1").arg(i*16+j, 2, 16, QChar('0')));
             connect(tile, SIGNAL(hovered()), this, SLOT(tileHovered()));
             mTiles.append(tile);
-            layout->addWidget(tile, i+1, j);
         }
     }
 
     mSelectedTile = 0;
     mTiles.at(mSelectedTile)->setSelected(true);
+    setModified(false);
 
-    mBankAButton = new QRadioButton("Bank A", this);
-    mBankAButton->setChecked(true);
-    mBankBButton = new QRadioButton("Bank B", this);
-    layout->addWidget(mBankAButton, 17, 0, 1, 8);
-    layout->addWidget(mBankBButton, 17, 8, 1, 8);
-    connect (mBankAButton, SIGNAL(toggled(bool)), this, SLOT(updateTiles()));
-    connect (mBankBButton, SIGNAL(toggled(bool)), this, SLOT(updateTiles()));
-
-    mCopyButton = new QToolButton(this);
-    mCopyButton->setText("Copy");
-    mPasteButton = new QToolButton(this);
-    mPasteButton->setText("Paste");
-    layout->addWidget(mCopyButton, 18, 0, 1, 8);
-    layout->addWidget(mPasteButton, 18, 8, 1, 8);
-    connect(mCopyButton, SIGNAL(clicked()), this, SLOT(copySelected()));
-    connect(mPasteButton, SIGNAL(clicked()), this, SLOT(pasteSelected()));
-
-    mFileNameLabel = new QLabel(this);
-    layout->addWidget(mFileNameLabel, 0, 0, 1, 16);
+    connect(ui->bankAButton, SIGNAL(toggled(bool)), this, SLOT(updateTiles()));
+    connect(ui->bankBButton, SIGNAL(toggled(bool)), this, SLOT(updateTiles()));
+    connect(ui->copyButton, SIGNAL(clicked()), this, SLOT(copySelected()));
+    connect(ui->pasteButton, SIGNAL(clicked()), this, SLOT(pasteSelected()));
+    connect(ui->gridButton, SIGNAL(toggled(bool)), this, SLOT(toggleShowGrid(bool)));
 
     mEditDialog = new EditTileDialog(this);
 }
@@ -81,17 +68,19 @@ bool TileSet::load(QString &filename)
     if (file.exists() && file.open(QIODevice::ReadOnly)) {
         if (info.size() == 8192) {
             mFileName = filename; // Only update mFileName if importing an 8k chr
-            mFileNameLabel->setText(info.baseName());
+            ui->filenameLabel->setText(info.baseName());
             file.read(mData, 8192);
             file.close();
             updateTiles();
+            setModified(false);
             return true;
         } else if (info.size() == 4096) {
             // Load file into the currently selected bank and don't remember filename
-            char *start = (mBankAButton->isChecked() ? mData : mData + 4096);
+            char *start = (ui->bankAButton->isChecked() ? mData : mData + 4096);
             file.read(start, 4096);
             file.close();
             updateTiles();
+            setModified(true);
             return true;
         } else {
             // Check size and import accordingly
@@ -107,14 +96,16 @@ void TileSet::save()
         file.write(mData, 8192);
         file.close();
     }
+    setModified(false);
 }
 
 void TileSet::saveAs(QString filename)
 {
     QFileInfo info(filename);
     mFileName = filename;
-    mFileNameLabel->setText(info.baseName());
+    ui->filenameLabel->setText(info.baseName());
     save();
+    setModified(false);
 }
 
 int TileSet::selectedTile() const
@@ -124,7 +115,7 @@ int TileSet::selectedTile() const
 
 void TileSet::updateTiles()
 {
-    char *start = (mBankAButton->isChecked() ? mData : mData + 4096);
+    char *start = (ui->bankAButton->isChecked() ? mData : mData + 4096);
     for (int i = 0; i < 16; ++i) {
         for (int j = 0; j < 16; ++j) {
             int which = i*16+j;
@@ -135,12 +126,13 @@ void TileSet::updateTiles()
 
 void TileSet::updateFromTiles(int index)
 {
-    char *start = (mBankAButton->isChecked() ? mData : mData + 4096);
+    char *start = (ui->bankAButton->isChecked() ? mData : mData + 4096);
     char *data = mTiles.at(index)->chrData();
     start = start + (index * 16);
     for (int x = 0; x < 16; ++x) {
         *start++ = data[x];
     }
+    setModified(true);
 }
 
 void TileSet::copySelected()
@@ -153,6 +145,22 @@ void TileSet::pasteSelected()
 {
     // Overwrite currently selected tile with copied chr data
     copyTile(mCopiedTile, mSelectedTile);
+}
+
+void TileSet::toggleShowGrid(bool checked)
+{
+    ui->tileGridLayout->setHorizontalSpacing(checked ? 1 : 0);
+    ui->tileGridLayout->setVerticalSpacing(checked ? 1 : 0);
+}
+
+void TileSet::setModified(bool modified)
+{
+    QFileInfo info(mFileName);
+    mModified = modified;
+    if (modified)
+        ui->filenameLabel->setText(QString("%1 *").arg(info.baseName()));
+    else
+        ui->filenameLabel->setText(info.baseName());
 }
 
 void TileSet::editTile(int index)
@@ -213,6 +221,11 @@ QList<QPair<int, int> > TileSet::duplicateTiles()
         }
     }
     return duplicates;
+}
+
+bool TileSet::isModified() const
+{
+    return mModified;
 }
 
 void TileSet::mousePressEvent(QMouseEvent *event)

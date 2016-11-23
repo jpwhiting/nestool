@@ -19,6 +19,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <QCloseEvent>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QSettings>
@@ -487,6 +488,18 @@ void MainWindow::setTitle(QString name)
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    if (ui->tileSet->isModified()) {
+        QMessageBox::StandardButton answer = QMessageBox::question(this,
+                                  "Save Tileset?",
+                                  "Tileset has been modified. Save?",
+                                  QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+        if (answer == QMessageBox::Yes) {
+            ui->tileSet->save();
+        } else if (answer == QMessageBox::Cancel) {
+            event->ignore();
+            return;
+        }
+    }
     mSettings->setValue(kWindowGeometryKey, saveGeometry());
     mSettings->setValue(kWindowStateKey, saveState());
 }

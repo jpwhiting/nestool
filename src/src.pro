@@ -32,7 +32,8 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui \
     settingsdialog.ui \
-    edittiledialog.ui
+    edittiledialog.ui \
+    tileset.ui
 
 RESOURCES += \
     nestool.qrc

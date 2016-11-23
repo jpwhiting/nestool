@@ -28,32 +28,6 @@
        <property name="spacing">
         <number>0</number>
        </property>
-       <item row="0" column="2">
-        <spacer name="horizontalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="0" column="0">
-        <spacer name="horizontalSpacer_4">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
        <item row="0" column="1">
         <widget class="TileSet" name="tileSet" native="true">
          <property name="minimumSize">
@@ -1942,7 +1916,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>436</width>
+            <width>461</width>
             <height>486</height>
            </rect>
           </property>
@@ -2011,7 +1985,7 @@
    </widget>
    <widget class="QMenu" name="menu_Palettes">
     <property name="title">
-     <string>&amp;Palettes</string>
+     <string>Pa&amp;lettes</string>
     </property>
     <widget class="QMenu" name="menu_Recent_Palettes">
      <property name="title">

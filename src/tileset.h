@@ -25,9 +25,11 @@
 #include <QWidget>
 
 class QLabel;
-class QRadioButton;
-class QToolButton;
 class EditTileDialog;
+
+namespace Ui {
+class Tileset;
+}
 
 class TileSet : public QWidget
 {
@@ -53,6 +55,8 @@ public:
     void clearTile(int index); // Clear out the given tile
 
     QList<QPair<int, int> > duplicateTiles(); // Find all duplicate tiles
+
+    bool isModified() const; // Whether the tileset in memory has been modified
 signals:
     void setStatus(QString text); // Signal to change the status bar message
 protected:
@@ -65,20 +69,19 @@ private slots:
     void updateFromTiles(int index); // Update mData based on tile contents
     void copySelected(); // Copy button clicked
     void pasteSelected(); // Paste button clicked
+    void toggleShowGrid(bool checked);
 
 private:
+    void setModified(bool modified);
     void editTile(int index);
+    Ui::Tileset *ui;
     QList<Tile*> mTiles;
     char mData[8192]; // chr data
-    QRadioButton *mBankAButton;
-    QRadioButton *mBankBButton;
-    QToolButton *mCopyButton;
-    QToolButton *mPasteButton;
-    QLabel *mFileNameLabel; // Label to show filename
     QString mFileName; // Last Filename used to load or save this NameTable
     int mSelectedTile; // Which tile is currently selected
     EditTileDialog *mEditDialog; // Dialog to edit tiles
     int mCopiedTile; // Last tile "Copied"
+    bool mModified;
 };
 
 #endif // TILESET_H
