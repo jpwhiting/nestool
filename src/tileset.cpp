@@ -18,6 +18,7 @@
 
 #include "tileset.h"
 
+#include <QClipboard>
 #include <QFile>
 #include <QFileInfo>
 #include <QGridLayout>
@@ -139,6 +140,9 @@ void TileSet::copySelected()
 {
     // Save selected tile chr data for pasting
     mCopiedTile = mSelectedTile;
+    QClipboard *clipboard = QGuiApplication::clipboard();
+    QImage image = mTiles.at(mSelectedTile)->image();
+    clipboard->setImage(image);
 }
 
 void TileSet::pasteSelected()

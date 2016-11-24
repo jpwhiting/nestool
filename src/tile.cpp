@@ -184,6 +184,20 @@ bool Tile::identical(Tile *other)
     return same;
 }
 
+QImage Tile::image() const
+{
+    QImage pic(8, 8, QImage::Format_Indexed8);
+    for (int i = 0; i < 4; ++i) {
+        pic.setColor(i, mPalette[i].rgb());
+    }
+    for (int x = 0; x < 8; ++x) {
+        for (int y = 0; y < 8; ++y) {
+            pic.setPixel(x, y, getPixel(x, y));
+        }
+    }
+    return pic;
+}
+
 void Tile::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
@@ -201,7 +215,7 @@ void Tile::paintEvent(QPaintEvent *event)
 
     for (int r = 0; r < 8; ++r) {
         for (int c = 0; c < 8; ++c) {
-            int col = (((mData[r]<<c)&128)>>7)|(((mData[r+8]<<c)&128)>>6);
+            int col = getPixel(c, r);
             painter.setBrush(mPalette[col]);
             painter.drawRect(c*cellWidth, r*cellWidth, cellWidth, cellWidth);
         }
@@ -259,4 +273,9 @@ void Tile::setPixel(int x, int y, int color)
 
     mData[pp]=(mData[pp] & (mask^255))|palLow;
     mData[pp+8]=(mData[pp+8] & (mask^255))|palHigh;
+}
+
+int Tile::getPixel(int x, int y) const
+{
+    return (((mData[y]<<x)&128)>>7)|(((mData[y+8]<<x)&128)>>6);
 }

@@ -57,6 +57,8 @@ public:
     void fill();
 
     bool identical(Tile *other); // Tell if this tile is identical to other
+
+    QImage image() const; // Get a pixmap of 8x8 pixels of the tile for clipboard
 signals:
     void clicked();
     void hovered();
@@ -69,6 +71,7 @@ protected:
 private:
     // set the given pixel at x and y to color
     void setPixel(int x, int y, int color);
+    int getPixel(int x, int y) const; // Get color number at given index
 
     bool mSelected;
     char mData[16];
