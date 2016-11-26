@@ -59,6 +59,7 @@ public:
     bool identical(Tile *other); // Tell if this tile is identical to other
 
     QImage image() const; // Get a pixmap of 8x8 pixels of the tile for clipboard
+    void setImage(QImage image, int x, int y); // Set tile to contents of image starting at x,y
 signals:
     void clicked();
     void hovered();

@@ -19,7 +19,8 @@ SOURCES += main.cpp\
         tile.cpp \
         tileset.cpp \
     settingsdialog.cpp \
-    edittiledialog.cpp
+    edittiledialog.cpp \
+    palette.cpp
 
 HEADERS  += mainwindow.h \
         nametable.h \

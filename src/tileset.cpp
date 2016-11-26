@@ -31,6 +31,8 @@
 
 #include "ui_tileset.h"
 
+#include <QDebug>
+
 char zeros[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 TileSet::TileSet(QWidget *parent)
@@ -50,6 +52,7 @@ TileSet::TileSet(QWidget *parent)
     }
 
     mSelectedTile = 0;
+    mCopiedTile = -1;
     mTiles.at(mSelectedTile)->setSelected(true);
     setModified(false);
 
@@ -148,7 +151,21 @@ void TileSet::copySelected()
 void TileSet::pasteSelected()
 {
     // Overwrite currently selected tile with copied chr data
-    copyTile(mCopiedTile, mSelectedTile);
+    QClipboard *clipboard = QGuiApplication::clipboard();
+    QImage image = clipboard->image();
+    if (!image.isNull()) { // TODO: Check the size of the image
+        for (int i= 0; i < image.width(); i+=8) {
+            for (int j = 0; j < image.height(); j+=8) {
+                int which = mSelectedTile + (i/8) + ((j/8)*16);
+                if (which < mTiles.size()) {
+                    mTiles.at(which)->setImage(image, i, j);
+                }
+            }
+        }
+        setModified(true);
+    } else if (mCopiedTile > -1) {
+        copyTile(mCopiedTile, mSelectedTile);
+    }
 }
 
 void TileSet::toggleShowGrid(bool checked)

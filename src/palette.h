@@ -1,5 +1,7 @@
 //ntsc palette captured.pal by Kinopio
 
+#include <QColor>
+
 const unsigned char ntscPalette[64*3]={
     124,124,124,
     0,0,252,
@@ -66,3 +68,7 @@ const unsigned char ntscPalette[64*3]={
     0,0,0,
     0,0,0
 };
+
+double colorRGBEuclideanDistance(const QColor& c1, const QColor& c2);
+int closestColor(const QColor &c1, QColor colors[4]);
+

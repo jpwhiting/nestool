@@ -17,6 +17,7 @@
  ***************************************************************************/
 
 #include "tile.h"
+#include "palette.h"
 
 #include <QMouseEvent>
 #include <QPainter>
@@ -196,6 +197,18 @@ QImage Tile::image() const
         }
     }
     return pic;
+}
+
+void Tile::setImage(QImage image, int x, int y)
+{
+    for (int r = 0; r < 8; ++r) { // Rows
+        for (int c = 0; c < 8; ++c) { // Columns
+            qDebug() << "Getting color from image at " << x+c << " y " << y + r;
+            QColor color = image.pixelColor(x + c, y + r);
+            setPixel(c, r, closestColor(color, mPalette));
+        }
+    }
+    update();
 }
 
 void Tile::paintEvent(QPaintEvent *event)
