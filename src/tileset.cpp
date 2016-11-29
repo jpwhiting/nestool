@@ -24,6 +24,7 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QMouseEvent>
+#include <QPainter>
 #include <QRadioButton>
 #include <QToolButton>
 
@@ -41,6 +42,9 @@ TileSet::TileSet(QWidget *parent)
 {
     ui->setupUi(this);
 
+    mRubberBand = new QRubberBand(QRubberBand::Rectangle, this);
+    mRubberBand->raise();
+
     for (int i = 0; i < 16; ++i) {
         for (int j = 0; j < 16; ++j) {
             Tile *tile = QWidget::findChild<Tile *>(QString("tile_%1").arg(i*16+j));
@@ -52,8 +56,12 @@ TileSet::TileSet(QWidget *parent)
     }
 
     mSelectedTile = 0;
+    mRubberBand->show();
+    mSelectedWidth = 1;
+    mSelectedHeight = 1;
+    updateSelection();
     mCopiedTile = -1;
-    mTiles.at(mSelectedTile)->setSelected(true);
+//    mTiles.at(mSelectedTile)->setSelected(true);
     setModified(false);
 
     connect(ui->bankAButton, SIGNAL(toggled(bool)), this, SLOT(updateTiles()));
@@ -144,8 +152,15 @@ void TileSet::copySelected()
     // Save selected tile chr data for pasting
     mCopiedTile = mSelectedTile;
     QClipboard *clipboard = QGuiApplication::clipboard();
-    QImage image = mTiles.at(mSelectedTile)->image();
-    clipboard->setImage(image);
+    QImage result = QImage(8 * mSelectedWidth, 8*mSelectedHeight, QImage::Format_RGB32);
+    QPainter painter (&result);
+    for (int c = 0; c < mSelectedWidth; ++c) {
+        for (int r = 0; r < mSelectedHeight; ++r) {
+            QImage image = mTiles.at(mSelectedTile + c + r*16)->image();
+            painter.drawImage(c*8, r*8, image);
+        }
+    }
+    clipboard->setImage(result);
 }
 
 void TileSet::pasteSelected()
@@ -172,6 +187,7 @@ void TileSet::toggleShowGrid(bool checked)
 {
     ui->tileGridLayout->setHorizontalSpacing(checked ? 1 : 0);
     ui->tileGridLayout->setVerticalSpacing(checked ? 1 : 0);
+    update();
 }
 
 void TileSet::setModified(bool modified)
@@ -191,6 +207,16 @@ void TileSet::editTile(int index)
         mTiles.at(index)->setData(mEditDialog->chrData());
     }
     updateFromTiles(index);
+}
+
+void TileSet::updateSelection()
+{
+    int x = mTiles.at(mSelectedTile)->x();
+    int y = mTiles.at(mSelectedTile)->y();
+    int grid = ui->gridButton->isChecked() ? 1 : 0;
+    int w = mSelectedWidth * (mTiles.at(0)->width() + grid);
+    int h = mSelectedHeight * (mTiles.at(0)->height() + grid);
+    mRubberBand->setGeometry(x, y, w, h);
 }
 
 char *TileSet::tileData(int tile)
@@ -254,17 +280,36 @@ void TileSet::mousePressEvent(QMouseEvent *event)
     // Find the tile
     Tile *tile = qobject_cast<Tile*>(childAt(event->x(), event->y()));
     if (tile) {
-        if (!tile->getSelected()) {
-            Q_FOREACH(Tile *t, mTiles) {
-                t->setSelected(false);
-            }
+        int index = mTiles.indexOf(tile);
+        if (index != mSelectedTile) {
+            if (event->modifiers() == Qt::ShiftModifier) {
+                int newX = index%16;
+                int newY = index/16;
+                int oldX = mSelectedTile%16;
+                int oldY = mSelectedTile/16;
+                // Is this new tile less than the previously selected tile?
+                mSelectedWidth = qAbs(newX - oldX) + 1;
+                mSelectedHeight = qAbs(newY - oldY) + 1;
 
-            tile->setSelected(true);
-            int index = mTiles.indexOf(tile);
-            mSelectedTile = index;
+                if (newY < oldY && newX > oldX) {
+                    // Higher row, but to the right
+                    mSelectedTile = oldX + newY * 16;
+                } else if (newX < oldX && newY > oldY) {
+                    // It's to the left, but lower
+                    mSelectedTile = newX + oldY * 16;
+                } else if (index < mSelectedTile){
+                    // To the left and/or above
+                    mSelectedTile = index;
+                }
+            } else {
+                mSelectedTile = index;
+                mSelectedWidth = 1;
+                mSelectedHeight = 1;
+            }
+            updateSelection();
+            update();
         } else {
             // Tile is already selected, so open edit mode
-            int index = mTiles.indexOf(tile);
             editTile(index);
         }
     }
@@ -273,6 +318,11 @@ void TileSet::mousePressEvent(QMouseEvent *event)
 void TileSet::mouseMoveEvent(QMouseEvent *event)
 {
 
+}
+
+void TileSet::resizeEvent(QResizeEvent *event)
+{
+    updateSelection();
 }
 
 void TileSet::tileHovered()

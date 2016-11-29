@@ -25,6 +25,7 @@
 #include <QWidget>
 
 class QLabel;
+class QRubberBand;
 class EditTileDialog;
 
 namespace Ui {
@@ -62,6 +63,7 @@ signals:
 protected:
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void tileHovered(); // Slot for when a tile is hovered over
@@ -74,14 +76,19 @@ private slots:
 private:
     void setModified(bool modified);
     void editTile(int index);
+    void updateSelection(); // Update the rubber band to reflect the selection
     Ui::Tileset *ui;
     QList<Tile*> mTiles;
     char mData[8192]; // chr data
     QString mFileName; // Last Filename used to load or save this NameTable
     int mSelectedTile; // Which tile is currently selected
+    int mSelectedWidth; // How many tiles wide are selected
+    int mSelectedHeight; // How many tiles high are selected
+
     EditTileDialog *mEditDialog; // Dialog to edit tiles
     int mCopiedTile; // Last tile "Copied"
     bool mModified;
+    QRubberBand *mRubberBand; // Rubberband to show selection
 };
 
 #endif // TILESET_H
