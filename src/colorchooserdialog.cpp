@@ -57,6 +57,7 @@ ColorChooserDialog::~ColorChooserDialog()
 void ColorChooserDialog::setCurrentIndex(int index)
 {
     mCurrentIndex = index;
+    mCurrentSwatch = mSwatches.at(index);
 }
 
 int ColorChooserDialog::chosenIndex() const
@@ -77,6 +78,7 @@ void ColorChooserDialog::paletteClicked()
     if (index != mCurrentIndex) {
         mCurrentSwatch->setSelected(false);
         swatch->setSelected(true);
+        mCurrentSwatch = swatch;
         mCurrentIndex = index;
     }
 }

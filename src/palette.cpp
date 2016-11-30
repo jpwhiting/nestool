@@ -65,8 +65,10 @@ Palette::Palette(QWidget *parent)
 void Palette::changeColor(int index)
 {
     ColorChooserDialog *dialog = new ColorChooserDialog(this);
-    dialog->setCurrentIndex(0);
+    dialog->setCurrentIndex(mPalData.at(index));
     if (dialog->exec() == QDialog::Accepted) {
+        mPalData[index] = dialog->chosenIndex();
+        mSwatches.at(index)->setColor(dialog->chosenColor());
         // Change the swatch to the new color
         emit currentPaletteChanged();
     }
