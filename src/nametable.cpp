@@ -26,6 +26,8 @@
 #include <QMouseEvent>
 #include <QPushButton>
 
+#include "palette.h"
+
 #include <QDebug>
 
 NameTable::NameTable(QWidget *parent) : QWidget(parent), mTileSet(0)
@@ -61,6 +63,8 @@ NameTable::NameTable(QWidget *parent) : QWidget(parent), mTileSet(0)
 void NameTable::setTileSet(TileSet *tileset)
 {
     mTileSet = tileset;
+    connect(mTileSet, SIGNAL(tilesChanged()), this, SLOT(tilesChanged()));
+    tilesChanged();
 }
 
 bool NameTable::load(QString filename)
@@ -186,37 +190,15 @@ void NameTable::setData(char *data)
         mData[i] = (unsigned char)data[i];
     }
 
-    int x = 0;
-    int y = 0;
-    if (mTileSet) { // Update tiles if we have a tileset
-        for (int i = 0; i < 960; ++i) {
-            char *tileData = mTileSet->tileData(mData[i]);
-            if (tileData) {
-                mTiles.at(i)->setData(tileData);
-                mTiles.at(i)->setPalette(mPalettes.at(getAttr(x, y)));
-                x++;
-                if (x == 32) {
-                    x = 0;
-                    y++;
-                }
-            }
-        }
-    }
+    paletteChanged();
+    tilesChanged();
 }
 
-void NameTable::setPalettes(QList<QList<QColor> > colors)
+void NameTable::setPalette(Palette *pal)
 {
-    mPalettes = colors;
-    int x = 0;
-    int y = 0;
-    Q_FOREACH(Tile *tile, mTiles) {
-        tile->setPalette(mPalettes.at(getAttr(x, y)));
-        x++;
-        if (x == 32) {
-            x = 0;
-            y++;
-        }
-    }
+    mPalette = pal;
+    connect(pal, SIGNAL(currentPaletteChanged()), this, SLOT(paletteChanged()));
+    paletteChanged();
 }
 
 void NameTable::setTile(int x, int y, int tile)
@@ -240,7 +222,8 @@ void NameTable::setAttr(int x, int y, int pal)
     int mask = 3;
     pal = pal&3;
 
-    QList<QColor> palette = mPalettes.at(pal);
+    QList<QList<QColor> > allColors = mPalette->getAllColors();
+    QList<QColor> palette = allColors.at(pal);
 
     if (x&2) {
         pal  <<=2;
@@ -323,6 +306,35 @@ void NameTable::tileClicked()
     int index = mTiles.indexOf(tile);
     if (index >= 0 && index < mTiles.size()) {
         emit tileClicked(index % 32, index / 32);
+    }
+}
+
+void NameTable::paletteChanged()
+{
+    // Get all the colors
+    QList<QList<QColor> > allColors = mPalette->getAllColors();
+    int x = 0;
+    int y = 0;
+    Q_FOREACH(Tile *tile, mTiles) {
+        tile->setPalette(allColors.at(getAttr(x, y)));
+        x++;
+        if (x == 32) {
+            x = 0;
+            y++;
+        }
+    }
+
+}
+
+void NameTable::tilesChanged()
+{
+    if (mTileSet) { // Update tiles if we have a tileset
+        for (int i = 0; i < 960; ++i) {
+            char *tileData = mTileSet->tileData(mData[i]);
+            if (tileData) {
+                mTiles.at(i)->setData(tileData);
+            }
+        }
     }
 }
 

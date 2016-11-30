@@ -40,9 +40,6 @@ public:
     ~MainWindow();
 
 private Q_SLOTS:
-    void bgClicked();
-
-    void paletteClicked();
     void paletteHovered();
 
     void on_action_Remove_Duplicates_triggered();
@@ -51,6 +48,7 @@ private Q_SLOTS:
     void on_action_Preferences_triggered();
 
     void on_action_Open_Palettes_triggered();
+    void on_action_Save_Palettes_As_triggered();
     void on_action_Save_Palettes_triggered();
 
     void on_action_Open_CHR_triggered();
@@ -64,7 +62,6 @@ private Q_SLOTS:
 
     void on_addNameTableButton_clicked();
 
-    void updatePalettes();
     void openRecentPalettes();
     void openRecentCHR();
     void openRecentNameTable();
@@ -88,14 +85,7 @@ private:
 
     Ui::MainWindow *ui;
     SettingsDialog *mSettingsDialog;
-    QColor mBasePalette[64];
-    unsigned char mBgPal[4][4]; // Palettes
-    char mChr[8192]; // Tileset
-    int mCurrentPalette; // Which palette to use
-    unsigned char *mCurrentPal; // Which color is selected
-    Swatch *mCurrentPalSwatch;
     NameTable *mCurrentNameTable; // Current name table
-    QMap<QString, int> mColorIndexes; // Which color is which index in nes palette
     QSettings *mSettings;
     QStringList mLastPaletteFiles;
     QStringList mLastCHRFiles;

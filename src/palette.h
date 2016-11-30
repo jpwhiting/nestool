@@ -24,26 +24,54 @@
 #include <QColor>
 #include <QWidget>
 
+class QLabel;
+
 class Palette: public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(int currentColor READ getCurrentColor WRITE setCurrentColor)
+    Q_PROPERTY(int currentPalette READ getCurrentPalette WRITE setCurrentPalette NOTIFY currentPaletteChanged)
 public:
     explicit Palette(QWidget *parent = 0);
 
     QColor getColor(int which);
+    QList<QColor> getCurrentPaletteColors() const;
+    QList<QList<QColor> > getAllColors() const;
 
     int getCurrentColor() const;
     void setCurrentColor(int which);
 
-public:
+    int getCurrentPalette() const;
+    void setCurrentPalette(int which);
+
+    static QList<QColor> nesColors();
+
+    bool load(const QString &filename);
+    void save(); // Need filename loaded or call saveAs first
+    void saveAs(QString filename);
+
     static double colorRGBEuclideanDistance(const QColor& c1, const QColor& c2);
     static int closestColor(const QColor &c1, QColor colors[4]);
 
+signals:
+    // Either the user clicked on a different palette or the palette colors changed
+    void currentPaletteChanged();
+
+private slots:
+    void paletteClicked();
+
 private:
+    static void initializeBasePalette();
+    void changeColor(int index);
+    void updatePalettes();
+
     QList<Swatch*> mSwatches;
     QList<QColor> mColors;
     int mCurrentColor;
+    QList<unsigned char> mPalData;
+    QString mFileName;
+    QLabel *mFilenameLabel;
+    static QList<QColor> mBasePalette;
 };
 
 //ntsc palette captured.pal by Kinopio

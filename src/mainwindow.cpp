@@ -45,10 +45,6 @@ MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::MainWindow),
   mSettingsDialog(new SettingsDialog(this)),
-  mBgPal{{15, 0, 16, 48}, {15, 1, 33, 49}, {15, 6, 22, 38}, {15, 9, 25, 41}},
-  mCurrentPalette(-1),
-  mCurrentPal(0),
-  mCurrentPalSwatch(0),
   mCurrentNameTable(0),
   mSettings(new QSettings())
 {
@@ -88,48 +84,13 @@ MainWindow::MainWindow(QWidget *parent) :
   // Create one nametable
   mNameTables.append(ui->nameTable);
   ui->nameTable->setTileSet(ui->tileSet);
+  ui->nameTable->setPalette(ui->backgroundPalette);
   mCurrentNameTable = mNameTables.at(0);
   setTitle(mCurrentNameTable->getName());
   connect(ui->nameTable, SIGNAL(tileClicked(int,int)), this, SLOT(nameTableClicked(int,int)));
 
-  // Populate mBasePalette
-  int pp = 0;
-  for (int i = 0; i < 64; ++i) {
-      mBasePalette[i] = QColor(ntscPalette[pp], ntscPalette[pp+1],ntscPalette[pp+2]);
-      Swatch *swatch = ui->paletteGroupBox->findChild<Swatch *>(QString("swatch%1").arg(i));
-      if (swatch) {
-          QColor color(ntscPalette[pp], ntscPalette[pp+1], ntscPalette[pp+2]);
-          swatch->setColor(color);
-          swatch->setHoverText(QString("Color:$%1").arg(i, 2, 16, QChar('0')));
-          connect(swatch, SIGNAL(hovered()), this, SLOT(paletteHovered()));
-          mColorIndexes.insert(color.name(), i);
-          connect(swatch, SIGNAL(clicked()), this, SLOT(paletteClicked()));
-      }
-      pp+=3;
-  }
-
-  updatePalettes();
-
-  // Connect to palette swatch click signals
-  for (int i = 0; i < 4; ++i) {
-      for (int j = 0; j < 4; ++j) {
-          Swatch *swatch = ui->paletteGroupBox->findChild<Swatch*>(QString("swatch%1_%2").arg(i).arg(j));
-          connect(swatch, SIGNAL(clicked()), this, SLOT(bgClicked()));
-      }
-  }
-
-  // Select swatch 0_0
-  Swatch *swatch = ui->paletteGroupBox->findChild<Swatch*>(QString("swatch0_0"));
-  swatch->setSelected(true);
-  mCurrentPal = &mBgPal[0][0];
-  mCurrentPalette = 0;
-  mCurrentPalSwatch = swatch;
-  QList<QColor> pal;
-  pal.append(mBasePalette[mBgPal[0][0]]);
-  pal.append(mBasePalette[mBgPal[0][1]]);
-  pal.append(mBasePalette[mBgPal[0][2]]);
-  pal.append(mBasePalette[mBgPal[0][3]]);
-  ui->tileSet->setPalette(pal);
+  ui->tileSet->setPalette(ui->backgroundPalette, true);
+  ui->tileSet->setPalette(ui->spritesPalette, false);
 
   connect(mSettingsDialog, SIGNAL(settingsChanged()), this, SLOT(onSettingsChanged()));
   onSettingsChanged(); // Update scales
@@ -141,51 +102,6 @@ MainWindow::~MainWindow()
     delete mSettings;
 }
 
-void MainWindow::bgClicked()
-{
-    Swatch *from = qobject_cast<Swatch*>(sender());
-    for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
-            Swatch *swatch = ui->paletteGroupBox->findChild<Swatch*>(QString("swatch%1_%2").arg(i).arg(j));
-            if (swatch == from) {
-                swatch->setSelected(true);
-                mCurrentPal = &mBgPal[i][j];
-                mCurrentPalette = i;
-                mCurrentPalSwatch = swatch;
-                QList<QColor> pal;
-                pal.append(mBasePalette[mBgPal[i][0]]);
-                pal.append(mBasePalette[mBgPal[i][1]]);
-                pal.append(mBasePalette[mBgPal[i][2]]);
-                pal.append(mBasePalette[mBgPal[i][3]]);
-                ui->tileSet->setPalette(pal);
-            } else {
-                swatch->setSelected(false);
-            }
-        }
-    }
-}
-
-void MainWindow::paletteClicked()
-{
-    Swatch *from = qobject_cast<Swatch*>(sender());
-    QColor color = from->getColor();
-    int index = mColorIndexes.value(color.name());
-    if (mCurrentPal != 0) {
-        *mCurrentPal = index;
-        mCurrentPalSwatch->setColor(color);
-
-        // Send list of QColor to nametable
-        QList<QList<QColor> > palettes;
-        for (int i = 0; i < 4; ++i) {
-            QList<QColor> pal;
-            for (int j = 0; j < 4; ++j) {
-                pal.append(mBasePalette[mBgPal[i][j]]);
-            }
-            palettes.append(pal);
-        }
-        ui->nameTable->setPalettes(palettes);
-    }
-}
 
 void MainWindow::paletteHovered()
 {
@@ -300,26 +216,20 @@ void MainWindow::on_action_Open_Palettes_triggered()
     }
 }
 
-void MainWindow::on_action_Save_Palettes_triggered()
+void MainWindow::on_action_Save_Palettes_As_triggered()
 {
     QString filename = QFileDialog::getSaveFileName(this,
                                                     "Save palettes file",
                                                     mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
                                                     "NES Palettes (*.pal)");
     if (!filename.isEmpty()) {
-        QFile file(filename);
-        if (file.open(QIODevice::WriteOnly)) {
-            char pal[16];
-            for (int i = 0; i < 4; ++i) {
-                pal[i]=mBgPal[0][i];
-                pal[i+4]=mBgPal[1][i];
-                pal[i+8]=mBgPal[2][i];
-                pal[i+12]=mBgPal[3][i];
-            }
-            file.write(pal, 16);
-            file.close();
-        }
+        ui->backgroundPalette->saveAs(filename);
     }
+}
+
+void MainWindow::on_action_Save_Palettes_triggered()
+{
+    ui->backgroundPalette->save();
 }
 
 void MainWindow::on_action_Open_CHR_triggered()
@@ -386,53 +296,8 @@ void MainWindow::on_addNameTableButton_clicked()
     ui->nameTableContents->layout()->addWidget(nameTable);
     nameTable->setTileSet(ui->tileSet);
     nameTable->setScale(mSettingsDialog->nameTableScale());
-
-    // Send list of QColor to new nametable
-    QList<QList<QColor> > palettes;
-    for (int i = 0; i < 4; ++i) {
-        QList<QColor> pal;
-        for (int j = 0; j < 4; ++j) {
-            pal.append(mBasePalette[mBgPal[i][j]]);
-        }
-        palettes.append(pal);
-    }
-    nameTable->setPalettes(palettes);
+    nameTable->setPalette(ui->backgroundPalette);
     connect(nameTable, SIGNAL(tileClicked(int,int)), this, SLOT(nameTableClicked(int,int)));
-}
-
-void MainWindow::updatePalettes()
-{
-    // Populate default palettes
-    for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
-            Swatch *swatch = ui->paletteGroupBox->findChild<Swatch*>(QString("swatch%1_%2").arg(i).arg(j));
-            if (swatch) {
-                QColor color(mBasePalette[mBgPal[i][j]]);
-                swatch->setColor(color);
-            }
-        }
-    }
-
-    // Send color palette to tileSet
-    QList<QColor> pal;
-    pal.append(mBasePalette[mBgPal[mCurrentPalette][0]]);
-    pal.append(mBasePalette[mBgPal[mCurrentPalette][1]]);
-    pal.append(mBasePalette[mBgPal[mCurrentPalette][2]]);
-    pal.append(mBasePalette[mBgPal[mCurrentPalette][3]]);
-    ui->tileSet->setPalette(pal);
-
-    // Send list of QColor to nametable
-    QList<QList<QColor> > palettes;
-    for (int i = 0; i < 4; ++i) {
-        QList<QColor> pal;
-        for (int j = 0; j < 4; ++j) {
-            pal.append(mBasePalette[mBgPal[i][j]]);
-        }
-        palettes.append(pal);
-    }
-    Q_FOREACH(NameTable* nameTable, mNameTables) {
-        nameTable->setPalettes(palettes);
-    }
 }
 
 void MainWindow::openRecentPalettes()
@@ -458,8 +323,8 @@ void MainWindow::nameTableClicked(int x, int y)
     NameTable *nameTable = qobject_cast<NameTable*>(sender());
     mCurrentNameTable = nameTable;
     setTitle(mCurrentNameTable->getName());
-    if (ui->applyPalettesCheckBox->isChecked() && mCurrentPalette != -1) {
-        nameTable->setAttr(x, y, mCurrentPalette);
+    if (ui->applyPalettesCheckBox->isChecked()) {
+        nameTable->setAttr(x, y, ui->backgroundPalette->getCurrentPalette());
     }
     if (ui->applyTilesCheckBox->isChecked()) {
         nameTable->setTile(x, y, ui->tileSet->selectedTile());
@@ -580,29 +445,17 @@ void MainWindow::updateRecentActions()
 
 void MainWindow::loadPalettes(QString filename)
 {
-    QFile file(filename);
-    if (file.exists()) {
+    if (ui->backgroundPalette->load(filename)) {
+        QFileInfo info(filename);
         if (!mLastPaletteFiles.contains(filename)) {
             mLastPaletteFiles.append(filename);
             if (mLastPaletteFiles.count() > mSettingsDialog->maxRecentFiles())
                 mLastPaletteFiles.removeFirst();
             updateRecentActions();
         }
-        QFileInfo info(file);
         mSettings->setValue(kLastOpenPathKey, info.absolutePath());
-        if (info.size() == 16 && file.open(QIODevice::ReadOnly)) {
-            char pal[16];
-            file.read(pal, 16);
-            file.close();
-            for (int i = 0; i < 4; ++i) {
-                mBgPal[0][i]=pal[i];
-                mBgPal[1][i]=pal[i+4];
-                mBgPal[2][i]=pal[i+8];
-                mBgPal[3][i]=pal[i+12];
-            }
-            updatePalettes();
-        } else {
-            QMessageBox::information(this, "Unable to read palettes file", "Palette file should be 16 bytes long");
-        }
+    } else {
+        QMessageBox::warning(this, "Unable to load palettes file",
+                             QString("Unable to load palettes from file %1").arg(filename));
     }
 }

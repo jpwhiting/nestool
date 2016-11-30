@@ -12,26 +12,32 @@ TARGET = nestool
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-        mainwindow.cpp \
-        nametable.cpp \
-        swatch.cpp \
-        tile.cpp \
-        tileset.cpp \
+SOURCES += \
+    colorchooserdialog.cpp \
+    main.cpp\
+    mainwindow.cpp \
+    nametable.cpp \
+    swatch.cpp \
+    tile.cpp \
+    tileset.cpp \
     settingsdialog.cpp \
     edittiledialog.cpp \
     palette.cpp
 
-HEADERS  += mainwindow.h \
-        nametable.h \
-        palette.h \
-        swatch.h \
-        tile.h \
-        tileset.h \
+HEADERS  += \
+    colorchooserdialog.h \
+    mainwindow.h \
+    nametable.h \
+    palette.h \
+    swatch.h \
+    tile.h \
+    tileset.h \
     settingsdialog.h \
     edittiledialog.h
 
-FORMS    += mainwindow.ui \
+FORMS    += \
+    colorchooserdialog.ui \
+    mainwindow.ui \
     settingsdialog.ui \
     edittiledialog.ui \
     tileset.ui

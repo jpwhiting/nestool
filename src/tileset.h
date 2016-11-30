@@ -27,6 +27,7 @@
 class QLabel;
 class QRubberBand;
 class EditTileDialog;
+class Palette;
 
 namespace Ui {
 class Tileset;
@@ -48,7 +49,7 @@ public:
 
     char *tileData(int tile); // Get the CHR data for a given tile
 
-    void setPalette(QList<QColor> colors);
+    void setPalette(Palette *pal, bool background = true);
 
     void setScale(int scale); // Set scale for tiles
 
@@ -60,6 +61,7 @@ public:
     bool isModified() const; // Whether the tileset in memory has been modified
 signals:
     void setStatus(QString text); // Signal to change the status bar message
+    void tilesChanged(); // Tiles were edited or loaded
 protected:
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
@@ -72,6 +74,7 @@ private slots:
     void copySelected(); // Copy button clicked
     void pasteSelected(); // Paste button clicked
     void toggleShowGrid(bool checked);
+    void paletteChanged();
 
 private:
     void setModified(bool modified);
@@ -84,6 +87,8 @@ private:
     int mSelectedTile; // Which tile is currently selected
     int mSelectedWidth; // How many tiles wide are selected
     int mSelectedHeight; // How many tiles high are selected
+    Palette *mBackgroundPalette;
+    Palette *mSpritePalette;
 
     EditTileDialog *mEditDialog; // Dialog to edit tiles
     int mCopiedTile; // Last tile "Copied"

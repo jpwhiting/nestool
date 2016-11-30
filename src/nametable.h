@@ -26,6 +26,7 @@
 #include <QWidget>
 
 class QLabel;
+class Palette;
 
 class NameTable : public QWidget
 {
@@ -42,7 +43,7 @@ public:
     void setData(char *data);
 
     // Set all 4 palettes in order so we can apply the right one per tile.
-    void setPalettes(QList<QList<QColor> > colors);
+    void setPalette(Palette *pal);
     // Set the given coordinate to the given tile
     void setTile(int x, int y, int tile);
 
@@ -67,6 +68,8 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void tileClicked();
+    void paletteChanged();
+    void tilesChanged();
 
 private:
     // Get the palette for a given tile
@@ -75,9 +78,9 @@ private:
     QList<Tile*> mTiles;
     unsigned char mData[1024]; // Nametable
     unsigned char *mAttrs; // Attributes of the name table
-    QList<QList<QColor> > mPalettes; // All 4 palettes in order
     QLabel *mFileNameLabel; // Label to show filename
     QString mFileName; // Last Filename used to load or save this NameTable
+    Palette *mPalette; // Nametable palette
 };
 
 #endif // NAMETABLE_H

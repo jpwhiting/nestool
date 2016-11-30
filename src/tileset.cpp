@@ -29,6 +29,7 @@
 #include <QToolButton>
 
 #include "edittiledialog.h"
+#include "palette.h"
 
 #include "ui_tileset.h"
 
@@ -84,6 +85,7 @@ bool TileSet::load(QString &filename)
             file.read(mData, 8192);
             file.close();
             updateTiles();
+            emit tilesChanged();
             setModified(false);
             return true;
         } else if (info.size() == 4096) {
@@ -92,6 +94,7 @@ bool TileSet::load(QString &filename)
             file.read(start, 4096);
             file.close();
             updateTiles();
+            emit tilesChanged();
             setModified(true);
             return true;
         } else {
@@ -134,6 +137,8 @@ void TileSet::updateTiles()
             mTiles.at(which)->setData(start + (which * 16));
         }
     }
+    ui->backgroundCheckBox->setChecked(ui->bankAButton->isChecked());
+    paletteChanged();
 }
 
 void TileSet::updateFromTiles(int index)
@@ -190,14 +195,27 @@ void TileSet::toggleShowGrid(bool checked)
     update();
 }
 
+void TileSet::paletteChanged()
+{
+    QList<QColor> colors = (ui->backgroundCheckBox->isChecked() ?
+                                mBackgroundPalette->getCurrentPaletteColors() :
+                                mSpritePalette->getCurrentPaletteColors());
+    Q_FOREACH(Tile *tile, mTiles) {
+        tile->setPalette(colors);
+    }
+    mEditDialog->setPalette(colors);
+}
+
 void TileSet::setModified(bool modified)
 {
     QFileInfo info(mFileName);
     mModified = modified;
-    if (modified)
+    if (modified) {
         ui->filenameLabel->setText(QString("%1 *").arg(info.baseName()));
-    else
+        emit tilesChanged();
+    } else {
         ui->filenameLabel->setText(info.baseName());
+    }
 }
 
 void TileSet::editTile(int index)
@@ -226,12 +244,15 @@ char *TileSet::tileData(int tile)
     return mTiles.at(tile)->chrData();
 }
 
-void TileSet::setPalette(QList<QColor> colors)
+void TileSet::setPalette(Palette *pal, bool background)
 {
-    Q_FOREACH(Tile *tile, mTiles) {
-        tile->setPalette(colors);
+    if (background) {
+        mBackgroundPalette = pal;
+    } else {
+        mSpritePalette = pal;
     }
-    mEditDialog->setPalette(colors);
+    connect(pal, SIGNAL(currentPaletteChanged()), this, SLOT(paletteChanged()));
+    paletteChanged();
 }
 
 void TileSet::setScale(int scale)
