@@ -69,6 +69,7 @@ void Palette::changeColor(int index)
     if (dialog->exec() == QDialog::Accepted) {
         mPalData[index] = dialog->chosenIndex();
         mSwatches.at(index)->setColor(dialog->chosenColor());
+        mColors[index] = dialog->chosenColor();
         // Change the swatch to the new color
         emit currentPaletteChanged();
     }
