@@ -179,6 +179,7 @@ void TileSet::pasteSelected()
                 int which = mSelectedTile + (i/8) + ((j/8)*16);
                 if (which < mTiles.size()) {
                     mTiles.at(which)->setImage(image, i, j);
+                    updateFromTiles(which);
                 }
             }
         }
