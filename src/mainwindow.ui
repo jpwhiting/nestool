@@ -336,16 +336,38 @@
     <property name="title">
      <string>Pa&amp;lettes</string>
     </property>
-    <widget class="QMenu" name="menu_Recent_Palettes">
+    <widget class="QMenu" name="menu_Background">
      <property name="title">
-      <string>&amp;Recent</string>
+      <string>&amp;Background</string>
      </property>
+     <widget class="QMenu" name="menu_Recent_Background_Palettes">
+      <property name="title">
+       <string>&amp;Recent Palettes</string>
+      </property>
+     </widget>
+     <addaction name="action_Open_Background_Palettes"/>
+     <addaction name="action_Save_Background_Palettes_As"/>
+     <addaction name="action_Save_Background_Palettes"/>
+     <addaction name="separator"/>
+     <addaction name="menu_Recent_Background_Palettes"/>
     </widget>
-    <addaction name="action_Open_Palettes"/>
-    <addaction name="action_Save_Palettes_As"/>
-    <addaction name="action_Save_Palettes"/>
-    <addaction name="separator"/>
-    <addaction name="menu_Recent_Palettes"/>
+    <widget class="QMenu" name="menuSprites">
+     <property name="title">
+      <string>&amp;Sprites</string>
+     </property>
+     <widget class="QMenu" name="menu_Recent_Sprites_Palettes">
+      <property name="title">
+       <string>&amp;Recent Palettes</string>
+      </property>
+     </widget>
+     <addaction name="action_Open_Sprites_Palettes"/>
+     <addaction name="action_Save_Sprites_Palettes_As"/>
+     <addaction name="action_Save_Sprites_Palettes"/>
+     <addaction name="separator"/>
+     <addaction name="menu_Recent_Sprites_Palettes"/>
+    </widget>
+    <addaction name="menu_Background"/>
+    <addaction name="menuSprites"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Nametable"/>
@@ -353,14 +375,14 @@
    <addaction name="menu_Palettes"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="action_Open_Palettes">
+  <action name="action_Open_Background_Palettes">
    <property name="text">
-    <string>&amp;Open Palettes...</string>
+    <string>&amp;Open Background Palettes...</string>
    </property>
   </action>
-  <action name="action_Save_Palettes">
+  <action name="action_Save_Background_Palettes">
    <property name="text">
-    <string>&amp;Save Palettes</string>
+    <string>&amp;Save Background Palettes</string>
    </property>
   </action>
   <action name="action_Open_CHR">
@@ -422,9 +444,39 @@
     <string>Save &amp;CHR</string>
    </property>
   </action>
-  <action name="action_Save_Palettes_As">
+  <action name="action_Save_Background_Palettes_As">
    <property name="text">
-    <string>Save Palettes As...</string>
+    <string>Save Background &amp;Palettes As...</string>
+   </property>
+  </action>
+  <action name="action_Open_Sprites_Palettes">
+   <property name="text">
+    <string>&amp;Open Sprites Palettes...</string>
+   </property>
+  </action>
+  <action name="action_Save_Sprites_Palettes_As">
+   <property name="text">
+    <string>&amp;Save Sprites Palettes As...</string>
+   </property>
+  </action>
+  <action name="action_Save_Sprites_Palettes">
+   <property name="text">
+    <string>Save Sprites &amp;Palettes</string>
+   </property>
+  </action>
+  <action name="actionRecent_2">
+   <property name="text">
+    <string>Recent</string>
+   </property>
+  </action>
+  <action name="actionTest">
+   <property name="text">
+    <string>Test</string>
+   </property>
+  </action>
+  <action name="actionTest_2">
+   <property name="text">
+    <string>Test</string>
    </property>
   </action>
  </widget>

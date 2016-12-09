@@ -184,6 +184,7 @@ bool Palette::load(const QString &filename)
 void Palette::save()
 {
     QFile file(mFileName);
+    QFileInfo info(mFileName);
     if (file.open(QIODevice::WriteOnly)) {
         char pal[16];
         for (int i = 0; i < 4; ++i) {
@@ -194,6 +195,26 @@ void Palette::save()
         }
         file.write(pal, 16);
         file.close();
+
+        // Write to .h file also
+        QFile headerFile(info.absolutePath() + "/" + info.baseName() + ".h");
+        if (headerFile.open(QIODevice::WriteOnly|QIODevice::Text)) {
+            QString name = info.baseName();
+            QString nameString = QString("const unsigned char %1[16]={\n").arg(name);
+            headerFile.write(nameString.toStdString().c_str(), nameString.length());
+
+            for (int i = 0; i < 16; ++i) {
+                QString numberString = QString("0x%1").arg(pal[i], 2, 16, QChar('0'));
+                if (i<15)
+                    numberString += ",";
+                if ((i&3) == 3 || i == 15)
+                    numberString += "\n";
+                headerFile.write(numberString.toStdString().c_str(), numberString.length());
+            }
+            QString endString("};\n");
+            headerFile.write(endString.toStdString().c_str(), endString.length());
+            headerFile.close();
+        }
     }
 }
 

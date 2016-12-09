@@ -205,18 +205,18 @@ void MainWindow::on_action_Preferences_triggered()
     mSettingsDialog->show();
 }
 
-void MainWindow::on_action_Open_Palettes_triggered()
+void MainWindow::on_action_Open_Background_Palettes_triggered()
 {
     QString filename = QFileDialog::getOpenFileName(this,
                                                     "Open palettes file",
                                                     mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
                                                     "NES Palettes (*.pal)");
     if (!filename.isEmpty()) {
-        loadPalettes(filename);
+        loadPalettes(filename, true);
     }
 }
 
-void MainWindow::on_action_Save_Palettes_As_triggered()
+void MainWindow::on_action_Save_Background_Palettes_As_triggered()
 {
     QString filename = QFileDialog::getSaveFileName(this,
                                                     "Save palettes file",
@@ -227,9 +227,36 @@ void MainWindow::on_action_Save_Palettes_As_triggered()
     }
 }
 
-void MainWindow::on_action_Save_Palettes_triggered()
+void MainWindow::on_action_Save_Background_Palettes_triggered()
 {
     ui->backgroundPalette->save();
+}
+
+void MainWindow::on_action_Open_Sprites_Palettes_triggered()
+{
+    QString filename = QFileDialog::getOpenFileName(this,
+                                                    "Open palettes file",
+                                                    mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
+                                                    "NES Palettes (*.pal)");
+    if (!filename.isEmpty()) {
+        loadPalettes(filename, false);
+    }
+}
+
+void MainWindow::on_action_Save_Sprites_Palettes_As_triggered()
+{
+    QString filename = QFileDialog::getSaveFileName(this,
+                                                    "Save palettes file",
+                                                    mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
+                                                    "NES Palettes (*.pal)");
+    if (!filename.isEmpty()) {
+        ui->spritesPalette->saveAs(filename);
+    }
+}
+
+void MainWindow::on_action_Save_Sprites_Palettes_triggered()
+{
+    ui->spritesPalette->save();
 }
 
 void MainWindow::on_action_Open_CHR_triggered()
@@ -300,10 +327,16 @@ void MainWindow::on_addNameTableButton_clicked()
     connect(nameTable, SIGNAL(tileClicked(int,int)), this, SLOT(nameTableClicked(int,int)));
 }
 
-void MainWindow::openRecentPalettes()
+void MainWindow::openRecentBackgroundPalettes()
 {
     QAction *action = qobject_cast<QAction*>(sender());
-    loadPalettes(action->text().remove('&'));
+    loadPalettes(action->text().remove('&'), true);
+}
+
+void MainWindow::openRecentSpritesPalettes()
+{
+    QAction *action = qobject_cast<QAction*>(sender());
+    loadPalettes(action->text().remove('&'), false);
 }
 
 void MainWindow::openRecentCHR()
@@ -405,11 +438,15 @@ void MainWindow::loadNameTable(QString filename)
 void MainWindow::updateRecentActions()
 {
     ui->menu_Recent_CHR->clear();
-    ui->menu_Recent_Palettes->clear();
+    ui->menu_Recent_Background_Palettes->clear();
+    ui->menu_Recent_Sprites_Palettes->clear();
     ui->menu_Recent_NameTable->clear();
 
     Q_FOREACH(const QString &filename, mLastPaletteFiles) {
-        ui->menu_Recent_Palettes->addAction(filename, this, SLOT(openRecentPalettes()));
+        ui->menu_Recent_Background_Palettes->addAction(filename, this,
+                                                       SLOT(openRecentBackgroundPalettes()));
+        ui->menu_Recent_Sprites_Palettes->addAction(filename, this,
+                                                    SLOT(openRecentSpritesPalettes()));
     }
 
     Q_FOREACH(const QString &filename, mLastCHRFiles) {
@@ -443,9 +480,10 @@ void MainWindow::updateRecentActions()
 
 }
 
-void MainWindow::loadPalettes(QString filename)
+void MainWindow::loadPalettes(QString filename, bool background)
 {
-    if (ui->backgroundPalette->load(filename)) {
+    if (background ? ui->backgroundPalette->load(filename) :
+            ui->spritesPalette->load(filename)) {
         QFileInfo info(filename);
         if (!mLastPaletteFiles.contains(filename)) {
             mLastPaletteFiles.append(filename);

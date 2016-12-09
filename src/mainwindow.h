@@ -47,9 +47,13 @@ private Q_SLOTS:
 
     void on_action_Preferences_triggered();
 
-    void on_action_Open_Palettes_triggered();
-    void on_action_Save_Palettes_As_triggered();
-    void on_action_Save_Palettes_triggered();
+    void on_action_Open_Background_Palettes_triggered();
+    void on_action_Save_Background_Palettes_As_triggered();
+    void on_action_Save_Background_Palettes_triggered();
+
+    void on_action_Open_Sprites_Palettes_triggered();
+    void on_action_Save_Sprites_Palettes_As_triggered();
+    void on_action_Save_Sprites_Palettes_triggered();
 
     void on_action_Open_CHR_triggered();
     void on_action_Save_CHR_As_triggered();
@@ -59,10 +63,10 @@ private Q_SLOTS:
     void on_action_Save_NameTable_triggered();
     void on_action_Save_All_NameTables_triggered();
 
-
     void on_addNameTableButton_clicked();
 
-    void openRecentPalettes();
+    void openRecentBackgroundPalettes();
+    void openRecentSpritesPalettes();
     void openRecentCHR();
     void openRecentNameTable();
 
@@ -76,7 +80,7 @@ private Q_SLOTS:
 
      void closeEvent(QCloseEvent *event);
 private:
-    void loadPalettes(QString filename);
+    void loadPalettes(QString filename, bool background = true);
     void loadCHR(QString filename);
     void loadNameTable(QString filename);
 
