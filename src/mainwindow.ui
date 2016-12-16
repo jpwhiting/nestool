@@ -298,6 +298,8 @@
     <addaction name="action_Remove_Duplicates"/>
     <addaction name="action_Remove_Unused"/>
     <addaction name="separator"/>
+    <addaction name="action_Import_From_Image"/>
+    <addaction name="separator"/>
     <addaction name="action_Preferences"/>
     <addaction name="separator"/>
     <addaction name="action_Quit"/>
@@ -477,6 +479,11 @@
   <action name="actionTest_2">
    <property name="text">
     <string>Test</string>
+   </property>
+  </action>
+  <action name="action_Import_From_Image">
+   <property name="text">
+    <string>Import from image</string>
    </property>
   </action>
  </widget>

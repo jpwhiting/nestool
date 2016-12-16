@@ -48,6 +48,11 @@ public:
     int selectedTile() const;
 
     char *tileData(int tile); // Get the CHR data for a given tile
+    void setTileData(int tile, char *data); // Set the CHR data for a given tile
+
+    // whether we already have a tile with given data
+    // If we do, return the tile number, if not return -1
+    int hasTile(Tile *tile);
 
     void setPalette(Palette *pal, bool background = true);
 

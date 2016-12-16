@@ -40,10 +40,12 @@ public:
     ~MainWindow();
 
 private Q_SLOTS:
-    void paletteHovered();
+    void paletteHovered(QString name);
 
     void on_action_Remove_Duplicates_triggered();
     void on_action_Remove_Unused_triggered();
+
+    void on_action_Import_From_Image_triggered();
 
     void on_action_Preferences_triggered();
 

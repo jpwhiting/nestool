@@ -50,6 +50,7 @@ Palette::Palette(QWidget *parent)
         mColors << Qt::black;
         layout->addWidget(mSwatches.at(i));
         connect(swatch, SIGNAL(clicked()), this, SLOT(paletteClicked()));
+        connect(swatch, SIGNAL(hovered()), this, SLOT(swatchHovered()));
     }
     layout->setSpacing(2);
 
@@ -67,10 +68,7 @@ void Palette::changeColor(int index)
     ColorChooserDialog *dialog = new ColorChooserDialog(this);
     dialog->setCurrentIndex(mPalData.at(index));
     if (dialog->exec() == QDialog::Accepted) {
-        mPalData[index] = dialog->chosenIndex();
-        mSwatches.at(index)->setColor(dialog->chosenColor());
-        mColors[index] = dialog->chosenColor();
-        // Change the swatch to the new color
+        setColor(index, dialog->chosenIndex());
         emit currentPaletteChanged();
     }
 }
@@ -78,6 +76,7 @@ void Palette::changeColor(int index)
 void Palette::updatePalettes()
 {
     for (int i = 0; i < 16; ++i) {
+
         QColor color = mBasePalette.at(mPalData.at(i));
         mSwatches.at(i)->setColor(color);
         mColors[i] = color;
@@ -147,6 +146,191 @@ void Palette::setCurrentPalette(int which)
         mCurrentColor = which * 4;
         emit currentPaletteChanged();
     }
+}
+
+QList<int> Palette::calculateFromImage(QImage *image)
+{
+    QList<int> attributes; // Which palette to use for each 16x16 block
+    QList<QList<QColor> > newColors;
+    // Find most common color
+//    QMap<QRgb, int> colorUses;
+//    int maxUses = 1;
+//    QColor maxColor;
+//    for (int y = 0; y < image->height(); ++y) {
+//        for (int x = 0; x < image->width(); ++x) {
+//            QColor pixelColor = image->pixelColor(x, y);
+//            if (colorUses.contains(pixelColor.rgb())) {
+//                int count = colorUses.value(pixelColor.rgb()) + 1;
+//                if (count > maxUses) {
+//                    maxUses = count;
+//                    maxColor = pixelColor;
+//                }
+//                colorUses.insert(pixelColor.rgb(), count);
+//            } else {
+//                colorUses.insert(pixelColor.rgb(), 1);
+//            }
+//        }
+//    }
+
+    for (int i = 0; i < 4; ++i) {
+        // Set maxColor as the first color of all 4 new palettes
+        QList<QColor> newList;
+//        newList.append(maxColor);
+        newColors.append(newList);
+    }
+
+    // Find palettes for each 16x16 block
+    for (int y = 0; y < image->height(); y+=16) {
+        for (int x = 0; x < image->width(); x+=16) {
+            QList<QColor> sectionPalette = colorsFromImageSection(image, x, y);
+            // Should have 4 or less colors
+            for (int p = 0; p < 4; ++p) {
+                int m = matches(sectionPalette, newColors[p]);
+                if (equal(sectionPalette, newColors[p])) {
+                    attributes.append(p);
+                    break;
+                } else if (sectionPalette.size() - m <= 4 - newColors[p].size()) {
+                    for (int i = 0; i < sectionPalette.size(); ++i) {
+                        if (!newColors[p].contains(sectionPalette.at(i)))
+                            newColors[p].append(sectionPalette.at(i));
+                    }
+                    attributes.append(p);
+                    break;
+                }
+            }
+        }
+    }
+    // Set the colors from the new palettes
+    for (int p = 0; p < 4; ++p) {
+        for (int c = 0; c < newColors[p].size(); ++c) {
+            int index = closestNesColor(newColors.at(p).at(c));
+            setColor(c + p*4, index);
+        }
+    }
+    emit currentPaletteChanged();
+
+    return attributes;
+}
+
+QList<int> Palette::getAttributesFromImage(QImage *image)
+{
+    QList<int> attributes; // Which palette to use for each 16x16 block
+
+    // Find palettes for each 16x16 block
+    for (int y = 0; y < image->height(); y+=16) {
+        for (int x = 0; x < image->width(); x+=16) {
+            QList<QColor> sectionPalette = colorsFromImageSection(image, x, y);
+            // Should have 4 or less colors
+            int pal = whichPalette(sectionPalette);
+            if (pal == -1) {
+                qDebug() << "found no matching palette for colors: "
+                         << sectionPalette.at(0)
+                         << " image at " << x << ", " << y;
+                attributes.append(0);
+            } else {
+                attributes.append(pal);
+            }
+        }
+    }
+
+    return attributes;
+}
+
+QList<QColor> Palette::colorsFromImageSection(QImage *image, int x, int y)
+{
+    QList<QColor> colorList;
+    for (int xo = 0; xo < 16 && x + xo < image->width(); ++xo) {
+        for (int yo = 0; yo < 16 && y + yo < image->height(); ++yo) {
+            QColor pixelColor = image->pixelColor(x+xo, y+yo);
+            if (!colorList.contains(pixelColor)) {
+                colorList.append(pixelColor);
+            }
+        }
+    }
+    // Normalize colors based on nes palette
+    for (int i = 0; i < colorList.size(); ++i) {
+        int nesColor = closestNesColor(colorList.at(i));
+        colorList[i] = mBasePalette.at(nesColor);
+    }
+    return colorList;
+}
+
+bool Palette::equal(QList<QColor> &c1, QList<QColor> &c2)
+{
+    if (c1.size() > c2.size()) {
+        qDebug() << "returning false because c1 is bigger than c2";
+        return false;
+    }
+
+    bool result = true;
+
+    //compare each color in palette 1 to each color in palette 2
+    for (int i = 0; i < 4; i++)
+    {
+        if (c1.size() <= i)
+            break;
+
+        for (int j = 0; j < 4; j++)
+        {
+            //if color match found, set result to true and move to next color in palette 1
+            if(c2[j] == c1[i])
+            {
+                result = true;
+                break;
+            }
+            //if no color match found and we are at the end of palette 2, then the palettes are not equal
+            else if(j == c2.size() - 1)
+            {
+                result = false;
+                break;
+            }
+        }
+        if (!result)
+            break;
+    }
+
+    return result;
+}
+
+int Palette::matches(QList<QColor> &c1, QList<QColor> &c2)
+{
+    int matches = 0;
+
+    for(int i = 0; i < c1.size(); i++)
+    {
+        for(int j = 0; j < c2.size(); j++)
+        {
+            if (colorRGBEuclideanDistance(c1.at(i), c2.at(j)) < 100.0)
+            {
+                matches++;
+                break;
+            }
+        }
+    }
+
+    return matches;
+}
+
+int Palette::whichPalette(QList<QColor> &c)
+{
+    for (int i = 0; i < 4; ++i) {
+        int ix = i*4;
+        QList<QColor> c2;
+        c2 << mColors.at(ix) << mColors.at(ix+1)
+           << mColors.at(ix + 2) << mColors.at(ix + 3);
+        int m = matches(c, c2);
+        if (m == c.size())
+            return i;
+    }
+    return -1;
+}
+
+void Palette::setColor(int index, int which)
+{
+    mPalData[index] = which;
+    mColors[index] = mBasePalette[which];
+    mSwatches.at(index)->setColor(mColors.at(index));
+    mSwatches.at(index)->setHoverText(QString("Color:$%1").arg(which, 2, 16, QChar('0')));
 }
 
 QList<QColor> Palette::nesColors()
@@ -229,7 +413,6 @@ void Palette::saveAs(QString filename)
 void Palette::paletteClicked()
 {
     Swatch *from = qobject_cast<Swatch*>(sender());
-    QColor color = from->getColor();
     int index = mSwatches.indexOf(from);
     if (index != mCurrentColor) {
         mSwatches.at(mCurrentColor)->setSelected(false);
@@ -241,6 +424,12 @@ void Palette::paletteClicked()
         // Swatch is already selected, so open color picker
         changeColor(index);
     }
+}
+
+void Palette::swatchHovered()
+{
+    Swatch *swatch = qobject_cast<Swatch*>(sender());
+    emit paletteHovered(swatch->getHoverText());
 }
 
 double Palette::colorRGBEuclideanDistance(const QColor &c1, const QColor &c2)
@@ -256,6 +445,20 @@ int Palette::closestColor(const QColor &c1, QColor colors[4])
     double closest = 3*pow(255,2);
     for (int i = 0; i < 4; ++i) {
         double distance = colorRGBEuclideanDistance(c1, colors[i]);
+        if (distance < closest) {
+            result = i;
+            closest = distance;
+        }
+    }
+    return result;
+}
+
+int Palette::closestNesColor(const QColor &c1)
+{
+    int result = 0;
+    double closest = 3*pow(255,2);
+    for (int i = 0; i < mBasePalette.size(); ++i) {
+        double distance = colorRGBEuclideanDistance(c1, mBasePalette.at(i));
         if (distance < closest) {
             result = i;
             closest = distance;

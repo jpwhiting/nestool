@@ -44,6 +44,9 @@ public:
     int getCurrentPalette() const;
     void setCurrentPalette(int which);
 
+    QList<int> calculateFromImage(QImage *image);
+    QList<int> getAttributesFromImage(QImage *image);
+
     static QList<QColor> nesColors();
 
     bool load(const QString &filename);
@@ -52,18 +55,29 @@ public:
 
     static double colorRGBEuclideanDistance(const QColor& c1, const QColor& c2);
     static int closestColor(const QColor &c1, QColor colors[4]);
+    static int closestNesColor(const QColor &c1);
 
 signals:
     // Either the user clicked on a different palette or the palette colors changed
     void currentPaletteChanged();
+    void paletteHovered(QString name);
 
 private slots:
     void paletteClicked();
+    void swatchHovered();
 
 private:
     static void initializeBasePalette();
     void changeColor(int index);
     void updatePalettes();
+    QList<QColor> colorsFromImageSection(QImage *image, int x, int y);
+    // Return true if c1 and c2 are the same or c1 is a subset of c2
+    bool equal(QList<QColor> &c1, QList<QColor> &c2);
+    // How many colors between c1 and c2 are matches
+    int matches(QList<QColor> &c1, QList<QColor> &c2);
+    // Which of the existing palettes has all of the given colors
+    int whichPalette(QList<QColor> &c);
+    void setColor(int index, int which);
 
     QList<Swatch*> mSwatches;
     QList<QColor> mColors;

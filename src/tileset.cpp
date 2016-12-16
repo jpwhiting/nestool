@@ -245,6 +245,23 @@ char *TileSet::tileData(int tile)
     return mTiles.at(tile)->chrData();
 }
 
+void TileSet::setTileData(int tile, char *data)
+{
+    if (tile < 0 || tile > 16*16)
+        return;
+    mTiles.at(tile)->setData(data);
+    updateFromTiles(tile);
+}
+
+int TileSet::hasTile(Tile *tile)
+{
+    for (int i = 0; i < mTiles.size(); ++i) {
+        if (mTiles.at(i)->identical(tile))
+            return i;
+    }
+    return -1;
+}
+
 void TileSet::setPalette(Palette *pal, bool background)
 {
     if (background) {

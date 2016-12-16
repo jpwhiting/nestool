@@ -180,8 +180,8 @@ void NameTable::save(bool compress)
 void NameTable::saveAs(QString filename, bool compress)
 {
     mFileName = filename;
-    mFileNameLabel->setText(getName());
     save(compress);
+    mFileNameLabel->setText(getName());
 }
 
 void NameTable::setData(char *data)
