@@ -37,7 +37,6 @@ ColorChooserDialog::ColorChooserDialog(QWidget *parent) :
             swatch->setColor(mColors.at(i));
             swatch->setHoverText(QString("Color:$%1").arg(i, 2, 16, QChar('0')));
             connect(swatch, SIGNAL(hovered()), this, SLOT(paletteHovered()));
-            mColorIndexes.insert(mColors.at(i).name(), i);
             connect(swatch, SIGNAL(clicked()), this, SLOT(paletteClicked()));
             mSwatches.append(swatch);
         }
@@ -73,12 +72,18 @@ QColor ColorChooserDialog::chosenColor() const
 void ColorChooserDialog::paletteClicked()
 {
     Swatch *swatch = qobject_cast<Swatch*>(sender());
-    QColor color = swatch->getColor();
-    int index = mColorIndexes.value(color.name());
+    int index = mSwatches.indexOf(swatch);
     if (index != mCurrentIndex) {
         mCurrentSwatch->setSelected(false);
         swatch->setSelected(true);
         mCurrentSwatch = swatch;
         mCurrentIndex = index;
     }
+}
+
+void ColorChooserDialog::paletteHovered()
+{
+    Swatch *swatch = qobject_cast<Swatch*>(sender());
+    if (swatch)
+        ui->statusLabel->setText(swatch->getHoverText());
 }

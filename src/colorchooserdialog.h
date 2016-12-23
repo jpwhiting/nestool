@@ -44,6 +44,7 @@ public:
 
 private slots:
     void paletteClicked();
+    void paletteHovered();
 
 private:
     Ui::ColorChooserDialog *ui;
@@ -51,7 +52,6 @@ private:
     Swatch *mCurrentSwatch;
     QList<Swatch*> mSwatches;
     QList<QColor> mColors;
-    QMap<QString, int> mColorIndexes; // Which color is which index in nes palette
 };
 
 #endif // COLORCHOOSERDIALOG_H
