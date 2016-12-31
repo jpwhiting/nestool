@@ -247,7 +247,7 @@ char *TileSet::tileData(int tile)
 
 void TileSet::setTileData(int tile, char *data)
 {
-    if (tile < 0 || tile > 16*16)
+    if (tile < 0 || tile >= mTiles.size())
         return;
     mTiles.at(tile)->setData(data);
     updateFromTiles(tile);
