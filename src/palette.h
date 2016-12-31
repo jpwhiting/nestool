@@ -22,6 +22,7 @@
 #include "swatch.h"
 
 #include <QColor>
+#include <QMap>
 #include <QWidget>
 
 class QLabel;
@@ -86,6 +87,7 @@ private:
     QString mFileName;
     QLabel *mFilenameLabel;
     static QList<QColor> mBasePalette;
+    static QMap<QRgb, int> mClosestColorMap;
 };
 
 //ntsc palette captured.pal by Kinopio

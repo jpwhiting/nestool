@@ -86,6 +86,8 @@ private:
     void loadCHR(QString filename);
     void loadNameTable(QString filename);
 
+    // Import tiles from the given x/y coordinate of the given image
+    void importImageSection(QImage *image, int x, int y, int &nextTile, QList<QColor> palette);
     // Delete and create recent file actions based on QStringLists
     void updateRecentActions();
 

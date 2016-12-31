@@ -31,6 +31,7 @@
 #include <QDebug>
 
 QList<QColor> Palette::mBasePalette;
+QMap<QRgb, int> Palette::mClosestColorMap;
 
 Palette::Palette(QWidget *parent)
     :QWidget(parent)
@@ -187,7 +188,7 @@ QList<int> Palette::calculateFromImage(QImage *image)
             for (int p = 0; p < 4; ++p) {
                 int m = matches(sectionPalette, newColors[p]);
                 if (equal(sectionPalette, newColors[p])) {
-                    attributes.append(p);
+                    attributes.append(p); // Palettes match (or sectionPalette is contained in newColors[p]
                     break;
                 } else if (sectionPalette.size() - m <= 4 - newColors[p].size()) {
                     for (int i = 0; i < sectionPalette.size(); ++i) {
@@ -195,6 +196,9 @@ QList<int> Palette::calculateFromImage(QImage *image)
                             newColors[p].append(sectionPalette.at(i));
                     }
                     attributes.append(p);
+                    break;
+                } else if (p == 3){
+                    attributes.append(0); // Use palette 0 if nothing else fits
                     break;
                 }
             }
@@ -455,6 +459,9 @@ int Palette::closestColor(const QColor &c1, QColor colors[4])
 
 int Palette::closestNesColor(const QColor &c1)
 {
+    if (mClosestColorMap.contains(c1.rgb())) {
+        return mClosestColorMap.value(c1.rgb());
+    }
     int result = 0;
     double closest = 3*pow(255,2);
     for (int i = 0; i < mBasePalette.size(); ++i) {
@@ -464,6 +471,7 @@ int Palette::closestNesColor(const QColor &c1)
             closest = distance;
         }
     }
+    mClosestColorMap.insert(c1.rgb(), result);
     return result;
 }
 

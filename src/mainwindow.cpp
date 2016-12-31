@@ -201,6 +201,15 @@ void MainWindow::on_action_Remove_Unused_triggered()
     update();
 }
 
+void MainWindow::importImageSection(QImage *image, int x, int y, int &nextTile, QList<QColor> palette)
+{
+    Tile *testTile = new Tile(this);
+    testTile->setPalette(palette);
+    if (nextTile < 256) {
+
+    }
+}
+
 void MainWindow::on_action_Import_From_Image_triggered()
 {
     // Get image filename
