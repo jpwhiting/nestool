@@ -198,6 +198,11 @@ QList<int> Palette::calculateFromImage(QImage *image)
                     attributes.append(p);
                     break;
                 } else if (p == 3){
+                    qDebug() << "couldn't find palette with colors ";
+                    for (int c=0; c < sectionPalette.size(); ++c)
+                        qDebug() << "color " << c << " is "
+                                 << QString("Color:$%1").arg(closestNesColor(sectionPalette.at(c)), 2, 16, QChar('0'));
+                    qDebug() << "for image at " << x << ", " << y;
                     attributes.append(0); // Use palette 0 if nothing else fits
                     break;
                 }
@@ -206,9 +211,14 @@ QList<int> Palette::calculateFromImage(QImage *image)
     }
     // Set the colors from the new palettes
     for (int p = 0; p < 4; ++p) {
-        for (int c = 0; c < newColors[p].size(); ++c) {
-            int index = closestNesColor(newColors.at(p).at(c));
-            setColor(c + p*4, index);
+        for (int c = 0; c < 4; ++c) {
+            // If we didn't fill the palette, use pink to fill in the rest
+            if (c < newColors.size()) {
+                int index = closestNesColor(newColors.at(p).at(c));
+                setColor(c + p*4, index);
+            } else {
+                setColor(c + p*4, 0x25);
+            }
         }
     }
     emit currentPaletteChanged();
@@ -262,7 +272,6 @@ QList<QColor> Palette::colorsFromImageSection(QImage *image, int x, int y)
 bool Palette::equal(QList<QColor> &c1, QList<QColor> &c2)
 {
     if (c1.size() > c2.size()) {
-        qDebug() << "returning false because c1 is bigger than c2";
         return false;
     }
 
@@ -459,6 +468,8 @@ int Palette::closestColor(const QColor &c1, QColor colors[4])
 
 int Palette::closestNesColor(const QColor &c1)
 {
+    if (c1 == Qt::black) // Prefer 0x0F for black
+        return 0x0F;
     if (mClosestColorMap.contains(c1.rgb())) {
         return mClosestColorMap.value(c1.rgb());
     }
