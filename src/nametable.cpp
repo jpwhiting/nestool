@@ -161,7 +161,9 @@ void NameTable::save(bool compress)
         dst = (unsigned char*)mData;
     }
     if (headerFile.open(QIODevice::WriteOnly|QIODevice::Text)) {
-        QString nameString = QString("const unsigned char %1[%2]={\n").arg(name).arg(size);
+        QString nameString = QString("unsigned char %1[%2]={\n").arg(name).arg(size);
+        if (compress)
+            nameString.prepend("const ");
         headerFile.write(nameString.toStdString().c_str(), nameString.length());
 
         for (i = 0; i < size; ++i) {

@@ -213,7 +213,7 @@ QList<int> Palette::calculateFromImage(QImage *image)
     for (int p = 0; p < 4; ++p) {
         for (int c = 0; c < 4; ++c) {
             // If we didn't fill the palette, use pink to fill in the rest
-            if (c < newColors.size()) {
+            if (c < newColors.at(p).size()) {
                 int index = closestNesColor(newColors.at(p).at(c));
                 setColor(c + p*4, index);
             } else {

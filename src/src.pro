@@ -22,7 +22,8 @@ SOURCES += \
     tileset.cpp \
     settingsdialog.cpp \
     edittiledialog.cpp \
-    palette.cpp
+    palette.cpp \
+    project.cpp
 
 HEADERS  += \
     colorchooserdialog.h \
@@ -33,7 +34,8 @@ HEADERS  += \
     tile.h \
     tileset.h \
     settingsdialog.h \
-    edittiledialog.h
+    edittiledialog.h \
+    project.h
 
 FORMS    += \
     colorchooserdialog.ui \

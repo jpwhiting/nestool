@@ -26,6 +26,7 @@
 
 #include "nametable.h"
 #include "palette.h"
+#include "project.h"
 #include "settingsdialog.h"
 #include "swatch.h"
 
@@ -45,6 +46,7 @@ MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::MainWindow),
   mSettingsDialog(new SettingsDialog(this)),
+  mProject(new Project),
   mCurrentNameTable(0),
   mSettings(new QSettings())
 {
@@ -96,6 +98,11 @@ MainWindow::MainWindow(QWidget *parent) :
   connect(ui->backgroundPalette, SIGNAL(paletteHovered(QString)), this, SLOT(paletteHovered(QString)));
   connect(ui->spritesPalette, SIGNAL(paletteHovered(QString)), this, SLOT(paletteHovered(QString)));
   onSettingsChanged(); // Update scales
+
+  connect(mProject, SIGNAL(loadBackgroundPalette(QString)), this, SLOT(loadBGPalettes(QString)));
+  connect(mProject, SIGNAL(loadSpritesPalette(QString)), this, SLOT(loadSPPalettes(QString)));
+  connect(mProject, SIGNAL(loadTileset(QString)), this, SLOT(loadTileSet(QString)));
+  connect(mProject, SIGNAL(loadNameTables(QStringList)), this, SLOT(loadNameTables(QStringList)));
 }
 
 MainWindow::~MainWindow()
@@ -108,6 +115,26 @@ MainWindow::~MainWindow()
 void MainWindow::paletteHovered(QString name)
 {
     setStatus(name);
+}
+
+void MainWindow::on_action_Open_Project_triggered()
+{
+    QString filename = QFileDialog::getOpenFileName(this,
+                                                    "Open project",
+                                                    mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
+                                                    "Project (*.ini)");
+    if (!filename.isEmpty()) {
+        mProject->load(filename);
+    }
+}
+
+void MainWindow::on_action_Save_Project_As_triggered()
+{
+    QString filename = QFileDialog::getSaveFileName(this,
+                                                    "Save project",
+                                                    mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
+                                                    "Project (*.ini)");
+    mProject->saveAs(filename);
 }
 
 void MainWindow::on_action_Remove_Duplicates_triggered()
@@ -312,6 +339,7 @@ void MainWindow::on_action_Open_Background_Palettes_triggered()
                                                     "NES Palettes (*.pal)");
     if (!filename.isEmpty()) {
         loadPalettes(filename, true);
+        mProject->setBackgroundPaletteFilename(filename);
     }
 }
 
@@ -323,6 +351,7 @@ void MainWindow::on_action_Save_Background_Palettes_As_triggered()
                                                     "NES Palettes (*.pal)");
     if (!filename.isEmpty()) {
         ui->backgroundPalette->saveAs(filename);
+        mProject->setBackgroundPaletteFilename(filename);
     }
 }
 
@@ -339,6 +368,7 @@ void MainWindow::on_action_Open_Sprites_Palettes_triggered()
                                                     "NES Palettes (*.pal)");
     if (!filename.isEmpty()) {
         loadPalettes(filename, false);
+        mProject->setSpritesPaletteFilename(filename);
     }
 }
 
@@ -350,6 +380,7 @@ void MainWindow::on_action_Save_Sprites_Palettes_As_triggered()
                                                     "NES Palettes (*.pal)");
     if (!filename.isEmpty()) {
         ui->spritesPalette->saveAs(filename);
+        mProject->setSpritesPaletteFilename(filename);
     }
 }
 
@@ -365,7 +396,8 @@ void MainWindow::on_action_Open_CHR_triggered()
                                                     mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
                                                     "NES Tileset (*.chr)");
     if (!filename.isEmpty()) {
-        loadCHR(filename);
+        loadTileSet(filename);
+        mProject->setTileSetFilename(filename);
     }
 }
 
@@ -377,6 +409,7 @@ void MainWindow::on_action_Save_CHR_As_triggered()
                                                     "NES Tileset (*.chr)");
     if (!filename.isEmpty()) {
         ui->tileSet->saveAs(filename);
+        mProject->setTileSetFilename(filename);
     }
 }
 
@@ -393,6 +426,7 @@ void MainWindow::on_action_Open_NameTable_triggered()
                                                     "NES NameTable (*.nam)");
     if (!filename.isEmpty()) {
         loadNameTable(filename);
+        updateNameTableList();
     }
 }
 
@@ -405,6 +439,7 @@ void MainWindow::on_action_Save_NameTable_triggered()
                                                     "NES NameTable (*.nam)");
     if (!filename.isEmpty()) {
         mCurrentNameTable->saveAs(filename, mSettingsDialog->compressNameTables());
+        updateNameTableList();
     }
 }
 
@@ -429,25 +464,32 @@ void MainWindow::on_addNameTableButton_clicked()
 void MainWindow::openRecentBackgroundPalettes()
 {
     QAction *action = qobject_cast<QAction*>(sender());
-    loadPalettes(action->text().remove('&'), true);
+    QString filename = action->text().remove('&');
+    loadPalettes(filename, true);
+    mProject->setBackgroundPaletteFilename(filename);
 }
 
 void MainWindow::openRecentSpritesPalettes()
 {
     QAction *action = qobject_cast<QAction*>(sender());
-    loadPalettes(action->text().remove('&'), false);
+    QString filename = action->text().remove('&');
+    loadPalettes(filename, false);
+    mProject->setSpritesPaletteFilename(filename);
 }
 
 void MainWindow::openRecentCHR()
 {
     QAction *action = qobject_cast<QAction*>(sender());
-    loadCHR(action->text().remove('&'));
+    QString filename = action->text().remove('&');
+    loadTileSet(filename);
+    mProject->setTileSetFilename(filename);
 }
 
 void MainWindow::openRecentNameTable()
 {
     QAction *action = qobject_cast<QAction*>(sender());
     loadNameTable(action->text().remove('&'));
+    updateNameTableList();
 }
 
 void MainWindow::nameTableClicked(int x, int y)
@@ -501,7 +543,19 @@ void MainWindow::closeEvent(QCloseEvent *event)
     mSettings->setValue(kWindowStateKey, saveState());
 }
 
-void MainWindow::loadCHR(QString filename)
+void MainWindow::loadBGPalettes(QString filename)
+{
+    loadPalettes(filename, true);
+    // Called from project signal, so no need to tell project the filename
+}
+
+void MainWindow::loadSPPalettes(QString filename)
+{
+    loadPalettes(filename, false);
+    // Called from project signal, so no need to tell project the filename
+}
+
+void MainWindow::loadTileSet(QString filename)
 {
     if (ui->tileSet->load(filename)) {
         if (!mLastCHRFiles.contains(filename)) {
@@ -513,6 +567,18 @@ void MainWindow::loadCHR(QString filename)
         QFile file(filename);
         QFileInfo info(file);
         mSettings->setValue(kLastOpenPathKey, info.absolutePath());
+    }
+}
+
+void MainWindow::loadNameTables(QStringList filenames)
+{
+    while (mNameTables.size() < filenames.size())
+        on_addNameTableButton_clicked();
+
+    int i = 0;
+    Q_FOREACH(QString filename, filenames) {
+        mNameTables.at(i)->load(filename);
+        ++i;
     }
 }
 
@@ -532,6 +598,16 @@ void MainWindow::loadNameTable(QString filename)
         QMessageBox::warning(this, "Unable to load NameTable",
                              QString("Unable to load NameTable from file %1").arg(filename));
     }
+}
+
+void MainWindow::updateNameTableList()
+{
+    QStringList filenames;
+    Q_FOREACH(NameTable *table, mNameTables) {
+        if (!table->getFileName().isEmpty())
+            filenames.append(table->getFileName());
+    }
+    mProject->setNameTables(filenames);
 }
 
 void MainWindow::updateRecentActions()

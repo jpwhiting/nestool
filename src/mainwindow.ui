@@ -295,9 +295,9 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
-    <addaction name="action_Remove_Duplicates"/>
-    <addaction name="action_Remove_Unused"/>
     <addaction name="separator"/>
+    <addaction name="action_Open_Project"/>
+    <addaction name="action_Save_Project_As"/>
     <addaction name="action_Import_From_Image"/>
     <addaction name="separator"/>
     <addaction name="action_Preferences"/>
@@ -371,7 +371,15 @@
     <addaction name="menu_Background"/>
     <addaction name="menuSprites"/>
    </widget>
+   <widget class="QMenu" name="menuOptimizations">
+    <property name="title">
+     <string>Opti&amp;mizations</string>
+    </property>
+    <addaction name="action_Remove_Duplicates"/>
+    <addaction name="action_Remove_Unused"/>
+   </widget>
    <addaction name="menu_File"/>
+   <addaction name="menuOptimizations"/>
    <addaction name="menu_Nametable"/>
    <addaction name="menu_Tileset"/>
    <addaction name="menu_Palettes"/>
@@ -483,7 +491,17 @@
   </action>
   <action name="action_Import_From_Image">
    <property name="text">
-    <string>Import from image</string>
+    <string>&amp;Import from image</string>
+   </property>
+  </action>
+  <action name="action_Open_Project">
+   <property name="text">
+    <string>Open Project...</string>
+   </property>
+  </action>
+  <action name="action_Save_Project_As">
+   <property name="text">
+    <string>Save Project As...</string>
    </property>
   </action>
  </widget>

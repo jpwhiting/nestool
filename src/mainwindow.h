@@ -24,6 +24,7 @@
 
 class Swatch;
 class NameTable;
+class Project;
 class SettingsDialog;
 class QSettings;
 
@@ -41,6 +42,9 @@ public:
 
 private Q_SLOTS:
     void paletteHovered(QString name);
+
+    void on_action_Open_Project_triggered();
+    void on_action_Save_Project_As_triggered();
 
     void on_action_Remove_Duplicates_triggered();
     void on_action_Remove_Unused_triggered();
@@ -81,10 +85,15 @@ private Q_SLOTS:
     void setTitle(QString name);
 
      void closeEvent(QCloseEvent *event);
+
+     void loadBGPalettes(QString filename);
+     void loadSPPalettes(QString filename);
+     void loadTileSet(QString filename);
+     void loadNameTables(QStringList filenames);
 private:
     void loadPalettes(QString filename, bool background = true);
-    void loadCHR(QString filename);
     void loadNameTable(QString filename);
+    void updateNameTableList(); // Updates the nametable filename list and saves it to the project
 
     // Import tiles from the given x/y coordinate of the given image
     void importImageSection(QImage *image, int x, int y, int &nextTile, QList<QColor> palette);
@@ -93,6 +102,7 @@ private:
 
     Ui::MainWindow *ui;
     SettingsDialog *mSettingsDialog;
+    Project *mProject;
     NameTable *mCurrentNameTable; // Current name table
     QSettings *mSettings;
     QStringList mLastPaletteFiles;
