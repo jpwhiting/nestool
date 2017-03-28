@@ -35,10 +35,10 @@ NameTable::NameTable(QWidget *parent) : QWidget(parent), mTileSet(0)
     QVBoxLayout *vLayout = new QVBoxLayout(this);
     mFileNameLabel = new QLabel(this);
 
-    QGridLayout *gridLayout = new QGridLayout(this);
-    gridLayout->setVerticalSpacing(0);
-    gridLayout->setHorizontalSpacing(0);
-    gridLayout->setContentsMargins(0, 0, 0, 0);
+    mGridLayout = new QGridLayout(this);
+    mGridLayout->setVerticalSpacing(0);
+    mGridLayout->setHorizontalSpacing(0);
+    mGridLayout->setContentsMargins(0, 0, 0, 0);
 
     mAttrs = &mData[960];
 
@@ -47,7 +47,7 @@ NameTable::NameTable(QWidget *parent) : QWidget(parent), mTileSet(0)
             Tile *tile = new Tile(this);
             tile->setFixedSize(QSize(24, 24));
             mTiles.append(tile);
-            gridLayout->addWidget(tile, i, j);
+            mGridLayout->addWidget(tile, i, j);
         }
     }
 
@@ -56,7 +56,7 @@ NameTable::NameTable(QWidget *parent) : QWidget(parent), mTileSet(0)
     }
     setLayout(vLayout);
     vLayout->addWidget(mFileNameLabel);
-    vLayout->addLayout(gridLayout);
+    vLayout->addLayout(mGridLayout);
     setMouseTracking(true);
 }
 
@@ -161,9 +161,7 @@ void NameTable::save(bool compress)
         dst = (unsigned char*)mData;
     }
     if (headerFile.open(QIODevice::WriteOnly|QIODevice::Text)) {
-        QString nameString = QString("unsigned char %1[%2]={\n").arg(name).arg(size);
-        if (compress)
-            nameString.prepend("const ");
+        QString nameString = QString("const unsigned char %1[%2]={\n").arg(name).arg(size);
         headerFile.write(nameString.toStdString().c_str(), nameString.length());
 
         for (i = 0; i < size; ++i) {
@@ -340,6 +338,13 @@ void NameTable::tilesChanged()
     }
 }
 
+void NameTable::toggleShowGrid(bool checked)
+{
+    mGridLayout->setHorizontalSpacing(checked ? 1 : 0);
+    mGridLayout->setVerticalSpacing(checked ? 1 : 0);
+    update();
+}
+
 int NameTable::getAttr(int x, int y)
 {
     int pal;
@@ -374,4 +379,3 @@ void NameTable::mouseMoveEvent(QMouseEvent *event)
         }
     }
 }
-

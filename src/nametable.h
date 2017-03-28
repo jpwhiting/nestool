@@ -25,6 +25,7 @@
 #include <QList>
 #include <QWidget>
 
+class QGridLayout;
 class QLabel;
 class Palette;
 
@@ -49,6 +50,8 @@ public:
 
     // Set the given x, y, to the given palette
     void setAttr(int x, int y, int pal);
+
+    void toggleShowGrid(bool checked);
 
     QString getName() const;
     QString getFileName() const;
@@ -81,6 +84,7 @@ private:
     QLabel *mFileNameLabel; // Label to show filename
     QString mFileName; // Last Filename used to load or save this NameTable
     Palette *mPalette; // Nametable palette
+    QGridLayout *mGridLayout; // Grid layout of tiles
 };
 
 #endif // NAMETABLE_H

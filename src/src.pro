@@ -14,34 +14,37 @@ TEMPLATE = app
 
 SOURCES += \
     colorchooserdialog.cpp \
+    edittiledialog.cpp \
+    importdialog.cpp \
     main.cpp\
     mainwindow.cpp \
     nametable.cpp \
+    palette.cpp \
+    project.cpp \
+    settingsdialog.cpp \
     swatch.cpp \
     tile.cpp \
-    tileset.cpp \
-    settingsdialog.cpp \
-    edittiledialog.cpp \
-    palette.cpp \
-    project.cpp
+    tileset.cpp
 
 HEADERS  += \
     colorchooserdialog.h \
+    edittiledialog.h \
+    importdialog.h \
     mainwindow.h \
     nametable.h \
     palette.h \
+    project.h \
+    settingsdialog.h \
     swatch.h \
     tile.h \
-    tileset.h \
-    settingsdialog.h \
-    edittiledialog.h \
-    project.h
+    tileset.h
 
 FORMS    += \
     colorchooserdialog.ui \
+    edittiledialog.ui \
+    importdialog.ui \
     mainwindow.ui \
     settingsdialog.ui \
-    edittiledialog.ui \
     tileset.ui
 
 RESOURCES += \

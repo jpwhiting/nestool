@@ -43,66 +43,66 @@
 #define VERSION "0.1"
 
 MainWindow::MainWindow(QWidget *parent) :
-  QMainWindow(parent),
-  ui(new Ui::MainWindow),
-  mSettingsDialog(new SettingsDialog(this)),
-  mProject(new Project),
-  mCurrentNameTable(0),
-  mSettings(new QSettings())
+    QMainWindow(parent),
+    ui(new Ui::MainWindow),
+    mSettingsDialog(new SettingsDialog(this)),
+    mProject(new Project),
+    mCurrentNameTable(0),
+    mSettings(new QSettings())
 {
-  ui->setupUi(this);
+    ui->setupUi(this);
 
-  restoreGeometry(mSettings->value(kWindowGeometryKey).toByteArray());
-  // create docks, toolbars, etc…
-  restoreState(mSettings->value(kWindowStateKey).toByteArray());
+    restoreGeometry(mSettings->value(kWindowGeometryKey).toByteArray());
+    // create docks, toolbars, etc…
+    restoreState(mSettings->value(kWindowStateKey).toByteArray());
 
-  // Read in list of last files
-  int size = mSettings->beginReadArray(kPreviousPalKey);
-  for (int i = 0; i < size; ++i) {
-      mSettings->setArrayIndex(i);
-      mLastPaletteFiles.append(mSettings->value(kPreviousPathKey).toString());
-  }
-  mSettings->endArray();
+    // Read in list of last files
+    int size = mSettings->beginReadArray(kPreviousPalKey);
+    for (int i = 0; i < size; ++i) {
+        mSettings->setArrayIndex(i);
+        mLastPaletteFiles.append(mSettings->value(kPreviousPathKey).toString());
+    }
+    mSettings->endArray();
 
-  size = mSettings->beginReadArray(kPreviousCHRKey);
-  for (int i = 0; i < size; ++i) {
-      mSettings->setArrayIndex(i);
-      mLastCHRFiles.append(mSettings->value(kPreviousPathKey).toString());
-  }
-  mSettings->endArray();
+    size = mSettings->beginReadArray(kPreviousCHRKey);
+    for (int i = 0; i < size; ++i) {
+        mSettings->setArrayIndex(i);
+        mLastCHRFiles.append(mSettings->value(kPreviousPathKey).toString());
+    }
+    mSettings->endArray();
 
-  size = mSettings->beginReadArray(kPreviousNameTablesKey);
-  for (int i = 0; i < size; ++i) {
-      mSettings->setArrayIndex(i);
-      mLastNameTableFiles.append(mSettings->value(kPreviousPathKey).toString());
-  }
-  mSettings->endArray();
+    size = mSettings->beginReadArray(kPreviousNameTablesKey);
+    for (int i = 0; i < size; ++i) {
+        mSettings->setArrayIndex(i);
+        mLastNameTableFiles.append(mSettings->value(kPreviousPathKey).toString());
+    }
+    mSettings->endArray();
 
-  updateRecentActions();
+    updateRecentActions();
 
-  // Connect to tileset signals
-  connect(ui->tileSet, SIGNAL(setStatus(QString)), this, SLOT(setStatus(QString)));
+    // Connect to tileset signals
+    connect(ui->tileSet, SIGNAL(setStatus(QString)), this, SLOT(setStatus(QString)));
 
-  // Create one nametable
-  mNameTables.append(ui->nameTable);
-  ui->nameTable->setTileSet(ui->tileSet);
-  ui->nameTable->setPalette(ui->backgroundPalette);
-  mCurrentNameTable = mNameTables.at(0);
-  setTitle(mCurrentNameTable->getName());
-  connect(ui->nameTable, SIGNAL(tileClicked(int,int)), this, SLOT(nameTableClicked(int,int)));
+    // Create one nametable
+    mNameTables.append(ui->nameTable);
+    ui->nameTable->setTileSet(ui->tileSet);
+    ui->nameTable->setPalette(ui->backgroundPalette);
+    mCurrentNameTable = mNameTables.at(0);
+    setTitle(mCurrentNameTable->getName());
+    connect(ui->nameTable, SIGNAL(tileClicked(int,int)), this, SLOT(nameTableClicked(int,int)));
 
-  ui->tileSet->setPalette(ui->backgroundPalette, true);
-  ui->tileSet->setPalette(ui->spritesPalette, false);
+    ui->tileSet->setPalette(ui->backgroundPalette, true);
+    ui->tileSet->setPalette(ui->spritesPalette, false);
 
-  connect(mSettingsDialog, SIGNAL(settingsChanged()), this, SLOT(onSettingsChanged()));
-  connect(ui->backgroundPalette, SIGNAL(paletteHovered(QString)), this, SLOT(paletteHovered(QString)));
-  connect(ui->spritesPalette, SIGNAL(paletteHovered(QString)), this, SLOT(paletteHovered(QString)));
-  onSettingsChanged(); // Update scales
+    connect(mSettingsDialog, SIGNAL(settingsChanged()), this, SLOT(onSettingsChanged()));
+    connect(ui->backgroundPalette, SIGNAL(paletteHovered(QString)), this, SLOT(paletteHovered(QString)));
+    connect(ui->spritesPalette, SIGNAL(paletteHovered(QString)), this, SLOT(paletteHovered(QString)));
+    onSettingsChanged(); // Update scales
 
-  connect(mProject, SIGNAL(loadBackgroundPalette(QString)), this, SLOT(loadBGPalettes(QString)));
-  connect(mProject, SIGNAL(loadSpritesPalette(QString)), this, SLOT(loadSPPalettes(QString)));
-  connect(mProject, SIGNAL(loadTileset(QString)), this, SLOT(loadTileSet(QString)));
-  connect(mProject, SIGNAL(loadNameTables(QStringList)), this, SLOT(loadNameTables(QStringList)));
+    connect(mProject, SIGNAL(loadBackgroundPalette(QString)), this, SLOT(loadBGPalettes(QString)));
+    connect(mProject, SIGNAL(loadSpritesPalette(QString)), this, SLOT(loadSPPalettes(QString)));
+    connect(mProject, SIGNAL(loadTileset(QString)), this, SLOT(loadTileSet(QString)));
+    connect(mProject, SIGNAL(loadNameTables(QStringList)), this, SLOT(loadNameTables(QStringList)));
 }
 
 MainWindow::~MainWindow()
@@ -120,9 +120,9 @@ void MainWindow::paletteHovered(QString name)
 void MainWindow::on_action_Open_Project_triggered()
 {
     QString filename = QFileDialog::getOpenFileName(this,
-                                                    "Open project",
-                                                    mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
-                                                    "Project (*.ini)");
+                       "Open project",
+                       mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
+                       "Project (*.ini)");
     if (!filename.isEmpty()) {
         mProject->load(filename);
     }
@@ -131,9 +131,9 @@ void MainWindow::on_action_Open_Project_triggered()
 void MainWindow::on_action_Save_Project_As_triggered()
 {
     QString filename = QFileDialog::getSaveFileName(this,
-                                                    "Save project",
-                                                    mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
-                                                    "Project (*.ini)");
+                       "Save project",
+                       mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
+                       "Project (*.ini)");
     mProject->saveAs(filename);
 }
 
@@ -241,9 +241,9 @@ void MainWindow::on_action_Import_From_Image_triggered()
 {
     // Get image filename
     QString filename = QFileDialog::getOpenFileName(this,
-                                                    "Open image file",
-                                                    mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
-                                                    "Images (*.png)");
+                       "Open image file",
+                       mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
+                       "Images (*.png)");
     if (!filename.isEmpty()) {
         // Read image
         QImage image(filename);
@@ -334,9 +334,9 @@ void MainWindow::on_action_Preferences_triggered()
 void MainWindow::on_action_Open_Background_Palettes_triggered()
 {
     QString filename = QFileDialog::getOpenFileName(this,
-                                                    "Open palettes file",
-                                                    mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
-                                                    "NES Palettes (*.pal)");
+                       "Open palettes file",
+                       mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
+                       "NES Palettes (*.pal)");
     if (!filename.isEmpty()) {
         loadPalettes(filename, true);
         mProject->setBackgroundPaletteFilename(filename);
@@ -346,9 +346,9 @@ void MainWindow::on_action_Open_Background_Palettes_triggered()
 void MainWindow::on_action_Save_Background_Palettes_As_triggered()
 {
     QString filename = QFileDialog::getSaveFileName(this,
-                                                    "Save palettes file",
-                                                    mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
-                                                    "NES Palettes (*.pal)");
+                       "Save palettes file",
+                       mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
+                       "NES Palettes (*.pal)");
     if (!filename.isEmpty()) {
         ui->backgroundPalette->saveAs(filename);
         mProject->setBackgroundPaletteFilename(filename);
@@ -363,9 +363,9 @@ void MainWindow::on_action_Save_Background_Palettes_triggered()
 void MainWindow::on_action_Open_Sprites_Palettes_triggered()
 {
     QString filename = QFileDialog::getOpenFileName(this,
-                                                    "Open palettes file",
-                                                    mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
-                                                    "NES Palettes (*.pal)");
+                       "Open palettes file",
+                       mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
+                       "NES Palettes (*.pal)");
     if (!filename.isEmpty()) {
         loadPalettes(filename, false);
         mProject->setSpritesPaletteFilename(filename);
@@ -375,9 +375,9 @@ void MainWindow::on_action_Open_Sprites_Palettes_triggered()
 void MainWindow::on_action_Save_Sprites_Palettes_As_triggered()
 {
     QString filename = QFileDialog::getSaveFileName(this,
-                                                    "Save palettes file",
-                                                    mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
-                                                    "NES Palettes (*.pal)");
+                       "Save palettes file",
+                       mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
+                       "NES Palettes (*.pal)");
     if (!filename.isEmpty()) {
         ui->spritesPalette->saveAs(filename);
         mProject->setSpritesPaletteFilename(filename);
@@ -392,9 +392,9 @@ void MainWindow::on_action_Save_Sprites_Palettes_triggered()
 void MainWindow::on_action_Open_CHR_triggered()
 {
     QString filename = QFileDialog::getOpenFileName(this,
-                                                    "Open tileset file",
-                                                    mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
-                                                    "NES Tileset (*.chr)");
+                       "Open tileset file",
+                       mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
+                       "NES Tileset (*.chr)");
     if (!filename.isEmpty()) {
         loadTileSet(filename);
         mProject->setTileSetFilename(filename);
@@ -404,9 +404,9 @@ void MainWindow::on_action_Open_CHR_triggered()
 void MainWindow::on_action_Save_CHR_As_triggered()
 {
     QString filename = QFileDialog::getSaveFileName(this,
-                                                    "Save tileset file",
-                                                    mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
-                                                    "NES Tileset (*.chr)");
+                       "Save tileset file",
+                       mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
+                       "NES Tileset (*.chr)");
     if (!filename.isEmpty()) {
         ui->tileSet->saveAs(filename);
         mProject->setTileSetFilename(filename);
@@ -421,9 +421,9 @@ void MainWindow::on_action_Save_CHR_triggered()
 void MainWindow::on_action_Open_NameTable_triggered()
 {
     QString filename = QFileDialog::getOpenFileName(this,
-                                                    "Open nametable file",
-                                                    mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
-                                                    "NES NameTable (*.nam)");
+                       "Open nametable file",
+                       mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
+                       "NES NameTable (*.nam)");
     if (!filename.isEmpty()) {
         loadNameTable(filename);
         updateNameTableList();
@@ -434,9 +434,9 @@ void MainWindow::on_action_Save_NameTable_triggered()
 {
     // Ask for each nametable filename
     QString filename = QFileDialog::getSaveFileName(this,
-                                                    "Save nametable file",
-                                                    mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
-                                                    "NES NameTable (*.nam)");
+                       "Save nametable file",
+                       mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
+                       "NES NameTable (*.nam)");
     if (!filename.isEmpty()) {
         mCurrentNameTable->saveAs(filename, mSettingsDialog->compressNameTables());
         updateNameTableList();
@@ -458,7 +458,15 @@ void MainWindow::on_addNameTableButton_clicked()
     nameTable->setTileSet(ui->tileSet);
     nameTable->setScale(mSettingsDialog->nameTableScale());
     nameTable->setPalette(ui->backgroundPalette);
+    nameTable->toggleShowGrid(ui->nametableGridButton->isChecked());
     connect(nameTable, SIGNAL(tileClicked(int,int)), this, SLOT(nameTableClicked(int,int)));
+}
+
+void MainWindow::on_nametableGridButton_toggled(bool checked)
+{
+    Q_FOREACH(NameTable *nameTable, mNameTables) {
+        nameTable->toggleShowGrid(checked);
+    }
 }
 
 void MainWindow::openRecentBackgroundPalettes()
@@ -529,9 +537,9 @@ void MainWindow::closeEvent(QCloseEvent *event)
 {
     if (ui->tileSet->isModified()) {
         QMessageBox::StandardButton answer = QMessageBox::question(this,
-                                  "Save Tileset?",
-                                  "Tileset has been modified. Save?",
-                                  QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+                                             "Save Tileset?",
+                                             "Tileset has been modified. Save?",
+                                             QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
         if (answer == QMessageBox::Yes) {
             ui->tileSet->save();
         } else if (answer == QMessageBox::Cancel) {
@@ -619,9 +627,9 @@ void MainWindow::updateRecentActions()
 
     Q_FOREACH(const QString &filename, mLastPaletteFiles) {
         ui->menu_Recent_Background_Palettes->addAction(filename, this,
-                                                       SLOT(openRecentBackgroundPalettes()));
+                SLOT(openRecentBackgroundPalettes()));
         ui->menu_Recent_Sprites_Palettes->addAction(filename, this,
-                                                    SLOT(openRecentSpritesPalettes()));
+                SLOT(openRecentSpritesPalettes()));
     }
 
     Q_FOREACH(const QString &filename, mLastCHRFiles) {

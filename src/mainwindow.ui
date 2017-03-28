@@ -213,8 +213,8 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
-        <spacer name="horizontalSpacer">
+       <item row="2" column="3">
+        <spacer name="horizontalSpacer_2">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -226,8 +226,8 @@
          </property>
         </spacer>
        </item>
-       <item row="2" column="3">
-        <spacer name="horizontalSpacer_2">
+       <item row="2" column="1">
+        <spacer name="horizontalSpacer">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -249,7 +249,17 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0" colspan="5">
+       <item row="2" column="5">
+        <widget class="QToolButton" name="nametableGridButton">
+         <property name="text">
+          <string>Grid</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="6">
         <widget class="QScrollArea" name="nameTableArea">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -265,8 +275,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>446</width>
-            <height>486</height>
+            <width>456</width>
+            <height>518</height>
            </rect>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_9">
@@ -288,7 +298,7 @@
      <x>0</x>
      <y>0</y>
      <width>826</width>
-     <height>30</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">

@@ -28,7 +28,8 @@ class Project;
 class SettingsDialog;
 class QSettings;
 
-namespace Ui {
+namespace Ui
+{
 class MainWindow;
 }
 
@@ -71,6 +72,8 @@ private Q_SLOTS:
 
     void on_addNameTableButton_clicked();
 
+    void on_nametableGridButton_toggled(bool checked);
+
     void openRecentBackgroundPalettes();
     void openRecentSpritesPalettes();
     void openRecentCHR();
@@ -84,12 +87,12 @@ private Q_SLOTS:
 
     void setTitle(QString name);
 
-     void closeEvent(QCloseEvent *event);
+    void closeEvent(QCloseEvent *event);
 
-     void loadBGPalettes(QString filename);
-     void loadSPPalettes(QString filename);
-     void loadTileSet(QString filename);
-     void loadNameTables(QStringList filenames);
+    void loadBGPalettes(QString filename);
+    void loadSPPalettes(QString filename);
+    void loadTileSet(QString filename);
+    void loadNameTables(QStringList filenames);
 private:
     void loadPalettes(QString filename, bool background = true);
     void loadNameTable(QString filename);
