@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>NES Tool v 0.1</string>
+   <string>NES Tool v 0.2</string>
   </property>
   <property name="windowIcon">
    <iconset resource="nestool.qrc">

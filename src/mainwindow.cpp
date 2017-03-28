@@ -40,7 +40,7 @@
 #define kWindowGeometryKey "windowGeometry"
 #define kWindowStateKey "windowState"
 
-#define VERSION "0.1"
+#define VERSION "0.2"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
