@@ -248,8 +248,8 @@ void MainWindow::on_action_Import_From_Image_triggered()
         // Read image
         QImage image(filename);
         // Figure out how many nametables we need
-        int nametablesWide = (image.width() / (32*8));
-        int nametablesHigh = (image.height() / (30*8));
+        int nametablesWide = ((image.width() + (32*8)-1)/ (32*8));
+        int nametablesHigh = ((image.height() + (30*8)-1) / (30*8));
         int nametablesNeeded = nametablesWide * nametablesHigh;
         // Create nametables
         while (mNameTables.count() < nametablesNeeded)
@@ -268,9 +268,12 @@ void MainWindow::on_action_Import_From_Image_triggered()
         int attrIndex = 0;
         for (int j = 0; j < image.height(); j+=16) {
             for (int i= 0; i < image.width(); i+=16) {
-                NameTable *nt = mNameTables[i/(32*8) + (j/(30*8) * nametablesWide)];
+                int whichNT = (i/(32*8)) + ((j/(30*8) * nametablesWide));
                 int x = i/8 % 32;
                 int y = j/8 % 30;
+                qDebug() << "importing image from i,j " << i << j
+                         << "nextTile is " << nextTile << " whichNT is " << whichNT;
+                NameTable *nt = mNameTables[whichNT];
                 if (attrIndex < attributes.size()) {
                     testTile->setPalette(allColors.at(attributes.at(attrIndex)));
                     nt->setAttr(x, y, attributes.at(attrIndex));
