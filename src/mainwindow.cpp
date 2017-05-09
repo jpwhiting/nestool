@@ -251,6 +251,7 @@ void MainWindow::on_action_Import_From_Image_triggered()
         int nametablesWide = ((image.width() + (32*8)-1)/ (32*8));
         int nametablesHigh = ((image.height() + (30*8)-1) / (30*8));
         int nametablesNeeded = nametablesWide * nametablesHigh;
+
         // Create nametables
         while (mNameTables.count() < nametablesNeeded)
             on_addNameTableButton_clicked();

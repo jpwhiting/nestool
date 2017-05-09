@@ -22,7 +22,7 @@
 int main(int argc, char *argv[])
 {
     QApplication::setApplicationName("NESTool");
-    QApplication::setApplicationVersion("0.1");
+    QApplication::setApplicationVersion("0.2");
     QApplication::setOrganizationDomain("jpwhiting.org");
     QApplication::setApplicationDisplayName("NESTool");
     QApplication a(argc, argv);
