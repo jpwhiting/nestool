@@ -24,7 +24,8 @@
 
 class Swatch;
 
-namespace Ui {
+namespace Ui
+{
 class ColorChooserDialog;
 }
 
@@ -35,6 +36,8 @@ class ColorChooserDialog : public QDialog
 public:
     explicit ColorChooserDialog(QWidget *parent = 0);
     ~ColorChooserDialog();
+
+    void setTitle(const QString &title);
 
     // Set the current color to the given index
     void setCurrentIndex(int index);

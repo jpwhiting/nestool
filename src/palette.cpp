@@ -154,6 +154,10 @@ QList<int> Palette::calculateFromImage(QImage *image)
     QList<int> attributes; // Which palette to use for each 16x16 block
     QList<QList<QColor> > newColors;
     // Find most common color
+    ColorChooserDialog *colorDialog = new ColorChooserDialog(this);
+    colorDialog->setTitle("Select the main color for this image");
+    colorDialog->exec();
+    QColor mainColor = colorDialog->chosenColor();
 //    QMap<QRgb, int> colorUses;
 //    int maxUses = 1;
 //    QColor maxColor;
@@ -176,7 +180,7 @@ QList<int> Palette::calculateFromImage(QImage *image)
     for (int i = 0; i < 4; ++i) {
         // Set maxColor as the first color of all 4 new palettes
         QList<QColor> newList;
-//        newList.append(maxColor);
+        newList.append(mainColor);
         newColors.append(newList);
     }
 
@@ -197,7 +201,7 @@ QList<int> Palette::calculateFromImage(QImage *image)
                     }
                     attributes.append(p);
                     break;
-                } else if (p == 3){
+                } else if (p == 3) {
                     qDebug() << "couldn't find palette with colors ";
                     for (int c=0; c < sectionPalette.size(); ++c)
                         qDebug() << "color " << c << " is "
@@ -278,22 +282,18 @@ bool Palette::equal(QList<QColor> &c1, QList<QColor> &c2)
     bool result = true;
 
     //compare each color in palette 1 to each color in palette 2
-    for (int i = 0; i < 4; i++)
-    {
+    for (int i = 0; i < 4; i++) {
         if (c1.size() <= i)
             break;
 
-        for (int j = 0; j < 4; j++)
-        {
+        for (int j = 0; j < 4; j++) {
             //if color match found, set result to true and move to next color in palette 1
-            if(c2[j] == c1[i])
-            {
+            if(c2[j] == c1[i]) {
                 result = true;
                 break;
             }
             //if no color match found and we are at the end of palette 2, then the palettes are not equal
-            else if(j == c2.size() - 1)
-            {
+            else if(j == c2.size() - 1) {
                 result = false;
                 break;
             }
@@ -309,12 +309,9 @@ int Palette::matches(QList<QColor> &c1, QList<QColor> &c2)
 {
     int matches = 0;
 
-    for(int i = 0; i < c1.size(); i++)
-    {
-        for(int j = 0; j < c2.size(); j++)
-        {
-            if (colorRGBEuclideanDistance(c1.at(i), c2.at(j)) < 100.0)
-            {
+    for(int i = 0; i < c1.size(); i++) {
+        for(int j = 0; j < c2.size(); j++) {
+            if (colorRGBEuclideanDistance(c1.at(i), c2.at(j)) < 100.0) {
                 matches++;
                 break;
             }

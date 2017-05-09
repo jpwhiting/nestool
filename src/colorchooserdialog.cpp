@@ -53,6 +53,11 @@ ColorChooserDialog::~ColorChooserDialog()
     delete ui;
 }
 
+void ColorChooserDialog::setTitle(const QString &title)
+{
+    setWindowTitle(title);
+}
+
 void ColorChooserDialog::setCurrentIndex(int index)
 {
     mCurrentIndex = index;

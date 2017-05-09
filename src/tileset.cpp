@@ -199,8 +199,8 @@ void TileSet::toggleShowGrid(bool checked)
 void TileSet::paletteChanged()
 {
     QList<QColor> colors = (ui->backgroundCheckBox->isChecked() ?
-                                mBackgroundPalette->getCurrentPaletteColors() :
-                                mSpritePalette->getCurrentPaletteColors());
+                            mBackgroundPalette->getCurrentPaletteColors() :
+                            mSpritePalette->getCurrentPaletteColors());
     Q_FOREACH(Tile *tile, mTiles) {
         tile->setPalette(colors);
     }
@@ -247,8 +247,11 @@ char *TileSet::tileData(int tile)
 
 void TileSet::setTileData(int tile, char *data)
 {
-    if (tile < 0 || tile >= mTiles.size())
+    if (tile < 0 || tile >= mTiles.size()) {
+        qDebug() << "Tried to set tile data for tile " << tile
+                 << " which is out of range for " << mTiles.size();
         return;
+    }
     mTiles.at(tile)->setData(data);
     updateFromTiles(tile);
 }
@@ -336,7 +339,7 @@ void TileSet::mousePressEvent(QMouseEvent *event)
                 } else if (newX < oldX && newY > oldY) {
                     // It's to the left, but lower
                     mSelectedTile = newX + oldY * 16;
-                } else if (index < mSelectedTile){
+                } else if (index < mSelectedTile) {
                     // To the left and/or above
                     mSelectedTile = index;
                 }
@@ -369,4 +372,3 @@ void TileSet::tileHovered()
     Tile *tile = qobject_cast<Tile*>(sender());
     emit setStatus(tile->getHoverText());
 }
-
