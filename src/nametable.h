@@ -56,6 +56,9 @@ public:
     QString getName() const;
     QString getFileName() const;
 
+    // Set filename without saving
+    void setFilename(const QString &filename);
+
     void setScale(int scale); // Set scale for tiles
 
     char *getData() const;

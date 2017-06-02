@@ -340,7 +340,7 @@ void Palette::setColor(int index, int which)
     mPalData[index] = which;
     mColors[index] = mBasePalette[which];
     mSwatches.at(index)->setColor(mColors.at(index));
-    mSwatches.at(index)->setHoverText(QString("Color:$%1").arg(which, 2, 16, QChar('0')));
+    mSwatches.at(index)->setHoverText(QString("Color:$%1 %2").arg(which, 2, 16, QChar('0')).arg(mColors[index].name()));
 }
 
 QList<QColor> Palette::nesColors()

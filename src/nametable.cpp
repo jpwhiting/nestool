@@ -179,9 +179,8 @@ void NameTable::save(bool compress)
 
 void NameTable::saveAs(QString filename, bool compress)
 {
-    mFileName = filename;
+    setFilename(filename);
     save(compress);
-    mFileNameLabel->setText(getName());
 }
 
 void NameTable::setData(char *data)
@@ -265,6 +264,12 @@ QString NameTable::getName() const
 QString NameTable::getFileName() const
 {
     return mFileName;
+}
+
+void NameTable::setFilename(const QString &filename)
+{
+    mFileName = filename;
+    mFileNameLabel->setText(getName());
 }
 
 void NameTable::setScale(int scale)

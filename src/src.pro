@@ -37,7 +37,8 @@ HEADERS  += \
     settingsdialog.h \
     swatch.h \
     tile.h \
-    tileset.h
+    tileset.h \
+    defines.h
 
 FORMS    += \
     colorchooserdialog.ui \

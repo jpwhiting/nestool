@@ -103,6 +103,10 @@ private:
     // Delete and create recent file actions based on QStringLists
     void updateRecentActions();
 
+    // Import nametables from image
+    void importImage(const QString &filename, const QString &nametableName,
+                     bool importPalettes, bool importTiles);
+
     Ui::MainWindow *ui;
     SettingsDialog *mSettingsDialog;
     Project *mProject;

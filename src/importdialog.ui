@@ -6,14 +6,40 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>294</width>
-    <height>222</height>
+    <width>281</width>
+    <height>251</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Import from Image</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="0" colspan="4">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Palettes</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QRadioButton" name="detectPalettesRadioButton">
+        <property name="text">
+         <string>Automaticall&amp;y detect palettes</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="useCurrentColorsRadioButton">
+        <property name="text">
+         <string>Use current background palettes</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
    <item row="0" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
@@ -31,16 +57,26 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0" colspan="4">
-    <widget class="QGroupBox" name="groupBox">
-     <property name="title">
-      <string>Palettes</string>
+   <item row="3" column="0" colspan="2">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Nametable base name:</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
+    </widget>
+   </item>
+   <item row="3" column="2" colspan="2">
+    <widget class="QLineEdit" name="nametableNameLineEdit"/>
+   </item>
+   <item row="2" column="0" colspan="4">
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Tileset</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QRadioButton" name="radioButton">
+       <widget class="QRadioButton" name="importTilesetRadioButton">
         <property name="text">
-         <string>Automaticall&amp;y detect palettes</string>
+         <string>Import tileset from image</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -48,26 +84,16 @@
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="radioButton_2">
+       <widget class="QRadioButton" name="useCurrentTilesRadioButton">
         <property name="text">
-         <string>Use current background palettes</string>
+         <string>Try to use current tileset</string>
         </property>
        </widget>
       </item>
      </layout>
     </widget>
    </item>
-   <item row="2" column="0" colspan="2">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Nametable base name:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="2" colspan="2">
-    <widget class="QLineEdit" name="nametableNameLineEdit"/>
-   </item>
-   <item row="3" column="1" colspan="3">
+   <item row="4" column="0" colspan="4">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>

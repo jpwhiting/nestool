@@ -29,7 +29,8 @@ class QRubberBand;
 class EditTileDialog;
 class Palette;
 
-namespace Ui {
+namespace Ui
+{
 class Tileset;
 }
 
@@ -64,9 +65,11 @@ public:
     QList<QPair<int, int> > duplicateTiles(); // Find all duplicate tiles
 
     bool isModified() const; // Whether the tileset in memory has been modified
+
 signals:
     void setStatus(QString text); // Signal to change the status bar message
     void tilesChanged(); // Tiles were edited or loaded
+
 protected:
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;

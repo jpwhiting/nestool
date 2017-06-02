@@ -21,9 +21,12 @@
 
 #include <QDialog>
 
-namespace Ui {
+namespace Ui
+{
 class ImportDialog;
 }
+
+class QSettings;
 
 class ImportDialog : public QDialog
 {
@@ -33,11 +36,23 @@ public:
     explicit ImportDialog(QWidget *parent = 0);
     ~ImportDialog();
 
+    QString filename() const;
+    QString nametableName() const;
+
+    bool importColors() const;
+    bool importTiles() const;
+
 private slots:
     void on_browseToolButton_clicked();
 
+    void updateButtons();
+
 private:
     Ui::ImportDialog *ui;
+
+    bool acceptableInput();
+
+    QSettings *mSettings;
 };
 
 #endif // IMPORTDIALOG_H

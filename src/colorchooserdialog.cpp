@@ -35,7 +35,7 @@ ColorChooserDialog::ColorChooserDialog(QWidget *parent) :
         Swatch *swatch = QWidget::findChild<Swatch *>(QString("swatch%1").arg(i));
         if (swatch) {
             swatch->setColor(mColors.at(i));
-            swatch->setHoverText(QString("Color:$%1").arg(i, 2, 16, QChar('0')));
+            swatch->setHoverText(QString("Color:$%1 %2").arg(i, 2, 16, QChar('0')).arg(mColors.at(i).name()));
             connect(swatch, SIGNAL(hovered()), this, SLOT(paletteHovered()));
             connect(swatch, SIGNAL(clicked()), this, SLOT(paletteClicked()));
             mSwatches.append(swatch);

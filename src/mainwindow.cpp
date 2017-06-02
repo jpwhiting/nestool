@@ -24,6 +24,8 @@
 #include <QMessageBox>
 #include <QSettings>
 
+#include "defines.h"
+#include "importdialog.h"
 #include "nametable.h"
 #include "palette.h"
 #include "project.h"
@@ -31,16 +33,6 @@
 #include "swatch.h"
 
 #include <QDebug>
-
-#define kLastOpenPathKey "lastOpenPath"
-#define kPreviousPalKey "previousPalFiles"
-#define kPreviousCHRKey "previousCHRFiles"
-#define kPreviousNameTablesKey "previousNameTableFiles"
-#define kPreviousPathKey "path"
-#define kWindowGeometryKey "windowGeometry"
-#define kWindowStateKey "windowState"
-
-#define VERSION "0.2"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -239,94 +231,14 @@ void MainWindow::importImageSection(QImage *image, int x, int y, int &nextTile, 
 
 void MainWindow::on_action_Import_From_Image_triggered()
 {
-    // Get image filename
-    QString filename = QFileDialog::getOpenFileName(this,
-                       "Open image file",
-                       mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
-                       "Images (*.png)");
-    if (!filename.isEmpty()) {
-        // Read image
-        QImage image(filename);
-        // Figure out how many nametables we need
-        int nametablesWide = ((image.width() + (32*8)-1)/ (32*8));
-        int nametablesHigh = ((image.height() + (30*8)-1) / (30*8));
-        int nametablesNeeded = nametablesWide * nametablesHigh;
+    ImportDialog *dialog = new ImportDialog(this);
+    int result = dialog->exec();
 
-        // Create nametables
-        while (mNameTables.count() < nametablesNeeded)
-            on_addNameTableButton_clicked();
-
-        qDebug() << "need " << nametablesNeeded << "nametables to handle the given image";
-        // Figure out palettes from image
-        QList<int> attributes = ui->backgroundPalette->calculateFromImage(&image);
-//        QList<int> attributes = ui->backgroundPalette->getAttributesFromImage(&image);
-        qDebug() << "Got " << attributes.size() << " attributes for given image";
-        QList<QList<QColor> > allColors = ui->backgroundPalette->getAllColors();
-        // Read tileset from image
-        // Fill nametables based on image
-        Tile *testTile = new Tile(this);
-        int nextTile = 0;
-        int attrIndex = 0;
-        for (int j = 0; j < image.height(); j+=16) {
-            for (int i= 0; i < image.width(); i+=16) {
-                int whichNT = (i/(32*8)) + ((j/(30*8) * nametablesWide));
-                int x = i/8 % 32;
-                int y = j/8 % 30;
-                qDebug() << "importing image from i,j " << i << j
-                         << "nextTile is " << nextTile << " whichNT is " << whichNT;
-                NameTable *nt = mNameTables[whichNT];
-                if (attrIndex < attributes.size()) {
-                    testTile->setPalette(allColors.at(attributes.at(attrIndex)));
-                    nt->setAttr(x, y, attributes.at(attrIndex));
-                }
-                testTile->setImage(image, i, j); // Top left corner
-                int tile = ui->tileSet->hasTile(testTile);
-                if (tile == -1) {
-                    // We don't have the tile
-                    ui->tileSet->setTileData(nextTile, testTile->chrData());
-                    tile = nextTile;
-                    nextTile++;
-                } else if (nextTile <= tile) { // If we matched a later tile
-                    nextTile = tile+1; // set nextTile to one past the one matched
-                }
-                nt->setTile(x, y, tile);
-                testTile->setImage(image, i+8, j); // Top right corner
-                tile = ui->tileSet->hasTile(testTile);
-                if (tile == -1) {
-                    ui->tileSet->setTileData(nextTile, testTile->chrData());
-                    tile = nextTile;
-                    nextTile++;
-                } else if (nextTile <= tile) { // If we matched a later tile
-                    nextTile = tile+1; // set nextTile to one past the one matched
-                }
-                nt->setTile(x + 1, y, tile);
-                testTile->setImage(image, i, j+8); // Bottom left corner
-                tile = ui->tileSet->hasTile(testTile);
-                if (tile == -1) {
-                    ui->tileSet->setTileData(nextTile, testTile->chrData());
-                    tile = nextTile;
-                    nextTile++;
-                } else if (nextTile <= tile) { // If we matched a later tile
-                    nextTile = tile+1; // set nextTile to one past the one matched
-                }
-                nt->setTile(x, y + 1, tile);
-                testTile->setImage(image, i+8, j+8); // Bottom right corner
-                tile = ui->tileSet->hasTile(testTile);
-                if (tile == -1) {
-                    ui->tileSet->setTileData(nextTile, testTile->chrData());
-                    tile = nextTile;
-                    nextTile++;
-                } else if (nextTile <= tile) { // If we matched a later tile
-                    nextTile = tile+1; // set nextTile to one past the one matched
-                }
-                nt->setTile(x + 1, y + 1, tile);
-                attrIndex++;
-                if (attrIndex > attributes.size()) {
-                    QMessageBox::critical(this, "Attribute calculation failure", "Not enough attributes returned by palette scanner");
-                    return;
-                }
-            }
-        }
+    if (result == QDialog::Accepted) {
+        importImage(dialog->filename(),
+                    dialog->nametableName(),
+                    dialog->importColors(),
+                    dialog->importTiles());
     }
 }
 
@@ -665,6 +577,106 @@ void MainWindow::updateRecentActions()
     }
     mSettings->endArray();
 
+}
+
+void MainWindow::importImage(const QString &filename,
+                             const QString &nametableName,
+                             bool importPalettes,
+                             bool importTiles)
+{
+    // Read image
+    QImage image(filename);
+    // Figure out how many nametables we need
+    int nametablesWide = ((image.width() + (32*8)-1)/ (32*8));
+    int nametablesHigh = ((image.height() + (30*8)-1) / (30*8));
+    int nametablesNeeded = nametablesWide * nametablesHigh;
+
+    // Create nametables
+    while (mNameTables.count() < nametablesNeeded)
+        on_addNameTableButton_clicked();
+
+    // Name nametables
+    for (int i = 0; i < nametablesNeeded; ++i) {
+        mNameTables[i]->setFilename(QString("%1_%2").arg(nametableName).arg(i));
+    }
+    qDebug() << "need " << nametablesNeeded << "nametables to handle the given image";
+    // Figure out palettes from image
+    QList<int> attributes;
+
+    if (importPalettes) {
+        attributes = ui->backgroundPalette->calculateFromImage(&image);
+    } else {
+        attributes = ui->backgroundPalette->getAttributesFromImage(&image);
+    }
+
+    qDebug() << "Got " << attributes.size() << " attributes for given image";
+    QList<QList<QColor> > allColors = ui->backgroundPalette->getAllColors();
+
+    // Read tileset from image
+    // Fill nametables based on image
+    Tile *testTile = new Tile(this);
+    int nextTile = 0;
+    int attrIndex = 0;
+    for (int j = 0; j < image.height(); j+=16) {
+        for (int i= 0; i < image.width(); i+=16) {
+            int whichNT = (i/(32*8)) + ((j/(30*8) * nametablesWide));
+            int x = i/8 % 32;
+            int y = j/8 % 30;
+            qDebug() << "importing image from i,j " << i << j
+                     << "nextTile is " << nextTile << " whichNT is " << whichNT;
+            NameTable *nt = mNameTables[whichNT];
+            if (attrIndex < attributes.size()) {
+                testTile->setPalette(allColors.at(attributes.at(attrIndex)));
+                nt->setAttr(x, y, attributes.at(attrIndex));
+            }
+            testTile->setImage(image, i, j); // Top left corner
+            int tile = ui->tileSet->hasTile(testTile);
+            if (tile == -1 && importTiles) {
+                // We don't have the tile
+                ui->tileSet->setTileData(nextTile, testTile->chrData());
+                tile = nextTile;
+                nextTile++;
+            } else if (nextTile <= tile) { // If we matched a later tile
+                nextTile = tile+1; // set nextTile to one past the one matched
+            }
+            nt->setTile(x, y, tile);
+            testTile->setImage(image, i+8, j); // Top right corner
+            tile = ui->tileSet->hasTile(testTile);
+            if (tile == -1 && importTiles) {
+                ui->tileSet->setTileData(nextTile, testTile->chrData());
+                tile = nextTile;
+                nextTile++;
+            } else if (nextTile <= tile) { // If we matched a later tile
+                nextTile = tile+1; // set nextTile to one past the one matched
+            }
+            nt->setTile(x + 1, y, tile);
+            testTile->setImage(image, i, j+8); // Bottom left corner
+            tile = ui->tileSet->hasTile(testTile);
+            if (tile == -1 && importTiles) {
+                ui->tileSet->setTileData(nextTile, testTile->chrData());
+                tile = nextTile;
+                nextTile++;
+            } else if (nextTile <= tile) { // If we matched a later tile
+                nextTile = tile+1; // set nextTile to one past the one matched
+            }
+            nt->setTile(x, y + 1, tile);
+            testTile->setImage(image, i+8, j+8); // Bottom right corner
+            tile = ui->tileSet->hasTile(testTile);
+            if (tile == -1 && importTiles) {
+                ui->tileSet->setTileData(nextTile, testTile->chrData());
+                tile = nextTile;
+                nextTile++;
+            } else if (nextTile <= tile) { // If we matched a later tile
+                nextTile = tile+1; // set nextTile to one past the one matched
+            }
+            nt->setTile(x + 1, y + 1, tile);
+            attrIndex++;
+            if (attrIndex > attributes.size()) {
+                QMessageBox::critical(this, "Attribute calculation failure", "Not enough attributes returned by palette scanner");
+                return;
+            }
+        }
+    }
 }
 
 void MainWindow::loadPalettes(QString filename, bool background)
