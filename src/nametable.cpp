@@ -202,11 +202,18 @@ void NameTable::setPalette(Palette *pal)
 
 void NameTable::setTile(int x, int y, int tile)
 {
+    qDebug() << "setTile called with x " << x
+             << " and y " << y;
     int i = x + y*32;
-    mData[i] = tile;
-    char *tileData = mTileSet->tileData(mData[i]);
-    if (tileData) {
-        mTiles.at(i)->setData(tileData);
+    qDebug() << "i is " << i;
+    if (i < 1024) {
+        mData[i] = tile;
+        char *tileData = mTileSet->tileData(mData[i]);
+        if (tileData) {
+            mTiles.at(i)->setData(tileData);
+        }
+    } else {
+        qDebug() << "i was out of bounds of data of size 1024";
     }
 }
 

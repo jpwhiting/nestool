@@ -425,7 +425,14 @@ void MainWindow::nameTableClicked(int x, int y)
         nameTable->setAttr(x, y, ui->backgroundPalette->getCurrentPalette());
     }
     if (ui->applyTilesCheckBox->isChecked()) {
-        nameTable->setTile(x, y, ui->tileSet->selectedTile());
+        // Iterate over selection
+        int start = ui->tileSet->selectedTile();
+        for (int c=0; c < ui->tileSet->selectedTilesWidth(); ++c) {
+            for (int r = 0; r < ui->tileSet->selectedTilesHeight(); ++r) {
+                if (x + c < 32 && y + r < 30)
+                    nameTable->setTile(x + c, y + r, start + c + (16*r));
+            }
+        }
     }
 }
 

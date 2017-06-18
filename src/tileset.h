@@ -47,6 +47,8 @@ public:
     void saveAs(QString filename);
 
     int selectedTile() const;
+    int selectedTilesWidth() const;
+    int selectedTilesHeight() const;
 
     char *tileData(int tile); // Get the CHR data for a given tile
     void setTileData(int tile, char *data); // Set the CHR data for a given tile

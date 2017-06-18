@@ -128,6 +128,16 @@ int TileSet::selectedTile() const
     return mSelectedTile;
 }
 
+int TileSet::selectedTilesWidth() const
+{
+    return mSelectedWidth;
+}
+
+int TileSet::selectedTilesHeight() const
+{
+    return mSelectedHeight;
+}
+
 void TileSet::updateTiles()
 {
     char *start = (ui->bankAButton->isChecked() ? mData : mData + 4096);
