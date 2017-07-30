@@ -76,6 +76,7 @@ private:
     bool equal(QList<QColor> &c1, QList<QColor> &c2);
     // How many colors between c1 and c2 are matches
     int matches(QList<QColor> &c1, QList<QColor> &c2);
+    void addNonMatches(QList<QColor> &c1, QList<QColor> &c2);
     // Which of the existing palettes has all of the given colors
     int whichPalette(QList<QColor> &c);
     void setColor(int index, int which);
@@ -92,7 +93,7 @@ private:
 
 //ntsc palette captured.pal by Kinopio
 
-const unsigned char ntscPalette[64*3]={
+const unsigned char ntscPalette[64*3]= {
     124,124,124,
     0,0,252,
     0,0,188,

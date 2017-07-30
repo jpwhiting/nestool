@@ -312,6 +312,19 @@ void NameTable::remapTiles(QMap<int, int> mapping)
     }
 }
 
+void NameTable::tilesSwapped(int first, int second)
+{
+    qDebug() << "tiles " << first << " and " << second
+             << "swapped" << " name is " << mFileName;
+    for (int i = 0; i < 960; ++i) {
+        if (mData[i] == first)
+            mData[i] = second;
+        else if (mData[i] == second)
+            mData[i] = first;
+    }
+    update();
+}
+
 void NameTable::tileClicked()
 {
     Tile *tile = qobject_cast<Tile*>(sender());

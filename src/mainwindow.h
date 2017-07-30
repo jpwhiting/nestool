@@ -74,6 +74,7 @@ private Q_SLOTS:
 
     void on_nametableGridButton_toggled(bool checked);
 
+    void openRecentProject();
     void openRecentBackgroundPalettes();
     void openRecentSpritesPalettes();
     void openRecentCHR();
@@ -115,6 +116,7 @@ private:
     QStringList mLastPaletteFiles;
     QStringList mLastCHRFiles;
     QStringList mLastNameTableFiles;
+    QStringList mLastProjectFiles;
     QList<NameTable*> mNameTables;
 };
 

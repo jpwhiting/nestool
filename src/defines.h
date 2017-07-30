@@ -2,6 +2,7 @@
 #define DEFINES_H
 
 #define kLastOpenPathKey "lastOpenPath"
+#define kPreviousProjectKey "previousProjects"
 #define kPreviousPalKey "previousPalFiles"
 #define kPreviousCHRKey "previousCHRFiles"
 #define kPreviousNameTablesKey "previousNameTableFiles"

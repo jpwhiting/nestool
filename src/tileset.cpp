@@ -69,6 +69,7 @@ TileSet::TileSet(QWidget *parent)
     connect(ui->bankBButton, SIGNAL(toggled(bool)), this, SLOT(updateTiles()));
     connect(ui->copyButton, SIGNAL(clicked()), this, SLOT(copySelected()));
     connect(ui->pasteButton, SIGNAL(clicked()), this, SLOT(pasteSelected()));
+    connect(ui->swapButton, SIGNAL(clicked()), this, SLOT(swapSelected()));
     connect(ui->gridButton, SIGNAL(toggled(bool)), this, SLOT(toggleShowGrid(bool)));
 
     mEditDialog = new EditTileDialog(this);
@@ -175,6 +176,7 @@ void TileSet::copySelected()
             painter.drawImage(c*8, r*8, image);
         }
     }
+    ui->swapButton->setEnabled(true);
     clipboard->setImage(result);
 }
 
@@ -196,6 +198,13 @@ void TileSet::pasteSelected()
         setModified(true);
     } else if (mCopiedTile > -1) {
         copyTile(mCopiedTile, mSelectedTile);
+    }
+}
+
+void TileSet::swapSelected()
+{
+    if (mCopiedTile > -1) {
+        swapTiles(mCopiedTile, mSelectedTile);
     }
 }
 
@@ -302,10 +311,33 @@ void TileSet::copyTile(int from, int to)
     updateFromTiles(to);
 }
 
+void TileSet::swapTiles(int first, int second)
+{
+    char data[16];
+    char *d2 = mTiles.at(first)->chrData();
+    for (int i = 0; i < 16; ++i) {
+        data[i] = d2[i];
+    }
+
+    mTiles.at(first)->setData(mTiles.at(second)->chrData());
+    mTiles.at(second)->setData(data);
+    updateFromTiles(first);
+    updateFromTiles(second);
+    emit tilesSwapped(first, second);
+    setModified(true);
+}
+
 void TileSet::clearTile(int index)
 {
     mTiles.at(index)->setData(zeros);
     updateFromTiles(index);
+}
+
+void TileSet::clear()
+{
+    for (int i = 0; i < mTiles.size(); ++i) {
+        clearTile(i);
+    }
 }
 
 QList<QPair<int, int> > TileSet::duplicateTiles()

@@ -70,6 +70,13 @@ MainWindow::MainWindow(QWidget *parent) :
     }
     mSettings->endArray();
 
+    size = mSettings->beginReadArray(kPreviousProjectKey);
+    for (int i = 0; i < size; ++i) {
+        mSettings->setArrayIndex(i);
+        mLastProjectFiles.append(mSettings->value(kPreviousPathKey).toString());
+    }
+    mSettings->endArray();
+
     updateRecentActions();
 
     // Connect to tileset signals
@@ -82,6 +89,7 @@ MainWindow::MainWindow(QWidget *parent) :
     mCurrentNameTable = mNameTables.at(0);
     setTitle(mCurrentNameTable->getName());
     connect(ui->nameTable, SIGNAL(tileClicked(int,int)), this, SLOT(nameTableClicked(int,int)));
+    connect(ui->tileSet, &TileSet::tilesSwapped, ui->nameTable, &NameTable::tilesSwapped);
 
     ui->tileSet->setPalette(ui->backgroundPalette, true);
     ui->tileSet->setPalette(ui->spritesPalette, false);
@@ -117,6 +125,12 @@ void MainWindow::on_action_Open_Project_triggered()
                        "Project (*.ini)");
     if (!filename.isEmpty()) {
         mProject->load(filename);
+        if (!mLastProjectFiles.contains(filename)) {
+            mLastProjectFiles.append(filename);
+            if (mLastProjectFiles.count() > mSettingsDialog->maxRecentFiles())
+                mLastProjectFiles.removeFirst();
+            updateRecentActions();
+        }
     }
 }
 
@@ -376,6 +390,7 @@ void MainWindow::on_addNameTableButton_clicked()
     nameTable->setPalette(ui->backgroundPalette);
     nameTable->toggleShowGrid(ui->nametableGridButton->isChecked());
     connect(nameTable, SIGNAL(tileClicked(int,int)), this, SLOT(nameTableClicked(int,int)));
+    connect(ui->tileSet, &TileSet::tilesSwapped, nameTable, &NameTable::tilesSwapped);
 }
 
 void MainWindow::on_nametableGridButton_toggled(bool checked)
@@ -383,6 +398,13 @@ void MainWindow::on_nametableGridButton_toggled(bool checked)
     Q_FOREACH(NameTable *nameTable, mNameTables) {
         nameTable->toggleShowGrid(checked);
     }
+}
+
+void MainWindow::openRecentProject()
+{
+    QAction *action = qobject_cast<QAction*>(sender());
+    QString filename = action->text().remove('&');
+    mProject->load(filename);
 }
 
 void MainWindow::openRecentBackgroundPalettes()
@@ -547,6 +569,12 @@ void MainWindow::updateRecentActions()
     ui->menu_Recent_Background_Palettes->clear();
     ui->menu_Recent_Sprites_Palettes->clear();
     ui->menu_Recent_NameTable->clear();
+    ui->menu_Recent_Project->clear();
+
+    Q_FOREACH(const QString &filename, mLastProjectFiles) {
+        ui->menu_Recent_Project->addAction(filename, this,
+                                           SLOT(openRecentProject()));
+    }
 
     Q_FOREACH(const QString &filename, mLastPaletteFiles) {
         ui->menu_Recent_Background_Palettes->addAction(filename, this,
@@ -562,6 +590,13 @@ void MainWindow::updateRecentActions()
     Q_FOREACH(const QString &filename, mLastNameTableFiles) {
         ui->menu_Recent_NameTable->addAction(filename, this, SLOT(openRecentNameTable()));
     }
+
+    mSettings->beginWriteArray(kPreviousProjectKey, mLastProjectFiles.count());
+    for (int i = 0; i < mLastProjectFiles.count(); ++i) {
+        mSettings->setArrayIndex(i);
+        mSettings->setValue(kPreviousPathKey, mLastProjectFiles.at(i));
+    }
+    mSettings->endArray();
 
     mSettings->beginWriteArray(kPreviousPalKey, mLastPaletteFiles.count());
     for (int i = 0; i < mLastPaletteFiles.count(); ++i) {
@@ -616,6 +651,10 @@ void MainWindow::importImage(const QString &filename,
         attributes = ui->backgroundPalette->getAttributesFromImage(&image);
     }
 
+    if (importTiles) {
+        // First clear out existing tiles
+        ui->tileSet->clear();
+    }
     qDebug() << "Got " << attributes.size() << " attributes for given image";
     QList<QList<QColor> > allColors = ui->backgroundPalette->getAllColors();
 

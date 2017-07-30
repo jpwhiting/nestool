@@ -62,7 +62,9 @@ public:
     void setScale(int scale); // Set scale for tiles
 
     void copyTile(int from, int to); // Copy tile data from tile from to tile to
+    void swapTiles(int first, int second);
     void clearTile(int index); // Clear out the given tile
+    void clear(); // Clear all tiles
 
     QList<QPair<int, int> > duplicateTiles(); // Find all duplicate tiles
 
@@ -71,6 +73,7 @@ public:
 signals:
     void setStatus(QString text); // Signal to change the status bar message
     void tilesChanged(); // Tiles were edited or loaded
+    void tilesSwapped(int first, int second);
 
 protected:
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
@@ -83,6 +86,7 @@ private slots:
     void updateFromTiles(int index); // Update mData based on tile contents
     void copySelected(); // Copy button clicked
     void pasteSelected(); // Paste button clicked
+    void swapSelected(); // Swap button clicked
     void toggleShowGrid(bool checked);
     void paletteChanged();
 

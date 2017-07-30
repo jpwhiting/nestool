@@ -178,7 +178,7 @@ QList<int> Palette::calculateFromImage(QImage *image)
 //    }
 
     for (int i = 0; i < 4; ++i) {
-        // Set maxColor as the first color of all 4 new palettes
+        // Set mainColor as the first color of all 4 new palettes
         QList<QColor> newList;
         newList.append(mainColor);
         newColors.append(newList);
@@ -192,13 +192,15 @@ QList<int> Palette::calculateFromImage(QImage *image)
             for (int p = 0; p < 4; ++p) {
                 int m = matches(sectionPalette, newColors[p]);
                 if (equal(sectionPalette, newColors[p])) {
+                    qDebug() << "sectionPalette is contained in newColors[" << p << "]";
                     attributes.append(p); // Palettes match (or sectionPalette is contained in newColors[p]
                     break;
                 } else if (sectionPalette.size() - m <= 4 - newColors[p].size()) {
-                    for (int i = 0; i < sectionPalette.size(); ++i) {
-                        if (!newColors[p].contains(sectionPalette.at(i)))
-                            newColors[p].append(sectionPalette.at(i));
-                    }
+                    qDebug() << "*** section palette size fits in palette " << p
+                             << " m is " << m
+                             << "sectionPalette.size is " << sectionPalette.size()
+                             << " newColors[p].size is " << newColors[p].size();
+                    addNonMatches(sectionPalette, newColors[p]);
                     attributes.append(p);
                     break;
                 } else if (p == 3) {
@@ -213,6 +215,12 @@ QList<int> Palette::calculateFromImage(QImage *image)
             }
         }
     }
+
+    qDebug() << "colors calculated are " << newColors.at(0).size()
+             << ", " << newColors.at(1).size()
+             << ", " << newColors.at(2).size()
+             << ", " << newColors.at(3).size();
+
     // Set the colors from the new palettes
     for (int p = 0; p < 4; ++p) {
         for (int c = 0; c < 4; ++c) {
@@ -268,6 +276,8 @@ QList<QColor> Palette::colorsFromImageSection(QImage *image, int x, int y)
     // Normalize colors based on nes palette
     for (int i = 0; i < colorList.size(); ++i) {
         int nesColor = closestNesColor(colorList.at(i));
+        qDebug() << "Closest nes color for " << colorList.at(i).name()
+                 << " is " << mBasePalette.at(nesColor).name();
         colorList[i] = mBasePalette.at(nesColor);
     }
     return colorList;
@@ -319,6 +329,24 @@ int Palette::matches(QList<QColor> &c1, QList<QColor> &c2)
     }
 
     return matches;
+}
+
+void Palette::addNonMatches(QList<QColor> &c1, QList<QColor> &c2)
+{
+    bool foundMatch = false;
+
+    // Add colors from c1 to c2 if they are not there already (non matches)
+    for(int i = 0; i < c1.size(); i++) {
+        foundMatch = false;
+        for(int j = 0; j < c2.size(); j++) {
+            if (colorRGBEuclideanDistance(c1.at(i), c2.at(j)) < 100.0) {
+                foundMatch = true;
+                break;
+            }
+        }
+        if (!foundMatch)
+            c2.append(c1.at(i));
+    }
 }
 
 int Palette::whichPalette(QList<QColor> &c)

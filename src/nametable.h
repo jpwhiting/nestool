@@ -65,6 +65,10 @@ public:
 
     QSet<int> usedTiles() const;
     void remapTiles(QMap<int, int> mapping); // Update nametable using the given mapping
+
+public slots:
+    void tilesSwapped(int first, int second);
+
 protected:
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;

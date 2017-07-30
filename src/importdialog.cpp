@@ -75,6 +75,8 @@ void ImportDialog::on_browseToolButton_clicked()
                        mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
                        "Images (*.png)");
     ui->filenameLineEdit->setText(filename);
+    QFileInfo info(filename);
+    mSettings->setValue(kLastOpenPathKey, info.absolutePath());
 }
 
 void ImportDialog::updateButtons()
