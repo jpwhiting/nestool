@@ -44,9 +44,11 @@ Palette::Palette(QWidget *parent)
              << 15 << 1 << 33 << 49
              << 15 << 6 << 22 << 38
              << 15 << 9 << 25 << 41;
+    QVBoxLayout *vlayout = new QVBoxLayout(this);
     QHBoxLayout *layout = new QHBoxLayout(this);
     for (int i = 0; i < 16; ++i) {
         Swatch *swatch = new Swatch(this);
+        swatch->setFixedSize(QSize(24, 24));
         mSwatches << swatch;
         mColors << Qt::black;
         layout->addWidget(mSwatches.at(i));
@@ -55,9 +57,11 @@ Palette::Palette(QWidget *parent)
     }
     layout->setSpacing(2);
 
+    vlayout->addLayout(layout);
+
     mFilenameLabel = new QLabel(this);
-    layout->addWidget(mFilenameLabel);
-    setLayout(layout);
+    vlayout->addWidget(mFilenameLabel);
+    setLayout(vlayout);
 
     mCurrentColor = 0;
     mSwatches.at(0)->setSelected(true);

@@ -66,7 +66,8 @@ void Swatch::paintEvent(QPaintEvent *event)
 
     painter.save();
 
-    painter.setPen(mSelected ? Qt::white : mColor);
+    QPen pen(mSelected ? Qt::white : Qt::black, 1, mSelected ? Qt::DashLine : Qt::SolidLine);
+    painter.setPen(pen);
     painter.setBrush(mColor);
     painter.drawRect(0, 0, width()-1, height()-1);
     painter.restore();
