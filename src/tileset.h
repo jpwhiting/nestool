@@ -106,6 +106,8 @@ private:
 
     EditTileDialog *mEditDialog; // Dialog to edit tiles
     int mCopiedTile; // Last tile "Copied"
+    int mCopiedWidth; // How many tiles wide were copied
+    int mCopiedHeight; // How many tiles high were copied
     bool mModified;
     QRubberBand *mRubberBand; // Rubberband to show selection
 };

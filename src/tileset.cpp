@@ -167,6 +167,9 @@ void TileSet::copySelected()
 {
     // Save selected tile chr data for pasting
     mCopiedTile = mSelectedTile;
+    mCopiedWidth = mSelectedWidth;
+    mCopiedHeight = mSelectedHeight;
+
     QClipboard *clipboard = QGuiApplication::clipboard();
     QImage result = QImage(8 * mSelectedWidth, 8*mSelectedHeight, QImage::Format_RGB32);
     QPainter painter (&result);
@@ -204,7 +207,11 @@ void TileSet::pasteSelected()
 void TileSet::swapSelected()
 {
     if (mCopiedTile > -1) {
-        swapTiles(mCopiedTile, mSelectedTile);
+        for (int i = 0; i < mCopiedWidth; ++i) {
+            for (int j = 0; j < mCopiedHeight; ++j) {
+                swapTiles(mCopiedTile + i + (j*16), mSelectedTile + i + (j*16));
+            }
+        }
     }
 }
 
