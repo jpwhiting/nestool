@@ -25,13 +25,21 @@
 #include <QLabel>
 #include <QMouseEvent>
 #include <QPushButton>
+#include <QRubberBand>
 
 #include "palette.h"
 
 #include <QDebug>
 
-NameTable::NameTable(QWidget *parent) : QWidget(parent), mTileSet(0)
+NameTable::NameTable(QWidget *parent) :
+    QWidget(parent),
+    mTileSet(0),
+    mNameRubberBand(0),
+    mSelected(false)
 {
+    mNameRubberBand = new QRubberBand(QRubberBand::Rectangle, this);
+    mNameRubberBand->raise();
+
     QVBoxLayout *vLayout = new QVBoxLayout(this);
     mFileNameLabel = new QLabel(this);
 
@@ -57,6 +65,7 @@ NameTable::NameTable(QWidget *parent) : QWidget(parent), mTileSet(0)
     setLayout(vLayout);
     vLayout->addWidget(mFileNameLabel);
     vLayout->addLayout(mGridLayout);
+    mNameRubberBand->setGeometry(mFileNameLabel->geometry());
     setMouseTracking(true);
 }
 
@@ -215,6 +224,16 @@ void NameTable::setTile(int x, int y, int tile)
     } else {
         qDebug() << "i was out of bounds of data of size 1024";
     }
+}
+
+void NameTable::setSelected(bool selected)
+{
+    mSelected = selected;
+    if (selected)
+        mNameRubberBand->show();
+    else
+        mNameRubberBand->hide();
+    update();
 }
 
 void NameTable::setAttr(int x, int y, int pal)

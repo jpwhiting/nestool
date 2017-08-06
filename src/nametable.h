@@ -48,6 +48,10 @@ public:
     // Set the given coordinate to the given tile
     void setTile(int x, int y, int tile);
 
+    // Set whether this nametable is the selected nametable
+    // When selected, show the rubberband(s)
+    void setSelected(bool selected);
+
     // Set the given x, y, to the given palette
     void setAttr(int x, int y, int pal);
 
@@ -92,6 +96,8 @@ private:
     QString mFileName; // Last Filename used to load or save this NameTable
     Palette *mPalette; // Nametable palette
     QGridLayout *mGridLayout; // Grid layout of tiles
+    QRubberBand *mNameRubberBand; // Rubber band to show on name if selected
+    bool mSelected;
 };
 
 #endif // NAMETABLE_H

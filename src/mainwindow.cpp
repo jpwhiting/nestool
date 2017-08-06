@@ -463,6 +463,9 @@ void MainWindow::openRecentNameTable()
 void MainWindow::nameTableClicked(int x, int y)
 {
     NameTable *nameTable = qobject_cast<NameTable*>(sender());
+    if (mCurrentNameTable != 0)
+        mCurrentNameTable->setSelected(false);
+
     mCurrentNameTable = nameTable;
     setTitle(mCurrentNameTable->getName());
     if (ui->applyPalettesCheckBox->isChecked()) {
@@ -478,6 +481,7 @@ void MainWindow::nameTableClicked(int x, int y)
             }
         }
     }
+    mCurrentNameTable->setSelected(true);
 }
 
 void MainWindow::setStatus(QString text)
