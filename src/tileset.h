@@ -26,6 +26,7 @@
 
 class QLabel;
 class QRubberBand;
+class QSettings;
 class EditTileDialog;
 class Palette;
 
@@ -110,6 +111,7 @@ private:
     int mCopiedHeight; // How many tiles high were copied
     bool mModified;
     QRubberBand *mRubberBand; // Rubberband to show selection
+    QSettings *mSettings;
 };
 
 #endif // TILESET_H

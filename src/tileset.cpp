@@ -26,8 +26,10 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QRadioButton>
+#include <QSettings>
 #include <QToolButton>
 
+#include "defines.h"
 #include "edittiledialog.h"
 #include "palette.h"
 
@@ -39,7 +41,8 @@ char zeros[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 TileSet::TileSet(QWidget *parent)
     : QWidget(parent),
-      ui(new Ui::Tileset)
+      ui(new Ui::Tileset),
+      mSettings(new QSettings())
 {
     ui->setupUi(this);
 
@@ -71,6 +74,8 @@ TileSet::TileSet(QWidget *parent)
     connect(ui->pasteButton, SIGNAL(clicked()), this, SLOT(pasteSelected()));
     connect(ui->swapButton, SIGNAL(clicked()), this, SLOT(swapSelected()));
     connect(ui->gridButton, SIGNAL(toggled(bool)), this, SLOT(toggleShowGrid(bool)));
+
+    ui->gridButton->setChecked(mSettings->value(kTilesetGridKey, false).toBool());
 
     mEditDialog = new EditTileDialog(this);
 }
@@ -219,6 +224,7 @@ void TileSet::toggleShowGrid(bool checked)
 {
     ui->tileGridLayout->setHorizontalSpacing(checked ? 1 : 0);
     ui->tileGridLayout->setVerticalSpacing(checked ? 1 : 0);
+    mSettings->setValue(kTilesetGridKey, checked);
     update();
 }
 

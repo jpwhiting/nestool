@@ -48,6 +48,9 @@ MainWindow::MainWindow(QWidget *parent) :
     // create docks, toolbars, etc…
     restoreState(mSettings->value(kWindowStateKey).toByteArray());
 
+    // Initialize nametable grid button
+    ui->nametableGridButton->setChecked(mSettings->value(kNametableGridKey, false).toBool());
+
     // Read in list of last files
     int size = mSettings->beginReadArray(kPreviousPalKey);
     for (int i = 0; i < size; ++i) {
@@ -86,6 +89,7 @@ MainWindow::MainWindow(QWidget *parent) :
     mNameTables.append(ui->nameTable);
     ui->nameTable->setTileSet(ui->tileSet);
     ui->nameTable->setPalette(ui->backgroundPalette);
+    ui->nameTable->toggleShowGrid(ui->nametableGridButton->isChecked());
     mCurrentNameTable = mNameTables.at(0);
     setTitle(mCurrentNameTable->getName());
     connect(ui->nameTable, SIGNAL(tileClicked(int,int)), this, SLOT(nameTableClicked(int,int)));
@@ -398,6 +402,7 @@ void MainWindow::on_nametableGridButton_toggled(bool checked)
     Q_FOREACH(NameTable *nameTable, mNameTables) {
         nameTable->toggleShowGrid(checked);
     }
+    mSettings->setValue(kNametableGridKey, checked);
 }
 
 void MainWindow::openRecentProject()
