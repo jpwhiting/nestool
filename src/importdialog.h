@@ -42,6 +42,9 @@ public:
     bool importColors() const;
     bool importTiles() const;
 
+public slots:
+    virtual void accept() Q_DECL_OVERRIDE;
+
 private slots:
     void on_browseToolButton_clicked();
 

@@ -21,6 +21,7 @@
 
 #include "ui_importdialog.h"
 
+#include <QComboBox>
 #include <QFileDialog>
 #include <QPushButton>
 #include <QSettings>
@@ -36,20 +37,28 @@ ImportDialog::ImportDialog(QWidget *parent) :
 
     updateButtons();
 
-    connect(ui->filenameLineEdit, &QLineEdit::textChanged,
+    connect(ui->filenameComboBox, &QComboBox::currentTextChanged,
             this, &ImportDialog::updateButtons);
     connect(ui->nametableNameLineEdit, &QLineEdit::textChanged,
             this, &ImportDialog::updateButtons);
+
+    int size = mSettings->beginReadArray(kPreviousImportKey);
+    for (int i = 0; i < size; ++i) {
+        mSettings->setArrayIndex(i);
+        ui->filenameComboBox->addItem(mSettings->value(kPreviousPathKey).toString());
+    }
+    mSettings->endArray();
 }
 
 ImportDialog::~ImportDialog()
 {
     delete ui;
+    delete mSettings;
 }
 
 QString ImportDialog::filename() const
 {
-    return ui->filenameLineEdit->text();
+    return ui->filenameComboBox->currentText();
 }
 
 QString ImportDialog::nametableName() const
@@ -67,6 +76,27 @@ bool ImportDialog::importTiles() const
     return ui->importTilesetRadioButton->isChecked();
 }
 
+void ImportDialog::accept()
+{
+    // Save chosen settings for quick load later
+    int size = ui->filenameComboBox->count();
+    if (ui->filenameComboBox->currentIndex() == -1)
+        size ++; // Add one for the current text
+
+    mSettings->beginWriteArray(kPreviousImportKey, size);
+    for (int i = 0; i < ui->filenameComboBox->count(); ++i) {
+        mSettings->setArrayIndex(i);
+        mSettings->setValue(kPreviousPathKey, ui->filenameComboBox->itemText(i));
+    }
+    if (ui->filenameComboBox->currentIndex() == -1) {
+        mSettings->setArrayIndex(size - 1);
+        mSettings->setValue(kPreviousPathKey, ui->filenameComboBox->currentText());
+    }
+    mSettings->endArray();
+
+    QDialog::accept();
+}
+
 void ImportDialog::on_browseToolButton_clicked()
 {
     // Get image filename
@@ -74,7 +104,7 @@ void ImportDialog::on_browseToolButton_clicked()
                        "Open image file",
                        mSettings->value(kLastOpenPathKey, QDir::home().absolutePath()).toString(),
                        "Images (*.png)");
-    ui->filenameLineEdit->setText(filename);
+    ui->filenameComboBox->setCurrentText(filename);
     QFileInfo info(filename);
     mSettings->setValue(kLastOpenPathKey, info.absolutePath());
 }
@@ -86,5 +116,5 @@ void ImportDialog::updateButtons()
 
 bool ImportDialog::acceptableInput()
 {
-    return !ui->filenameLineEdit->text().isEmpty() && !ui->nametableNameLineEdit->text().isEmpty();
+    return !ui->filenameComboBox->currentText().isEmpty() && !ui->nametableNameLineEdit->text().isEmpty();
 }
