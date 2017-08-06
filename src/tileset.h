@@ -58,7 +58,7 @@ public:
     // If we do, return the tile number, if not return -1
     int hasTile(Tile *tile);
 
-    void setPalette(Palette *pal, bool background = true);
+    void setPalette(Palette *pal);
 
     void setScale(int scale); // Set scale for tiles
 
@@ -102,8 +102,7 @@ private:
     int mSelectedTile; // Which tile is currently selected
     int mSelectedWidth; // How many tiles wide are selected
     int mSelectedHeight; // How many tiles high are selected
-    Palette *mBackgroundPalette;
-    Palette *mSpritePalette;
+    Palette *mPalette;
 
     EditTileDialog *mEditDialog; // Dialog to edit tiles
     int mCopiedTile; // Last tile "Copied"

@@ -153,8 +153,8 @@ void TileSet::updateTiles()
             mTiles.at(which)->setData(start + (which * 16));
         }
     }
-    ui->backgroundCheckBox->setChecked(ui->bankAButton->isChecked());
     paletteChanged();
+    emit tilesChanged();
 }
 
 void TileSet::updateFromTiles(int index)
@@ -230,9 +230,7 @@ void TileSet::toggleShowGrid(bool checked)
 
 void TileSet::paletteChanged()
 {
-    QList<QColor> colors = (ui->backgroundCheckBox->isChecked() ?
-                            mBackgroundPalette->getCurrentPaletteColors() :
-                            mSpritePalette->getCurrentPaletteColors());
+    QList<QColor> colors = mPalette->getCurrentPaletteColors();
     Q_FOREACH(Tile *tile, mTiles) {
         tile->setPalette(colors);
     }
@@ -297,13 +295,9 @@ int TileSet::hasTile(Tile *tile)
     return -1;
 }
 
-void TileSet::setPalette(Palette *pal, bool background)
+void TileSet::setPalette(Palette *pal)
 {
-    if (background) {
-        mBackgroundPalette = pal;
-    } else {
-        mSpritePalette = pal;
-    }
+    mPalette = pal;
     connect(pal, SIGNAL(currentPaletteChanged()), this, SLOT(paletteChanged()));
     paletteChanged();
 }

@@ -95,8 +95,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->nameTable, SIGNAL(tileClicked(int,int)), this, SLOT(nameTableClicked(int,int)));
     connect(ui->tileSet, &TileSet::tilesSwapped, ui->nameTable, &NameTable::tilesSwapped);
 
-    ui->tileSet->setPalette(ui->backgroundPalette, true);
-    ui->tileSet->setPalette(ui->spritesPalette, false);
+    ui->tileSet->setPalette(ui->backgroundPalette);
+    ui->spritesTileSet->setPalette(ui->spritesPalette);
 
     connect(mSettingsDialog, SIGNAL(settingsChanged()), this, SLOT(onSettingsChanged()));
     connect(ui->backgroundPalette, SIGNAL(paletteHovered(QString)), this, SLOT(paletteHovered(QString)));
