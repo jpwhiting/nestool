@@ -71,6 +71,7 @@ private Q_SLOTS:
     void on_action_Save_All_NameTables_triggered();
 
     void on_addNameTableButton_clicked();
+    void on_delNameTableButton_clicked();
 
     void on_nametableGridButton_toggled(bool checked);
 

@@ -397,6 +397,23 @@ void MainWindow::on_addNameTableButton_clicked()
     connect(ui->tileSet, &TileSet::tilesSwapped, nameTable, &NameTable::tilesSwapped);
 }
 
+void MainWindow::on_delNameTableButton_clicked()
+{
+    // Confirm deletion of nametable
+    int answer = QMessageBox::question(this, "Delete nametable",
+                                       QString("Are you sure you want to remove the nametable %1?\n NOTE: This will not delete the file from the disk.").arg(mCurrentNameTable->getName()));
+    if (answer == QMessageBox::Yes) {
+        // remove currently selected nametable
+        ui->nameTableContents->layout()->removeWidget(mCurrentNameTable);
+        mNameTables.removeAll(mCurrentNameTable);
+        mCurrentNameTable->deleteLater();
+        if (mNameTables.size() > 0) {
+            mCurrentNameTable = mNameTables.at(0);
+            setTitle(mCurrentNameTable->getName());
+        }
+    }
+}
+
 void MainWindow::on_nametableGridButton_toggled(bool checked)
 {
     Q_FOREACH(NameTable *nameTable, mNameTables) {
