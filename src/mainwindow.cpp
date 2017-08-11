@@ -414,6 +414,16 @@ void MainWindow::on_delNameTableButton_clicked()
     }
 }
 
+void MainWindow::on_shiftNametableDownButton_clicked()
+{
+    mCurrentNameTable->shiftTilesVertically(1, true);
+}
+
+void MainWindow::on_shiftNametableUpButton_clicked()
+{
+    mCurrentNameTable->shiftTilesVertically(1, false);
+}
+
 void MainWindow::on_nametableGridButton_toggled(bool checked)
 {
     Q_FOREACH(NameTable *nameTable, mNameTables) {

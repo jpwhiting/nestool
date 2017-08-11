@@ -344,6 +344,63 @@ void NameTable::tilesSwapped(int first, int second)
     update();
 }
 
+void NameTable::shiftTilesVertically(int count, bool down)
+{
+    if (down) {
+        // Shifting down, so start at the bottom
+        char data[32];
+        for (int c = 0; c < 32; ++c) {
+            data[c] = mData[29*32 + c];
+        }
+
+        for (int row = 29; row >= 1; --row) {
+            for (int c = 0; c < 32; ++c) {
+                // copy from the row above into this row
+                int dest = row * 32 + c;
+                int source = dest - 32;
+                if (source < 0)
+                    source += 960;
+                mData[dest] = mData[source];
+            }
+        }
+
+        // Then put temp data into top row
+        for (int c = 0; c < 32; ++c) {
+            mData[c] = data[c];
+        }
+    } else {
+        // Shifting up, so start from the top
+        char data[32];
+        for (int c = 0; c < 32; ++c) {
+            // Save top row of data
+            data[c] = mData[c];
+        }
+
+        for (int row = 0; row < 30; ++row) {
+            for (int c = 0; c < 32; ++c) {
+                // copy from the row above into this row
+                int dest = row * 32 + c;
+                int source = dest + 32;
+                if (source > 960)
+                    source -= 960;
+                mData[dest] = mData[source];
+            }
+        }
+
+        // Then put temp data into top row
+        for (int c = 0; c < 32; ++c) {
+            mData[32*29 + c] = data[c];
+        }
+    }
+    // Update tiles to reflect changes
+    tilesChanged();
+}
+
+void NameTable::shiftTilesHorizontally(int count, bool right)
+{
+
+}
+
 void NameTable::tileClicked()
 {
     Tile *tile = qobject_cast<Tile*>(sender());

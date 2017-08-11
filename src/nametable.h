@@ -72,6 +72,10 @@ public:
 
 public slots:
     void tilesSwapped(int first, int second);
+    // Shift the whole nametable down (or up if down is false) count tiles
+    void shiftTilesVertically(int count, bool down);
+    // Shift the whole nametable right (or left if right is false) count tiles
+    void shiftTilesHorizontally(int count, bool right);
 
 protected:
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;

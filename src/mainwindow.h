@@ -73,6 +73,9 @@ private Q_SLOTS:
     void on_addNameTableButton_clicked();
     void on_delNameTableButton_clicked();
 
+    void on_shiftNametableDownButton_clicked();
+    void on_shiftNametableUpButton_clicked();
+
     void on_nametableGridButton_toggled(bool checked);
 
     void openRecentProject();

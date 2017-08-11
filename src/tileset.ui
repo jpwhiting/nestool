@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>333</width>
-    <height>371</height>
+    <width>829</width>
+    <height>604</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -56,6 +56,408 @@
      <property name="spacing">
       <number>0</number>
      </property>
+     <item row="10" column="11">
+      <widget class="Tile" name="tile_155" native="true"/>
+     </item>
+     <item row="10" column="10">
+      <widget class="Tile" name="tile_154" native="true"/>
+     </item>
+     <item row="10" column="13">
+      <widget class="Tile" name="tile_157" native="true"/>
+     </item>
+     <item row="10" column="14">
+      <widget class="Tile" name="tile_158" native="true"/>
+     </item>
+     <item row="10" column="9">
+      <widget class="Tile" name="tile_153" native="true"/>
+     </item>
+     <item row="10" column="12">
+      <widget class="Tile" name="tile_156" native="true"/>
+     </item>
+     <item row="10" column="15">
+      <widget class="Tile" name="tile_159" native="true"/>
+     </item>
+     <item row="11" column="0">
+      <widget class="Tile" name="tile_160" native="true"/>
+     </item>
+     <item row="11" column="1">
+      <widget class="Tile" name="tile_161" native="true"/>
+     </item>
+     <item row="11" column="2">
+      <widget class="Tile" name="tile_162" native="true"/>
+     </item>
+     <item row="11" column="3">
+      <widget class="Tile" name="tile_163" native="true"/>
+     </item>
+     <item row="11" column="6">
+      <widget class="Tile" name="tile_166" native="true"/>
+     </item>
+     <item row="11" column="5">
+      <widget class="Tile" name="tile_165" native="true"/>
+     </item>
+     <item row="11" column="8">
+      <widget class="Tile" name="tile_168" native="true"/>
+     </item>
+     <item row="11" column="7">
+      <widget class="Tile" name="tile_167" native="true"/>
+     </item>
+     <item row="11" column="4">
+      <widget class="Tile" name="tile_164" native="true"/>
+     </item>
+     <item row="11" column="13">
+      <widget class="Tile" name="tile_173" native="true"/>
+     </item>
+     <item row="11" column="11">
+      <widget class="Tile" name="tile_171" native="true"/>
+     </item>
+     <item row="11" column="14">
+      <widget class="Tile" name="tile_174" native="true"/>
+     </item>
+     <item row="11" column="10">
+      <widget class="Tile" name="tile_170" native="true"/>
+     </item>
+     <item row="11" column="9">
+      <widget class="Tile" name="tile_169" native="true"/>
+     </item>
+     <item row="11" column="12">
+      <widget class="Tile" name="tile_172" native="true"/>
+     </item>
+     <item row="12" column="0">
+      <widget class="Tile" name="tile_176" native="true"/>
+     </item>
+     <item row="12" column="1">
+      <widget class="Tile" name="tile_177" native="true"/>
+     </item>
+     <item row="12" column="2">
+      <widget class="Tile" name="tile_178" native="true"/>
+     </item>
+     <item row="12" column="3">
+      <widget class="Tile" name="tile_179" native="true"/>
+     </item>
+     <item row="11" column="15">
+      <widget class="Tile" name="tile_175" native="true"/>
+     </item>
+     <item row="12" column="7">
+      <widget class="Tile" name="tile_183" native="true"/>
+     </item>
+     <item row="12" column="5">
+      <widget class="Tile" name="tile_181" native="true"/>
+     </item>
+     <item row="12" column="6">
+      <widget class="Tile" name="tile_182" native="true"/>
+     </item>
+     <item row="12" column="4">
+      <widget class="Tile" name="tile_180" native="true"/>
+     </item>
+     <item row="12" column="8">
+      <widget class="Tile" name="tile_184" native="true"/>
+     </item>
+     <item row="12" column="14">
+      <widget class="Tile" name="tile_190" native="true"/>
+     </item>
+     <item row="12" column="12">
+      <widget class="Tile" name="tile_188" native="true"/>
+     </item>
+     <item row="12" column="10">
+      <widget class="Tile" name="tile_186" native="true"/>
+     </item>
+     <item row="12" column="13">
+      <widget class="Tile" name="tile_189" native="true"/>
+     </item>
+     <item row="12" column="9">
+      <widget class="Tile" name="tile_185" native="true"/>
+     </item>
+     <item row="12" column="11">
+      <widget class="Tile" name="tile_187" native="true"/>
+     </item>
+     <item row="12" column="15">
+      <widget class="Tile" name="tile_191" native="true"/>
+     </item>
+     <item row="13" column="1">
+      <widget class="Tile" name="tile_193" native="true"/>
+     </item>
+     <item row="13" column="2">
+      <widget class="Tile" name="tile_194" native="true"/>
+     </item>
+     <item row="13" column="3">
+      <widget class="Tile" name="tile_195" native="true"/>
+     </item>
+     <item row="13" column="0">
+      <widget class="Tile" name="tile_192" native="true"/>
+     </item>
+     <item row="13" column="6">
+      <widget class="Tile" name="tile_198" native="true"/>
+     </item>
+     <item row="13" column="7">
+      <widget class="Tile" name="tile_199" native="true"/>
+     </item>
+     <item row="13" column="5">
+      <widget class="Tile" name="tile_197" native="true"/>
+     </item>
+     <item row="13" column="8">
+      <widget class="Tile" name="tile_200" native="true"/>
+     </item>
+     <item row="13" column="4">
+      <widget class="Tile" name="tile_196" native="true"/>
+     </item>
+     <item row="13" column="14">
+      <widget class="Tile" name="tile_206" native="true"/>
+     </item>
+     <item row="13" column="12">
+      <widget class="Tile" name="tile_204" native="true"/>
+     </item>
+     <item row="13" column="13">
+      <widget class="Tile" name="tile_205" native="true"/>
+     </item>
+     <item row="13" column="9">
+      <widget class="Tile" name="tile_201" native="true"/>
+     </item>
+     <item row="13" column="10">
+      <widget class="Tile" name="tile_202" native="true"/>
+     </item>
+     <item row="13" column="11">
+      <widget class="Tile" name="tile_203" native="true"/>
+     </item>
+     <item row="14" column="0">
+      <widget class="Tile" name="tile_208" native="true"/>
+     </item>
+     <item row="13" column="15">
+      <widget class="Tile" name="tile_207" native="true"/>
+     </item>
+     <item row="14" column="1">
+      <widget class="Tile" name="tile_209" native="true"/>
+     </item>
+     <item row="14" column="2">
+      <widget class="Tile" name="tile_210" native="true"/>
+     </item>
+     <item row="14" column="6">
+      <widget class="Tile" name="tile_214" native="true"/>
+     </item>
+     <item row="14" column="5">
+      <widget class="Tile" name="tile_213" native="true"/>
+     </item>
+     <item row="14" column="7">
+      <widget class="Tile" name="tile_215" native="true"/>
+     </item>
+     <item row="14" column="3">
+      <widget class="Tile" name="tile_211" native="true"/>
+     </item>
+     <item row="14" column="8">
+      <widget class="Tile" name="tile_216" native="true"/>
+     </item>
+     <item row="14" column="4">
+      <widget class="Tile" name="tile_212" native="true"/>
+     </item>
+     <item row="14" column="9">
+      <widget class="Tile" name="tile_217" native="true"/>
+     </item>
+     <item row="14" column="10">
+      <widget class="Tile" name="tile_218" native="true"/>
+     </item>
+     <item row="14" column="11">
+      <widget class="Tile" name="tile_219" native="true"/>
+     </item>
+     <item row="14" column="13">
+      <widget class="Tile" name="tile_221" native="true"/>
+     </item>
+     <item row="14" column="12">
+      <widget class="Tile" name="tile_220" native="true"/>
+     </item>
+     <item row="14" column="14">
+      <widget class="Tile" name="tile_222" native="true"/>
+     </item>
+     <item row="14" column="15">
+      <widget class="Tile" name="tile_223" native="true"/>
+     </item>
+     <item row="15" column="1">
+      <widget class="Tile" name="tile_225" native="true"/>
+     </item>
+     <item row="15" column="3">
+      <widget class="Tile" name="tile_227" native="true"/>
+     </item>
+     <item row="15" column="0">
+      <widget class="Tile" name="tile_224" native="true"/>
+     </item>
+     <item row="15" column="2">
+      <widget class="Tile" name="tile_226" native="true"/>
+     </item>
+     <item row="15" column="4">
+      <widget class="Tile" name="tile_228" native="true"/>
+     </item>
+     <item row="15" column="6">
+      <widget class="Tile" name="tile_230" native="true"/>
+     </item>
+     <item row="15" column="7">
+      <widget class="Tile" name="tile_231" native="true"/>
+     </item>
+     <item row="15" column="9">
+      <widget class="Tile" name="tile_233" native="true"/>
+     </item>
+     <item row="15" column="8">
+      <widget class="Tile" name="tile_232" native="true"/>
+     </item>
+     <item row="15" column="5">
+      <widget class="Tile" name="tile_229" native="true"/>
+     </item>
+     <item row="15" column="15">
+      <widget class="Tile" name="tile_239" native="true"/>
+     </item>
+     <item row="15" column="11">
+      <widget class="Tile" name="tile_235" native="true"/>
+     </item>
+     <item row="15" column="12">
+      <widget class="Tile" name="tile_236" native="true"/>
+     </item>
+     <item row="15" column="14">
+      <widget class="Tile" name="tile_238" native="true"/>
+     </item>
+     <item row="15" column="10">
+      <widget class="Tile" name="tile_234" native="true"/>
+     </item>
+     <item row="15" column="13">
+      <widget class="Tile" name="tile_237" native="true"/>
+     </item>
+     <item row="16" column="2">
+      <widget class="Tile" name="tile_242" native="true"/>
+     </item>
+     <item row="16" column="4">
+      <widget class="Tile" name="tile_244" native="true"/>
+     </item>
+     <item row="16" column="3">
+      <widget class="Tile" name="tile_243" native="true"/>
+     </item>
+     <item row="16" column="1">
+      <widget class="Tile" name="tile_241" native="true"/>
+     </item>
+     <item row="16" column="0">
+      <widget class="Tile" name="tile_240" native="true"/>
+     </item>
+     <item row="16" column="5">
+      <widget class="Tile" name="tile_245" native="true"/>
+     </item>
+     <item row="16" column="6">
+      <widget class="Tile" name="tile_246" native="true"/>
+     </item>
+     <item row="16" column="8">
+      <widget class="Tile" name="tile_248" native="true"/>
+     </item>
+     <item row="16" column="9">
+      <widget class="Tile" name="tile_249" native="true"/>
+     </item>
+     <item row="16" column="7">
+      <widget class="Tile" name="tile_247" native="true"/>
+     </item>
+     <item row="16" column="13">
+      <widget class="Tile" name="tile_253" native="true"/>
+     </item>
+     <item row="16" column="15">
+      <widget class="Tile" name="tile_255" native="true"/>
+     </item>
+     <item row="16" column="11">
+      <widget class="Tile" name="tile_251" native="true"/>
+     </item>
+     <item row="16" column="10">
+      <widget class="Tile" name="tile_250" native="true"/>
+     </item>
+     <item row="16" column="12">
+      <widget class="Tile" name="tile_252" native="true"/>
+     </item>
+     <item row="16" column="14">
+      <widget class="Tile" name="tile_254" native="true"/>
+     </item>
+     <item row="9" column="6">
+      <widget class="Tile" name="tile_134" native="true"/>
+     </item>
+     <item row="9" column="4">
+      <widget class="Tile" name="tile_132" native="true"/>
+     </item>
+     <item row="9" column="5">
+      <widget class="Tile" name="tile_133" native="true"/>
+     </item>
+     <item row="9" column="7">
+      <widget class="Tile" name="tile_135" native="true"/>
+     </item>
+     <item row="9" column="8">
+      <widget class="Tile" name="tile_136" native="true"/>
+     </item>
+     <item row="9" column="11">
+      <widget class="Tile" name="tile_139" native="true"/>
+     </item>
+     <item row="9" column="13">
+      <widget class="Tile" name="tile_141" native="true"/>
+     </item>
+     <item row="9" column="9">
+      <widget class="Tile" name="tile_137" native="true"/>
+     </item>
+     <item row="9" column="10">
+      <widget class="Tile" name="tile_138" native="true"/>
+     </item>
+     <item row="9" column="12">
+      <widget class="Tile" name="tile_140" native="true"/>
+     </item>
+     <item row="9" column="14">
+      <widget class="Tile" name="tile_142" native="true"/>
+     </item>
+     <item row="9" column="15">
+      <widget class="Tile" name="tile_143" native="true"/>
+     </item>
+     <item row="10" column="1">
+      <widget class="Tile" name="tile_145" native="true"/>
+     </item>
+     <item row="10" column="0">
+      <widget class="Tile" name="tile_144" native="true"/>
+     </item>
+     <item row="10" column="2">
+      <widget class="Tile" name="tile_146" native="true"/>
+     </item>
+     <item row="10" column="3">
+      <widget class="Tile" name="tile_147" native="true"/>
+     </item>
+     <item row="10" column="5">
+      <widget class="Tile" name="tile_149" native="true"/>
+     </item>
+     <item row="10" column="4">
+      <widget class="Tile" name="tile_148" native="true"/>
+     </item>
+     <item row="10" column="8">
+      <widget class="Tile" name="tile_152" native="true"/>
+     </item>
+     <item row="10" column="7">
+      <widget class="Tile" name="tile_151" native="true"/>
+     </item>
+     <item row="10" column="6">
+      <widget class="Tile" name="tile_150" native="true"/>
+     </item>
+     <item row="9" column="3">
+      <widget class="Tile" name="tile_131" native="true"/>
+     </item>
+     <item row="7" column="11">
+      <widget class="Tile" name="tile_123" native="true"/>
+     </item>
+     <item row="7" column="12">
+      <widget class="Tile" name="tile_124" native="true"/>
+     </item>
+     <item row="7" column="14">
+      <widget class="Tile" name="tile_126" native="true"/>
+     </item>
+     <item row="7" column="13">
+      <widget class="Tile" name="tile_125" native="true"/>
+     </item>
+     <item row="7" column="15">
+      <widget class="Tile" name="tile_127" native="true"/>
+     </item>
+     <item row="9" column="0">
+      <widget class="Tile" name="tile_128" native="true"/>
+     </item>
+     <item row="9" column="1">
+      <widget class="Tile" name="tile_129" native="true"/>
+     </item>
+     <item row="9" column="2">
+      <widget class="Tile" name="tile_130" native="true"/>
+     </item>
+     <item row="0" column="8">
+      <widget class="Tile" name="tile_8" native="true"/>
+     </item>
      <item row="0" column="0">
       <widget class="Tile" name="tile_0" native="true"/>
      </item>
@@ -65,29 +467,20 @@
      <item row="0" column="2">
       <widget class="Tile" name="tile_2" native="true"/>
      </item>
-     <item row="0" column="3">
-      <widget class="Tile" name="tile_3" native="true"/>
-     </item>
-     <item row="0" column="4">
-      <widget class="Tile" name="tile_4" native="true"/>
-     </item>
      <item row="0" column="5">
       <widget class="Tile" name="tile_5" native="true"/>
      </item>
      <item row="0" column="6">
       <widget class="Tile" name="tile_6" native="true"/>
      </item>
+     <item row="0" column="4">
+      <widget class="Tile" name="tile_4" native="true"/>
+     </item>
+     <item row="0" column="3">
+      <widget class="Tile" name="tile_3" native="true"/>
+     </item>
      <item row="0" column="7">
       <widget class="Tile" name="tile_7" native="true"/>
-     </item>
-     <item row="0" column="8">
-      <widget class="Tile" name="tile_8" native="true"/>
-     </item>
-     <item row="0" column="9">
-      <widget class="Tile" name="tile_9" native="true"/>
-     </item>
-     <item row="0" column="10">
-      <widget class="Tile" name="tile_10" native="true"/>
      </item>
      <item row="0" column="11">
       <widget class="Tile" name="tile_11" native="true"/>
@@ -95,11 +488,17 @@
      <item row="0" column="12">
       <widget class="Tile" name="tile_12" native="true"/>
      </item>
-     <item row="0" column="13">
-      <widget class="Tile" name="tile_13" native="true"/>
+     <item row="0" column="9">
+      <widget class="Tile" name="tile_9" native="true"/>
+     </item>
+     <item row="0" column="10">
+      <widget class="Tile" name="tile_10" native="true"/>
      </item>
      <item row="0" column="14">
       <widget class="Tile" name="tile_14" native="true"/>
+     </item>
+     <item row="1" column="1">
+      <widget class="Tile" name="tile_17" native="true"/>
      </item>
      <item row="0" column="15">
       <widget class="Tile" name="tile_15" native="true"/>
@@ -107,32 +506,32 @@
      <item row="1" column="0">
       <widget class="Tile" name="tile_16" native="true"/>
      </item>
-     <item row="1" column="1">
-      <widget class="Tile" name="tile_17" native="true"/>
-     </item>
      <item row="1" column="2">
       <widget class="Tile" name="tile_18" native="true"/>
      </item>
-     <item row="1" column="3">
-      <widget class="Tile" name="tile_19" native="true"/>
+     <item row="0" column="13">
+      <widget class="Tile" name="tile_13" native="true"/>
      </item>
      <item row="1" column="4">
       <widget class="Tile" name="tile_20" native="true"/>
      </item>
-     <item row="1" column="5">
-      <widget class="Tile" name="tile_21" native="true"/>
-     </item>
-     <item row="1" column="6">
-      <widget class="Tile" name="tile_22" native="true"/>
+     <item row="1" column="3">
+      <widget class="Tile" name="tile_19" native="true"/>
      </item>
      <item row="1" column="7">
       <widget class="Tile" name="tile_23" native="true"/>
      </item>
-     <item row="1" column="8">
-      <widget class="Tile" name="tile_24" native="true"/>
+     <item row="1" column="6">
+      <widget class="Tile" name="tile_22" native="true"/>
+     </item>
+     <item row="1" column="5">
+      <widget class="Tile" name="tile_21" native="true"/>
      </item>
      <item row="1" column="9">
       <widget class="Tile" name="tile_25" native="true"/>
+     </item>
+     <item row="1" column="12">
+      <widget class="Tile" name="tile_28" native="true"/>
      </item>
      <item row="1" column="10">
       <widget class="Tile" name="tile_26" native="true"/>
@@ -140,14 +539,14 @@
      <item row="1" column="11">
       <widget class="Tile" name="tile_27" native="true"/>
      </item>
-     <item row="1" column="12">
-      <widget class="Tile" name="tile_28" native="true"/>
+     <item row="1" column="8">
+      <widget class="Tile" name="tile_24" native="true"/>
      </item>
-     <item row="1" column="13">
-      <widget class="Tile" name="tile_29" native="true"/>
+     <item row="2" column="2">
+      <widget class="Tile" name="tile_34" native="true"/>
      </item>
-     <item row="1" column="14">
-      <widget class="Tile" name="tile_30" native="true"/>
+     <item row="2" column="1">
+      <widget class="Tile" name="tile_33" native="true"/>
      </item>
      <item row="1" column="15">
       <widget class="Tile" name="tile_31" native="true"/>
@@ -155,26 +554,26 @@
      <item row="2" column="0">
       <widget class="Tile" name="tile_32" native="true"/>
      </item>
-     <item row="2" column="1">
-      <widget class="Tile" name="tile_33" native="true"/>
+     <item row="1" column="13">
+      <widget class="Tile" name="tile_29" native="true"/>
      </item>
-     <item row="2" column="2">
-      <widget class="Tile" name="tile_34" native="true"/>
+     <item row="1" column="14">
+      <widget class="Tile" name="tile_30" native="true"/>
      </item>
      <item row="2" column="3">
       <widget class="Tile" name="tile_35" native="true"/>
-     </item>
-     <item row="2" column="4">
-      <widget class="Tile" name="tile_36" native="true"/>
-     </item>
-     <item row="2" column="5">
-      <widget class="Tile" name="tile_37" native="true"/>
      </item>
      <item row="2" column="6">
       <widget class="Tile" name="tile_38" native="true"/>
      </item>
      <item row="2" column="7">
       <widget class="Tile" name="tile_39" native="true"/>
+     </item>
+     <item row="2" column="4">
+      <widget class="Tile" name="tile_36" native="true"/>
+     </item>
+     <item row="2" column="5">
+      <widget class="Tile" name="tile_37" native="true"/>
      </item>
      <item row="2" column="8">
       <widget class="Tile" name="tile_40" native="true"/>
@@ -191,44 +590,47 @@
      <item row="2" column="12">
       <widget class="Tile" name="tile_44" native="true"/>
      </item>
-     <item row="2" column="13">
-      <widget class="Tile" name="tile_45" native="true"/>
-     </item>
-     <item row="2" column="14">
-      <widget class="Tile" name="tile_46" native="true"/>
-     </item>
-     <item row="2" column="15">
-      <widget class="Tile" name="tile_47" native="true"/>
-     </item>
-     <item row="3" column="0">
-      <widget class="Tile" name="tile_48" native="true"/>
-     </item>
      <item row="3" column="1">
       <widget class="Tile" name="tile_49" native="true"/>
      </item>
      <item row="3" column="2">
       <widget class="Tile" name="tile_50" native="true"/>
      </item>
-     <item row="3" column="3">
-      <widget class="Tile" name="tile_51" native="true"/>
+     <item row="2" column="14">
+      <widget class="Tile" name="tile_46" native="true"/>
      </item>
-     <item row="3" column="4">
-      <widget class="Tile" name="tile_52" native="true"/>
+     <item row="3" column="0">
+      <widget class="Tile" name="tile_48" native="true"/>
      </item>
-     <item row="3" column="5">
-      <widget class="Tile" name="tile_53" native="true"/>
+     <item row="2" column="15">
+      <widget class="Tile" name="tile_47" native="true"/>
+     </item>
+     <item row="2" column="13">
+      <widget class="Tile" name="tile_45" native="true"/>
      </item>
      <item row="3" column="6">
       <widget class="Tile" name="tile_54" native="true"/>
      </item>
+     <item row="3" column="3">
+      <widget class="Tile" name="tile_51" native="true"/>
+     </item>
+     <item row="3" column="5">
+      <widget class="Tile" name="tile_53" native="true"/>
+     </item>
+     <item row="3" column="4">
+      <widget class="Tile" name="tile_52" native="true"/>
+     </item>
      <item row="3" column="7">
       <widget class="Tile" name="tile_55" native="true"/>
      </item>
-     <item row="3" column="8">
-      <widget class="Tile" name="tile_56" native="true"/>
+     <item row="3" column="12">
+      <widget class="Tile" name="tile_60" native="true"/>
      </item>
      <item row="3" column="9">
       <widget class="Tile" name="tile_57" native="true"/>
+     </item>
+     <item row="3" column="8">
+      <widget class="Tile" name="tile_56" native="true"/>
      </item>
      <item row="3" column="10">
       <widget class="Tile" name="tile_58" native="true"/>
@@ -236,32 +638,29 @@
      <item row="3" column="11">
       <widget class="Tile" name="tile_59" native="true"/>
      </item>
-     <item row="3" column="12">
-      <widget class="Tile" name="tile_60" native="true"/>
-     </item>
-     <item row="3" column="13">
-      <widget class="Tile" name="tile_61" native="true"/>
+     <item row="4" column="0">
+      <widget class="Tile" name="tile_64" native="true"/>
      </item>
      <item row="3" column="14">
       <widget class="Tile" name="tile_62" native="true"/>
      </item>
+     <item row="3" column="13">
+      <widget class="Tile" name="tile_61" native="true"/>
+     </item>
      <item row="3" column="15">
       <widget class="Tile" name="tile_63" native="true"/>
      </item>
-     <item row="4" column="0">
-      <widget class="Tile" name="tile_64" native="true"/>
-     </item>
      <item row="4" column="1">
       <widget class="Tile" name="tile_65" native="true"/>
-     </item>
-     <item row="4" column="2">
-      <widget class="Tile" name="tile_66" native="true"/>
      </item>
      <item row="4" column="3">
       <widget class="Tile" name="tile_67" native="true"/>
      </item>
      <item row="4" column="4">
       <widget class="Tile" name="tile_68" native="true"/>
+     </item>
+     <item row="4" column="2">
+      <widget class="Tile" name="tile_66" native="true"/>
      </item>
      <item row="4" column="5">
       <widget class="Tile" name="tile_69" native="true"/>
@@ -272,20 +671,23 @@
      <item row="4" column="7">
       <widget class="Tile" name="tile_71" native="true"/>
      </item>
-     <item row="4" column="8">
-      <widget class="Tile" name="tile_72" native="true"/>
-     </item>
      <item row="4" column="9">
       <widget class="Tile" name="tile_73" native="true"/>
+     </item>
+     <item row="4" column="8">
+      <widget class="Tile" name="tile_72" native="true"/>
      </item>
      <item row="4" column="10">
       <widget class="Tile" name="tile_74" native="true"/>
      </item>
-     <item row="4" column="11">
-      <widget class="Tile" name="tile_75" native="true"/>
+     <item row="4" column="15">
+      <widget class="Tile" name="tile_79" native="true"/>
      </item>
      <item row="4" column="12">
       <widget class="Tile" name="tile_76" native="true"/>
+     </item>
+     <item row="4" column="11">
+      <widget class="Tile" name="tile_75" native="true"/>
      </item>
      <item row="4" column="13">
       <widget class="Tile" name="tile_77" native="true"/>
@@ -293,8 +695,14 @@
      <item row="4" column="14">
       <widget class="Tile" name="tile_78" native="true"/>
      </item>
-     <item row="4" column="15">
-      <widget class="Tile" name="tile_79" native="true"/>
+     <item row="5" column="2">
+      <widget class="Tile" name="tile_82" native="true"/>
+     </item>
+     <item row="5" column="4">
+      <widget class="Tile" name="tile_84" native="true"/>
+     </item>
+     <item row="5" column="3">
+      <widget class="Tile" name="tile_83" native="true"/>
      </item>
      <item row="5" column="0">
       <widget class="Tile" name="tile_80" native="true"/>
@@ -302,23 +710,8 @@
      <item row="5" column="1">
       <widget class="Tile" name="tile_81" native="true"/>
      </item>
-     <item row="5" column="2">
-      <widget class="Tile" name="tile_82" native="true"/>
-     </item>
-     <item row="5" column="3">
-      <widget class="Tile" name="tile_83" native="true"/>
-     </item>
-     <item row="5" column="4">
-      <widget class="Tile" name="tile_84" native="true"/>
-     </item>
      <item row="5" column="5">
       <widget class="Tile" name="tile_85" native="true"/>
-     </item>
-     <item row="5" column="6">
-      <widget class="Tile" name="tile_86" native="true"/>
-     </item>
-     <item row="5" column="7">
-      <widget class="Tile" name="tile_87" native="true"/>
      </item>
      <item row="5" column="8">
       <widget class="Tile" name="tile_88" native="true"/>
@@ -326,32 +719,38 @@
      <item row="5" column="9">
       <widget class="Tile" name="tile_89" native="true"/>
      </item>
-     <item row="5" column="10">
-      <widget class="Tile" name="tile_90" native="true"/>
+     <item row="5" column="6">
+      <widget class="Tile" name="tile_86" native="true"/>
      </item>
-     <item row="5" column="11">
-      <widget class="Tile" name="tile_91" native="true"/>
-     </item>
-     <item row="5" column="12">
-      <widget class="Tile" name="tile_92" native="true"/>
+     <item row="5" column="7">
+      <widget class="Tile" name="tile_87" native="true"/>
      </item>
      <item row="5" column="13">
       <widget class="Tile" name="tile_93" native="true"/>
      </item>
+     <item row="5" column="12">
+      <widget class="Tile" name="tile_92" native="true"/>
+     </item>
+     <item row="5" column="10">
+      <widget class="Tile" name="tile_90" native="true"/>
+     </item>
      <item row="5" column="14">
       <widget class="Tile" name="tile_94" native="true"/>
      </item>
-     <item row="5" column="15">
-      <widget class="Tile" name="tile_95" native="true"/>
-     </item>
-     <item row="6" column="0">
-      <widget class="Tile" name="tile_96" native="true"/>
+     <item row="5" column="11">
+      <widget class="Tile" name="tile_91" native="true"/>
      </item>
      <item row="6" column="1">
       <widget class="Tile" name="tile_97" native="true"/>
      </item>
+     <item row="6" column="0">
+      <widget class="Tile" name="tile_96" native="true"/>
+     </item>
      <item row="6" column="2">
       <widget class="Tile" name="tile_98" native="true"/>
+     </item>
+     <item row="5" column="15">
+      <widget class="Tile" name="tile_95" native="true"/>
      </item>
      <item row="6" column="3">
       <widget class="Tile" name="tile_99" native="true"/>
@@ -359,17 +758,23 @@
      <item row="6" column="4">
       <widget class="Tile" name="tile_100" native="true"/>
      </item>
-     <item row="6" column="5">
-      <widget class="Tile" name="tile_101" native="true"/>
-     </item>
      <item row="6" column="6">
       <widget class="Tile" name="tile_102" native="true"/>
      </item>
      <item row="6" column="7">
       <widget class="Tile" name="tile_103" native="true"/>
      </item>
+     <item row="6" column="5">
+      <widget class="Tile" name="tile_101" native="true"/>
+     </item>
      <item row="6" column="8">
       <widget class="Tile" name="tile_104" native="true"/>
+     </item>
+     <item row="6" column="14">
+      <widget class="Tile" name="tile_110" native="true"/>
+     </item>
+     <item row="6" column="13">
+      <widget class="Tile" name="tile_109" native="true"/>
      </item>
      <item row="6" column="9">
       <widget class="Tile" name="tile_105" native="true"/>
@@ -383,26 +788,20 @@
      <item row="6" column="12">
       <widget class="Tile" name="tile_108" native="true"/>
      </item>
-     <item row="6" column="13">
-      <widget class="Tile" name="tile_109" native="true"/>
-     </item>
-     <item row="6" column="14">
-      <widget class="Tile" name="tile_110" native="true"/>
-     </item>
-     <item row="6" column="15">
-      <widget class="Tile" name="tile_111" native="true"/>
-     </item>
      <item row="7" column="0">
       <widget class="Tile" name="tile_112" native="true"/>
      </item>
      <item row="7" column="1">
       <widget class="Tile" name="tile_113" native="true"/>
      </item>
+     <item row="7" column="3">
+      <widget class="Tile" name="tile_115" native="true"/>
+     </item>
      <item row="7" column="2">
       <widget class="Tile" name="tile_114" native="true"/>
      </item>
-     <item row="7" column="3">
-      <widget class="Tile" name="tile_115" native="true"/>
+     <item row="6" column="15">
+      <widget class="Tile" name="tile_111" native="true"/>
      </item>
      <item row="7" column="4">
       <widget class="Tile" name="tile_116" native="true"/>
@@ -410,419 +809,36 @@
      <item row="7" column="5">
       <widget class="Tile" name="tile_117" native="true"/>
      </item>
+     <item row="7" column="9">
+      <widget class="Tile" name="tile_121" native="true"/>
+     </item>
      <item row="7" column="6">
       <widget class="Tile" name="tile_118" native="true"/>
-     </item>
-     <item row="7" column="7">
-      <widget class="Tile" name="tile_119" native="true"/>
      </item>
      <item row="7" column="8">
       <widget class="Tile" name="tile_120" native="true"/>
      </item>
-     <item row="7" column="9">
-      <widget class="Tile" name="tile_121" native="true"/>
-     </item>
      <item row="7" column="10">
       <widget class="Tile" name="tile_122" native="true"/>
      </item>
-     <item row="7" column="11">
-      <widget class="Tile" name="tile_123" native="true"/>
-     </item>
-     <item row="7" column="12">
-      <widget class="Tile" name="tile_124" native="true"/>
-     </item>
-     <item row="7" column="13">
-      <widget class="Tile" name="tile_125" native="true"/>
-     </item>
-     <item row="7" column="14">
-      <widget class="Tile" name="tile_126" native="true"/>
-     </item>
-     <item row="7" column="15">
-      <widget class="Tile" name="tile_127" native="true"/>
-     </item>
-     <item row="8" column="0">
-      <widget class="Tile" name="tile_128" native="true"/>
-     </item>
-     <item row="8" column="1">
-      <widget class="Tile" name="tile_129" native="true"/>
-     </item>
-     <item row="8" column="2">
-      <widget class="Tile" name="tile_130" native="true"/>
-     </item>
-     <item row="8" column="3">
-      <widget class="Tile" name="tile_131" native="true"/>
-     </item>
-     <item row="8" column="4">
-      <widget class="Tile" name="tile_132" native="true"/>
-     </item>
-     <item row="8" column="5">
-      <widget class="Tile" name="tile_133" native="true"/>
-     </item>
-     <item row="8" column="6">
-      <widget class="Tile" name="tile_134" native="true"/>
-     </item>
-     <item row="8" column="7">
-      <widget class="Tile" name="tile_135" native="true"/>
-     </item>
-     <item row="8" column="8">
-      <widget class="Tile" name="tile_136" native="true"/>
-     </item>
-     <item row="8" column="9">
-      <widget class="Tile" name="tile_137" native="true"/>
-     </item>
-     <item row="8" column="10">
-      <widget class="Tile" name="tile_138" native="true"/>
-     </item>
-     <item row="8" column="11">
-      <widget class="Tile" name="tile_139" native="true"/>
-     </item>
-     <item row="8" column="12">
-      <widget class="Tile" name="tile_140" native="true"/>
-     </item>
-     <item row="8" column="13">
-      <widget class="Tile" name="tile_141" native="true"/>
-     </item>
-     <item row="8" column="14">
-      <widget class="Tile" name="tile_142" native="true"/>
-     </item>
-     <item row="8" column="15">
-      <widget class="Tile" name="tile_143" native="true"/>
-     </item>
-     <item row="9" column="0">
-      <widget class="Tile" name="tile_144" native="true"/>
-     </item>
-     <item row="9" column="1">
-      <widget class="Tile" name="tile_145" native="true"/>
-     </item>
-     <item row="9" column="2">
-      <widget class="Tile" name="tile_146" native="true"/>
-     </item>
-     <item row="9" column="3">
-      <widget class="Tile" name="tile_147" native="true"/>
-     </item>
-     <item row="9" column="4">
-      <widget class="Tile" name="tile_148" native="true"/>
-     </item>
-     <item row="9" column="5">
-      <widget class="Tile" name="tile_149" native="true"/>
-     </item>
-     <item row="9" column="6">
-      <widget class="Tile" name="tile_150" native="true"/>
-     </item>
-     <item row="9" column="7">
-      <widget class="Tile" name="tile_151" native="true"/>
-     </item>
-     <item row="9" column="8">
-      <widget class="Tile" name="tile_152" native="true"/>
-     </item>
-     <item row="9" column="9">
-      <widget class="Tile" name="tile_153" native="true"/>
-     </item>
-     <item row="9" column="10">
-      <widget class="Tile" name="tile_154" native="true"/>
-     </item>
-     <item row="9" column="11">
-      <widget class="Tile" name="tile_155" native="true"/>
-     </item>
-     <item row="9" column="12">
-      <widget class="Tile" name="tile_156" native="true"/>
-     </item>
-     <item row="9" column="13">
-      <widget class="Tile" name="tile_157" native="true"/>
-     </item>
-     <item row="9" column="14">
-      <widget class="Tile" name="tile_158" native="true"/>
-     </item>
-     <item row="9" column="15">
-      <widget class="Tile" name="tile_159" native="true"/>
-     </item>
-     <item row="10" column="0">
-      <widget class="Tile" name="tile_160" native="true"/>
-     </item>
-     <item row="10" column="1">
-      <widget class="Tile" name="tile_161" native="true"/>
-     </item>
-     <item row="10" column="2">
-      <widget class="Tile" name="tile_162" native="true"/>
-     </item>
-     <item row="10" column="3">
-      <widget class="Tile" name="tile_163" native="true"/>
-     </item>
-     <item row="10" column="4">
-      <widget class="Tile" name="tile_164" native="true"/>
-     </item>
-     <item row="10" column="5">
-      <widget class="Tile" name="tile_165" native="true"/>
-     </item>
-     <item row="10" column="6">
-      <widget class="Tile" name="tile_166" native="true"/>
-     </item>
-     <item row="10" column="7">
-      <widget class="Tile" name="tile_167" native="true"/>
-     </item>
-     <item row="10" column="8">
-      <widget class="Tile" name="tile_168" native="true"/>
-     </item>
-     <item row="10" column="9">
-      <widget class="Tile" name="tile_169" native="true"/>
-     </item>
-     <item row="10" column="10">
-      <widget class="Tile" name="tile_170" native="true"/>
-     </item>
-     <item row="10" column="11">
-      <widget class="Tile" name="tile_171" native="true"/>
-     </item>
-     <item row="10" column="12">
-      <widget class="Tile" name="tile_172" native="true"/>
-     </item>
-     <item row="10" column="13">
-      <widget class="Tile" name="tile_173" native="true"/>
-     </item>
-     <item row="10" column="14">
-      <widget class="Tile" name="tile_174" native="true"/>
-     </item>
-     <item row="10" column="15">
-      <widget class="Tile" name="tile_175" native="true"/>
-     </item>
-     <item row="11" column="0">
-      <widget class="Tile" name="tile_176" native="true"/>
-     </item>
-     <item row="11" column="1">
-      <widget class="Tile" name="tile_177" native="true"/>
-     </item>
-     <item row="11" column="2">
-      <widget class="Tile" name="tile_178" native="true"/>
-     </item>
-     <item row="11" column="3">
-      <widget class="Tile" name="tile_179" native="true"/>
-     </item>
-     <item row="11" column="4">
-      <widget class="Tile" name="tile_180" native="true"/>
-     </item>
-     <item row="11" column="5">
-      <widget class="Tile" name="tile_181" native="true"/>
-     </item>
-     <item row="11" column="6">
-      <widget class="Tile" name="tile_182" native="true"/>
-     </item>
-     <item row="11" column="7">
-      <widget class="Tile" name="tile_183" native="true"/>
-     </item>
-     <item row="11" column="8">
-      <widget class="Tile" name="tile_184" native="true"/>
-     </item>
-     <item row="11" column="9">
-      <widget class="Tile" name="tile_185" native="true"/>
-     </item>
-     <item row="11" column="10">
-      <widget class="Tile" name="tile_186" native="true"/>
-     </item>
-     <item row="11" column="11">
-      <widget class="Tile" name="tile_187" native="true"/>
-     </item>
-     <item row="11" column="12">
-      <widget class="Tile" name="tile_188" native="true"/>
-     </item>
-     <item row="11" column="13">
-      <widget class="Tile" name="tile_189" native="true"/>
-     </item>
-     <item row="11" column="14">
-      <widget class="Tile" name="tile_190" native="true"/>
-     </item>
-     <item row="11" column="15">
-      <widget class="Tile" name="tile_191" native="true"/>
-     </item>
-     <item row="12" column="0">
-      <widget class="Tile" name="tile_192" native="true"/>
-     </item>
-     <item row="12" column="1">
-      <widget class="Tile" name="tile_193" native="true"/>
-     </item>
-     <item row="12" column="2">
-      <widget class="Tile" name="tile_194" native="true"/>
-     </item>
-     <item row="12" column="3">
-      <widget class="Tile" name="tile_195" native="true"/>
-     </item>
-     <item row="12" column="4">
-      <widget class="Tile" name="tile_196" native="true"/>
-     </item>
-     <item row="12" column="5">
-      <widget class="Tile" name="tile_197" native="true"/>
-     </item>
-     <item row="12" column="6">
-      <widget class="Tile" name="tile_198" native="true"/>
-     </item>
-     <item row="12" column="7">
-      <widget class="Tile" name="tile_199" native="true"/>
-     </item>
-     <item row="12" column="8">
-      <widget class="Tile" name="tile_200" native="true"/>
-     </item>
-     <item row="12" column="9">
-      <widget class="Tile" name="tile_201" native="true"/>
-     </item>
-     <item row="12" column="10">
-      <widget class="Tile" name="tile_202" native="true"/>
-     </item>
-     <item row="12" column="11">
-      <widget class="Tile" name="tile_203" native="true"/>
-     </item>
-     <item row="12" column="12">
-      <widget class="Tile" name="tile_204" native="true"/>
-     </item>
-     <item row="12" column="13">
-      <widget class="Tile" name="tile_205" native="true"/>
-     </item>
-     <item row="12" column="14">
-      <widget class="Tile" name="tile_206" native="true"/>
-     </item>
-     <item row="12" column="15">
-      <widget class="Tile" name="tile_207" native="true"/>
-     </item>
-     <item row="13" column="0">
-      <widget class="Tile" name="tile_208" native="true"/>
-     </item>
-     <item row="13" column="1">
-      <widget class="Tile" name="tile_209" native="true"/>
-     </item>
-     <item row="13" column="2">
-      <widget class="Tile" name="tile_210" native="true"/>
-     </item>
-     <item row="13" column="3">
-      <widget class="Tile" name="tile_211" native="true"/>
-     </item>
-     <item row="13" column="4">
-      <widget class="Tile" name="tile_212" native="true"/>
-     </item>
-     <item row="13" column="5">
-      <widget class="Tile" name="tile_213" native="true"/>
-     </item>
-     <item row="13" column="6">
-      <widget class="Tile" name="tile_214" native="true"/>
-     </item>
-     <item row="13" column="7">
-      <widget class="Tile" name="tile_215" native="true"/>
-     </item>
-     <item row="13" column="8">
-      <widget class="Tile" name="tile_216" native="true"/>
-     </item>
-     <item row="13" column="9">
-      <widget class="Tile" name="tile_217" native="true"/>
-     </item>
-     <item row="13" column="10">
-      <widget class="Tile" name="tile_218" native="true"/>
-     </item>
-     <item row="13" column="11">
-      <widget class="Tile" name="tile_219" native="true"/>
-     </item>
-     <item row="13" column="12">
-      <widget class="Tile" name="tile_220" native="true"/>
-     </item>
-     <item row="13" column="13">
-      <widget class="Tile" name="tile_221" native="true"/>
-     </item>
-     <item row="13" column="14">
-      <widget class="Tile" name="tile_222" native="true"/>
-     </item>
-     <item row="13" column="15">
-      <widget class="Tile" name="tile_223" native="true"/>
-     </item>
-     <item row="14" column="0">
-      <widget class="Tile" name="tile_224" native="true"/>
-     </item>
-     <item row="14" column="1">
-      <widget class="Tile" name="tile_225" native="true"/>
-     </item>
-     <item row="14" column="2">
-      <widget class="Tile" name="tile_226" native="true"/>
-     </item>
-     <item row="14" column="3">
-      <widget class="Tile" name="tile_227" native="true"/>
-     </item>
-     <item row="14" column="4">
-      <widget class="Tile" name="tile_228" native="true"/>
-     </item>
-     <item row="14" column="5">
-      <widget class="Tile" name="tile_229" native="true"/>
-     </item>
-     <item row="14" column="6">
-      <widget class="Tile" name="tile_230" native="true"/>
-     </item>
-     <item row="14" column="7">
-      <widget class="Tile" name="tile_231" native="true"/>
-     </item>
-     <item row="14" column="8">
-      <widget class="Tile" name="tile_232" native="true"/>
-     </item>
-     <item row="14" column="9">
-      <widget class="Tile" name="tile_233" native="true"/>
-     </item>
-     <item row="14" column="10">
-      <widget class="Tile" name="tile_234" native="true"/>
-     </item>
-     <item row="14" column="11">
-      <widget class="Tile" name="tile_235" native="true"/>
-     </item>
-     <item row="14" column="12">
-      <widget class="Tile" name="tile_236" native="true"/>
-     </item>
-     <item row="14" column="13">
-      <widget class="Tile" name="tile_237" native="true"/>
-     </item>
-     <item row="14" column="14">
-      <widget class="Tile" name="tile_238" native="true"/>
-     </item>
-     <item row="14" column="15">
-      <widget class="Tile" name="tile_239" native="true"/>
-     </item>
-     <item row="15" column="0">
-      <widget class="Tile" name="tile_240" native="true"/>
-     </item>
-     <item row="15" column="1">
-      <widget class="Tile" name="tile_241" native="true"/>
-     </item>
-     <item row="15" column="2">
-      <widget class="Tile" name="tile_242" native="true"/>
-     </item>
-     <item row="15" column="3">
-      <widget class="Tile" name="tile_243" native="true"/>
-     </item>
-     <item row="15" column="4">
-      <widget class="Tile" name="tile_244" native="true"/>
-     </item>
-     <item row="15" column="5">
-      <widget class="Tile" name="tile_245" native="true"/>
-     </item>
-     <item row="15" column="6">
-      <widget class="Tile" name="tile_246" native="true"/>
-     </item>
-     <item row="15" column="7">
-      <widget class="Tile" name="tile_247" native="true"/>
-     </item>
-     <item row="15" column="8">
-      <widget class="Tile" name="tile_248" native="true"/>
-     </item>
-     <item row="15" column="9">
-      <widget class="Tile" name="tile_249" native="true"/>
-     </item>
-     <item row="15" column="10">
-      <widget class="Tile" name="tile_250" native="true"/>
-     </item>
-     <item row="15" column="11">
-      <widget class="Tile" name="tile_251" native="true"/>
-     </item>
-     <item row="15" column="12">
-      <widget class="Tile" name="tile_252" native="true"/>
-     </item>
-     <item row="15" column="13">
-      <widget class="Tile" name="tile_253" native="true"/>
-     </item>
-     <item row="15" column="14">
-      <widget class="Tile" name="tile_254" native="true"/>
-     </item>
-     <item row="15" column="15">
-      <widget class="Tile" name="tile_255" native="true"/>
+     <item row="7" column="7">
+      <widget class="Tile" name="tile_119" native="true"/>
+     </item>
+     <item row="8" column="0" colspan="16">
+      <widget class="QWidget" name="widget" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>2</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>2</height>
+        </size>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
