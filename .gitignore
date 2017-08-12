@@ -1,0 +1,8 @@
+*.o
+moc_*.cpp
+qrc_*.cpp
+ui_*.h
+Makefile
+src/nestool
+*.pro.user*
+.qmake.stash
