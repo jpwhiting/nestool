@@ -76,6 +76,11 @@ bool ImportDialog::importTiles() const
     return ui->importTilesetRadioButton->isChecked();
 }
 
+bool ImportDialog::clearTileset() const
+{
+    return ui->clearTilesetCheckBox->isChecked();
+}
+
 void ImportDialog::accept()
 {
     // Save chosen settings for quick load later

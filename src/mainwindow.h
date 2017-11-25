@@ -110,7 +110,7 @@ private:
 
     // Import nametables from image
     void importImage(const QString &filename, const QString &nametableName,
-                     bool importPalettes, bool importTiles);
+                     bool importPalettes, bool importTiles, bool clearTileset);
 
     Ui::MainWindow *ui;
     SettingsDialog *mSettingsDialog;

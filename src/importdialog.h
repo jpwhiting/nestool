@@ -41,6 +41,7 @@ public:
 
     bool importColors() const;
     bool importTiles() const;
+    bool clearTileset() const;
 
 public slots:
     virtual void accept() Q_DECL_OVERRIDE;

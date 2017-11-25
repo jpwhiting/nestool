@@ -21,6 +21,7 @@
 
 #include <QCloseEvent>
 #include <QFileDialog>
+#include <QInputDialog>
 #include <QMessageBox>
 #include <QSettings>
 
@@ -256,7 +257,8 @@ void MainWindow::on_action_Import_From_Image_triggered()
         importImage(dialog->filename(),
                     dialog->nametableName(),
                     dialog->importColors(),
-                    dialog->importTiles());
+                    dialog->importTiles(),
+                    dialog->clearTileset());
     }
 }
 
@@ -660,7 +662,8 @@ void MainWindow::updateRecentActions()
 void MainWindow::importImage(const QString &filename,
                              const QString &nametableName,
                              bool importPalettes,
-                             bool importTiles)
+                             bool importTiles,
+                             bool clearTileset)
 {
     // Read image
     QImage image(filename);
@@ -680,6 +683,9 @@ void MainWindow::importImage(const QString &filename,
     qDebug() << "need " << nametablesNeeded << "nametables to handle the given image";
     // Figure out palettes from image
     QList<int> attributes;
+    Tile *testTile = new Tile(this);
+    int nextTile = 0;
+    int attrIndex = 0;
 
     if (importPalettes) {
         attributes = ui->backgroundPalette->calculateFromImage(&image);
@@ -688,17 +694,22 @@ void MainWindow::importImage(const QString &filename,
     }
 
     if (importTiles) {
-        // First clear out existing tiles
-        ui->tileSet->clear();
+        if (clearTileset) {
+            // First clear out existing tiles
+            ui->tileSet->clear();
+        } else {
+            // ask for first tile number
+            nextTile = QInputDialog::getInt(this,
+                                            "First empty tile",
+                                            "Which is the first empty tile to start import from?",
+                                            128, 0, 255);
+        }
     }
     qDebug() << "Got " << attributes.size() << " attributes for given image";
     QList<QList<QColor> > allColors = ui->backgroundPalette->getAllColors();
 
     // Read tileset from image
     // Fill nametables based on image
-    Tile *testTile = new Tile(this);
-    int nextTile = 0;
-    int attrIndex = 0;
     for (int j = 0; j < image.height(); j+=16) {
         for (int i= 0; i < image.width(); i+=16) {
             int whichNT = (i/(32*8)) + ((j/(30*8) * nametablesWide));

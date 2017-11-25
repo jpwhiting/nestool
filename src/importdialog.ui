@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>281</width>
-    <height>251</height>
+    <height>274</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -94,6 +94,13 @@
        <widget class="QRadioButton" name="useCurrentTilesRadioButton">
         <property name="text">
          <string>Try to use current tileset</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="clearTilesetCheckBox">
+        <property name="text">
+         <string>Clear tileset before import</string>
         </property>
        </widget>
       </item>
