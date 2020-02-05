@@ -26,6 +26,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QRadioButton>
+#include <QRubberBand>
 #include <QSettings>
 #include <QToolButton>
 
@@ -37,7 +38,7 @@
 
 #include <QDebug>
 
-char zeros[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+static char zeros[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 TileSet::TileSet(QWidget *parent)
     : QWidget(parent),
@@ -271,7 +272,7 @@ void TileSet::updateSelection()
 char *TileSet::tileData(int tile)
 {
     if (tile < 0 || tile > 16*16)
-        return NULL;
+        return nullptr;
     return mTiles.at(tile)->chrData();
 }
 
@@ -406,12 +407,12 @@ void TileSet::mousePressEvent(QMouseEvent *event)
     }
 }
 
-void TileSet::mouseMoveEvent(QMouseEvent *event)
+void TileSet::mouseMoveEvent(QMouseEvent * /* event */)
 {
 
 }
 
-void TileSet::resizeEvent(QResizeEvent *event)
+void TileSet::resizeEvent(QResizeEvent * /* event */)
 {
     updateSelection();
 }
