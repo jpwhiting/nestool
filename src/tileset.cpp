@@ -28,6 +28,7 @@
 #include <QRadioButton>
 #include <QSettings>
 #include <QToolButton>
+#include <QRubberBand>
 
 #include "defines.h"
 #include "edittiledialog.h"
