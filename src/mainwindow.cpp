@@ -85,6 +85,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Connect to tileset signals
     connect(ui->tileSet, SIGNAL(setStatus(QString)), this, SLOT(setStatus(QString)));
+    connect(ui->nameTable, SIGNAL(setStatus(QString)), this, SLOT(setStatus(QString)));
 
     // Create one nametable
     mNameTables.append(ui->nameTable);

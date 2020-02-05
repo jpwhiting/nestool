@@ -83,11 +83,13 @@ protected:
 
 Q_SIGNALS:
     void tileClicked(int x, int y);
+    void setStatus(QString text); // change status bar message
 
 private Q_SLOTS:
     void tileClicked();
     void paletteChanged();
     void tilesChanged();
+    void tileHovered();
 
 private:
     // Get the palette for a given tile

@@ -50,10 +50,29 @@ NameTable::NameTable(QWidget *parent) :
 
     mAttrs = &mData[960];
 
+    int NAMETABLES [4] = { 8192, 9216, 10240, 11264 };
+    int ATTRTABLES [4] = { 9152, 10176, 11200, 12224 };
+
     for (int i = 0; i < 30; ++i) {
         for (int j = 0; j < 32; ++j) {
+            int nameOffset = i*32 + j;
+            int attrOffset = (j - (j % 4)) / 4;
+            attrOffset += ((i - (i % 4)) / 4) * 8;
             Tile *tile = new Tile(this);
+
             tile->setFixedSize(QSize(24, 24));
+            tile->setHoverText(QString("Nametable offset: $%1 ($%2, $%3, $%4, $%5)     Attribute offset: $%6 ($%7, $%8, $%9, $%10)")
+                .arg(nameOffset, 4, 16, QChar('0'))
+                .arg(NAMETABLES[0] + nameOffset, 4, 16, QChar('0'))
+                .arg(NAMETABLES[1] + nameOffset, 4, 16, QChar('0'))
+                .arg(NAMETABLES[2] + nameOffset, 4, 16, QChar('0'))
+                .arg(NAMETABLES[3] + nameOffset, 4, 16, QChar('0'))
+                .arg(attrOffset, 2, 16, QChar('0'))
+                .arg(ATTRTABLES[0] + attrOffset, 4, 16, QChar('0'))
+                .arg(ATTRTABLES[1] + attrOffset, 4, 16, QChar('0'))
+                .arg(ATTRTABLES[2] + attrOffset, 4, 16, QChar('0'))
+                .arg(ATTRTABLES[3] + attrOffset, 4, 16, QChar('0')));
+            connect(tile, SIGNAL(hovered()), this, SLOT(tileHovered()));
             mTiles.append(tile);
             mGridLayout->addWidget(tile, i, j);
         }
@@ -479,4 +498,10 @@ void NameTable::mouseMoveEvent(QMouseEvent *event)
             emit tileClicked(index %32, index / 32);
         }
     }
+}
+
+void NameTable::tileHovered()
+{
+  Tile *tile = qobject_cast<Tile*>(sender());
+  emit setStatus(tile->getHoverText());
 }
